@@ -6,7 +6,7 @@ For a linear policy ``z = theta x`` the parameter gradient is the outer product 
 
 The objective RLCD argues for is a proper score of the stated distribution against outcome ``y``::
 
-    max  E_{x, y} [ S(p(. | x), y) ]  -  beta * KL(p || p_ref)
+    max  E_{x, y} [ S(p(. | x), y) ]  -  beta * KL(p_ref || p)
 
 and the three ways of estimating its gradient are:
 
@@ -195,13 +195,15 @@ def supervised_grad_logits(probs: np.ndarray, y: np.ndarray) -> np.ndarray:
 
 
 def kl_grad_logits(
-    probs: np.ndarray, ref_probs: np.ndarray, direction: str = "reverse"
+    probs: np.ndarray, ref_probs: np.ndarray, direction: str = "forward"
 ) -> np.ndarray:
     """Gradient w.r.t. the policy logits of a KL penalty to a reference distribution.
 
-    ``reverse`` is ``KL(p || p_ref)`` (the usual RLHF direction and the one written in the RLCD
-    objective); ``forward`` is ``KL(p_ref || p)`` (the direction of decider's retention term and
-    of the old Breakout code). Subtract ``beta`` times this from the reward gradient.
+    ``forward`` is ``KL(p_ref || p)``: the project's choice (``docs/decisions.md`` D1) and the
+    direction of decider's retention term and of the old Breakout code. It is large when ``p`` puts
+    little mass on an option the reference supports, so it penalises collapse onto one option and
+    partly counteracts RLVR's sharpening. ``reverse`` is ``KL(p || p_ref)``, the usual RLHF
+    direction, kept for comparison. Subtract ``beta`` times this from the reward gradient.
     """
     p = np.asarray(probs, dtype=np.float64)
     q = np.asarray(ref_probs, dtype=np.float64)
