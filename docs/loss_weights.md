@@ -71,15 +71,18 @@ reasons that should be written down rather than assumed away:
 3. **B5 (no retention KL)** sets the retention weight to 0.
 4. **The missing rendering-consistency term and retention gate are deliberate omissions to disclose**,
    not silent ones. If B3 shows forgetting that the old runs did not, the gate is the first suspect.
-5. **The KL direction in the task spec differs from the code.** The spec's objective is written with
-   KL(p_θ ‖ p_ref) (reverse); decider's retention term and the old Breakout code use KL(p_ref ‖ p_θ)
-   (forward). `rlcd.estimators.kl_grad_logits` supports both. **Open decision for the maintainer:** which
-   direction Exp A's β-penalty uses. B3/B5/B6 keep the forward direction to match the verified recipe.
+5. **The KL direction** was an open mismatch (the spec wrote KL(p_θ ‖ p_ref); decider's retention term and the
+   old Breakout code use KL(p_ref ‖ p_θ)). **Resolved 2026-10-06 (`docs/decisions.md` D1): forward,
+   KL(p_ref ‖ p_θ), everywhere**, including Exp A's β-penalty.
+6. **B3 is the spec's definition** (actor + belief + retention); the two omissions in the table above are
+   recorded as deviations in `docs/decisions.md` D6.
 
 ## Caveat on what the old Breakout numbers can support
 
-The old results (`hardgen/EXPERIMENTS.md`: greedy 54 for "v2 best" against 34 for plain PPO) are one run
-per arm, 10 greedy games, with the "best" checkpoint chosen on 3 fixed greedy games; the final iterate of
-the same run scores 33 greedy. That gap is what selection on a tiny, reused set produces. Exp B is
-designed to avoid it: three seeds per arm, 50 greedy + 50 sampled games on fresh evaluation seeds, and
-checkpoints chosen on separate selection seeds (`rlcd.data.SeedSets`).
+The old results (`hardgen/EXPERIMENTS.md`) are one run per arm and 10 greedy games. The run's **final
+checkpoint scores 33 greedy against 34 for plain PPO**, i.e. no difference on that measure. A different
+checkpoint of the same run had been chosen because it scored higher on 3 fixed greedy games; a number
+selected on a tiny, reused set is what selection noise produces, so it is deliberately not quoted in this
+repository. Exp B is designed to avoid that: three seeds per arm, 50 greedy + 50 sampled games on fresh
+evaluation seeds, and checkpoints chosen on separate selection seeds (`rlcd.data.SeedSets`). The final
+checkpoint is reported alongside the selected one.

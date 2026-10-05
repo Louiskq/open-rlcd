@@ -55,12 +55,15 @@ distribution over typed options**, judged against an outcome supplied by labels,
 an environment:
 
 $$
-\max_\theta\; \mathbb{E}_{s,\,q,\; y}\Big[\, S\big(p_\theta(\cdot\mid s,q),\, y\big) \Big] \;-\; \beta\,\mathrm{KL}\big(p_\theta \,\|\, p_{\text{ref}}\big)
+\max_\theta\; \mathbb{E}_{s,\,q,\; y}\Big[\, S\big(p_\theta(\cdot\mid s,q),\, y\big) \Big] \;-\; \beta\,\mathrm{KL}\big(p_{\text{ref}} \,\|\, p_\theta\big)
 $$
 
 A question is *typed*: `NOUL` (true or false), `CHOICE` (one of several unordered options) or `SCORE` (an
 ordered scale). The model gives a probability for every option in one forward pass. $S$ is the log score for
-`NOUL` and `CHOICE`, and the negative ranked probability score (RPS) for `SCORE`.
+`NOUL` and `CHOICE`, and the negative ranked probability score (RPS) for `SCORE`. The penalty is the
+*forward* KL, the direction decider's retention term uses. It is large when the policy puts little mass on an
+option the reference supports, so it penalises collapse onto one option and partly counteracts RLVR's
+overconfidence; one exploratory run without it will show by how much ([`docs/decisions.md`](docs/decisions.md) D1).
 
 <p align="center">
   <picture>
@@ -234,10 +237,11 @@ Written *before* the language-model results exist, so they cannot be shaped by t
 - **Group-mean baseline.** The specified baseline (mean over the K samples of a question, including the sample
   itself) shrinks the gradient by exactly (K−1)/K without changing its direction. A leave-one-out baseline is
   exactly unbiased; both are implemented and tested.
-- **Open decisions** that change what later experiments mean, listed in
-  [`docs/loss_weights.md`](docs/loss_weights.md) and the draft [`PREREGISTRATION.md`](PREREGISTRATION.md): the
-  direction of the KL penalty, whether "raw" probabilities include the model's stored temperature, and how
-  `SCORE` answers are read out.
+- **Decisions that change what the experiments mean** are recorded in [`docs/decisions.md`](docs/decisions.md):
+  the KL direction (forward), "raw" meaning temperature 1 (the checkpoint's stored 1.30 is itself a post-hoc
+  calibration, so it appears only as a separate "as served" reference row), how `SCORE` answers are read out
+  (decider's one yes/no pass per level, normalised into a distribution), and RPS normalisation (which gives
+  `SCORE` questions less gradient than their share of the pool).
 - **Planned-experiment limitations, stated now:** the independent dev set was written by the same teacher as the
   training data; JevBench hard has 111 items (standard error about 4.4 points), too few to separate the arms.
 - **Results that went against a hypothesis** will be listed here by name. None yet, because no hypothesis has
