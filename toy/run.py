@@ -1,6 +1,6 @@
 """Run Exp 0 and write ``results/toy/*.json`` and the figures.
 
-python -m toy.run                 # full: 10 seeds x 4,000 steps, about 2 minutes on a laptop CPU
+python -m toy.run                 # full: 10 seeds x 4,000 steps, about 1-2 minutes on a laptop CPU
 python -m toy.run --quick         # CI: 3 seeds x 1,500 steps
 python -m toy.run --out /tmp/x    # write to /tmp/x/results/toy and /tmp/x/figures
 """

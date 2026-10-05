@@ -750,6 +750,141 @@ def hero_animation(
 
 
 # ---------------------------------------------------------------------------------------------
+# concept diagram
+# ---------------------------------------------------------------------------------------------
+
+
+def fig_concept(theme: Theme) -> Any:
+    """State + typed questions -> one forward pass -> distributions -> proper-score reward."""
+    from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+    blue = color("rlcd", theme)
+    with plt.rc_context(rc(theme)):
+        fig, ax = plt.subplots(figsize=(11.2, 4.3))
+        fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01)
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 40)
+        ax.set_aspect("equal")
+        ax.axis("off")
+
+        def box(x, y, w, h, edge=None, lw=1.0, dashed=False):
+            ax.add_patch(
+                FancyBboxPatch(
+                    (x, y),
+                    w,
+                    h,
+                    boxstyle="round,pad=0,rounding_size=1.4",
+                    fc=theme.surface,
+                    ec=edge or theme.axis,
+                    lw=lw,
+                    ls=(0, (3, 2)) if dashed else "-",
+                )
+            )
+
+        def arrow(p0, p1, color_=None):
+            ax.add_patch(
+                FancyArrowPatch(
+                    p0,
+                    p1,
+                    arrowstyle="-|>",
+                    mutation_scale=11,
+                    lw=1.3,
+                    color=color_ or theme.muted,
+                    shrinkA=0,
+                    shrinkB=0,
+                )
+            )
+
+        def title(x, y, text, sub=None):
+            ax.text(x, y, text, fontsize=10.5, fontweight="bold", color=theme.ink, va="top")
+            if sub:
+                ax.text(x, y - 3.1, sub, fontsize=8.5, color=theme.ink2, va="top")
+
+        # 1. state + typed questions
+        box(1, 11, 25, 25)
+        title(2.4, 34.4, "State + typed questions")
+        mono = {"family": "monospace", "fontsize": 8.2, "color": theme.ink2, "va": "top"}
+        ax.text(2.4, 29.2, 'state   "order arrived damaged"', **mono)
+        ax.text(2.4, 25.0, "NOUL    refund eligible?", **mono)
+        ax.text(2.4, 21.6, "CHOICE  billing | support", **mono)
+        ax.text(2.4, 18.2, "        | legal", **mono)
+        ax.text(2.4, 14.8, "SCORE   urgency 0 .. 4", **mono)
+
+        # 2. one forward pass
+        box(31, 15, 17.5, 17)
+        title(32.4, 30.4, "One forward pass", "option logits at\nthe answer slot")
+
+        # 3. a distribution per question
+        box(53, 6, 27, 30, edge=blue, lw=1.6)
+        title(54.4, 34.4, "A distribution per question")
+        groups = [
+            ("NOUL", [0.7, 0.3]),
+            ("CHOICE", [0.55, 0.3, 0.15]),
+            ("SCORE", [0.05, 0.15, 0.4, 0.3, 0.1]),
+        ]
+        gx, width, gap = 55.4, 1.6, 0.4
+        for name, probs in groups:
+            for i, pr in enumerate(probs):
+                ax.add_patch(
+                    plt.Rectangle(
+                        (gx + i * (width + gap), 11.5), width, pr * 14, fc=blue, alpha=0.85, lw=0
+                    )
+                )
+            span = len(probs) * (width + gap) - gap
+            ax.plot([gx - 0.3, gx + span + 0.3], [11.5, 11.5], color=theme.axis, lw=0.8)
+            ax.text(gx + span / 2, 9.6, name, fontsize=8.2, color=theme.ink2, ha="center", va="top")
+            gx += span + 2.6
+
+        # 4. proper-score reward
+        box(86, 12, 13.5, 14, edge=blue, lw=1.6)
+        title(87.2, 24.4, "Proper-score", "reward S(p, y)")
+        ax.text(87.2, 13.4, "log score, or −RPS", fontsize=8.2, color=theme.muted, va="bottom")
+
+        # outcome
+        box(80.5, 30, 19, 9, dashed=True)
+        ax.text(82, 37.6, "outcome y", fontsize=9.5, fontweight="bold", color=theme.ink, va="top")
+        ax.text(
+            82,
+            34.3,
+            "label, verifier, teacher\nor environment",
+            fontsize=8.2,
+            color=theme.ink2,
+            va="top",
+            linespacing=1.3,
+        )
+
+        arrow((26.4, 23.5), (30.6, 23.5))
+        arrow((49.0, 23.5), (52.6, 23.5))
+        arrow((80.4, 19.0), (85.6, 19.0), blue)
+        arrow((92.7, 29.6), (92.7, 26.4))
+
+        # learning signal back to the model
+        ax.plot([92.7, 92.7, 39.75], [11.6, 3.2, 3.2], color=blue, lw=1.3)
+        arrow((39.75, 3.2), (39.75, 14.6), blue)
+        ax.text(
+            66,
+            0.6,
+            r"gradient ascent on  $\mathbb{E}[S(p,y)] - \beta\,"
+            r"\mathrm{KL}(p\,\Vert\,p_{\mathrm{ref}})$",
+            fontsize=9.5,
+            color=theme.ink2,
+            ha="center",
+            va="bottom",
+        )
+    return fig
+
+
+def make_concept_figures(fig_dir: str | Path) -> list[Path]:
+    mpl.rcParams["svg.fonttype"] = "path"
+    out: list[Path] = []
+    for theme in THEMES:
+        fig = fig_concept(theme)
+        out += save_figure(fig, "concept", fig_dir, theme)
+        plt.close(fig)
+    return out
+
+
+# ---------------------------------------------------------------------------------------------
 # entry point
 # ---------------------------------------------------------------------------------------------
 
@@ -766,3 +901,10 @@ def make_toy_figures(res_dir: str | Path, fig_dir: str | Path) -> list[Path]:
             plt.close(fig)
         written.append(hero_animation(data, theme, Path(fig_dir) / f"toy_hero{theme.suffix}.gif"))
     return written
+
+
+if __name__ == "__main__":
+    import sys
+
+    mpl.use("Agg")
+    print(*make_concept_figures(sys.argv[1] if len(sys.argv) > 1 else "figures"), sep="\n")
