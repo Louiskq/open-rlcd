@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# large run artefacts stay on the cluster; only small result JSONs are tracked under results/
+runs/
+checkpoints/
+*.pt
+*.safetensors
+wandb/

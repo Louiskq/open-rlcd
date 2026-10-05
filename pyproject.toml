@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "open-rlcd"
+version = "0.1.0"
+description = "An open reading of Reinforcement Learning for Calibrated Decisions (RLCD): proper-scoring-rule rewards for typed decisions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Louis Kearney" }]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+# Notebook + tests + lint: everything needed to work on the repo without a GPU.
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "ipykernel",
+    "ipywidgets>=8",
+    "nbformat",
+    "nbconvert",
+]
+# Exp A / Exp B training and evaluation (added in phase 2; pinned on the cluster, see slurm/).
+train = [
+    "torch",
+    "transformers",
+    "peft",
+    "pyyaml",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["rlcd", "toy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "NPY"]
+ignore = ["E741"]  # ambiguous names such as `l` are fine in short numeric code
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
