@@ -335,3 +335,25 @@ Choices the design left open, made while building the Exp A runner (`rlcd/train_
   version measured a single micro-batch and fluctuated wildly (SCORE 1% to 64%); it was replaced before any number was
   reported.
 
+
+## D19. The pre-registration is frozen and Phase 3 started (2026-10-06)
+
+- **Pre-registration frozen at commit `112dc50`** (`PREREGISTRATION.md`, with `results/expA/delta.json`). From here it is
+  edited only through its Amendments section. The maintainer's "go" on 2026-10-06 confirmed the open readings (halved
+  training split; N = 1,500 per round; A4 the swept arm for A3 / A4; H2 as A5 seed 0 against A1 seed 0; one
+  learning-rate schedule over S with optimiser state carried across A6 / A6r rounds).
+- **A1 learning rate 1e-4** (lowest selection-split log loss, 0.341 against 0.360 and 0.367); **δ** is twice the
+  difference of A1 seeds 0 and 1 on the selection split (1,189 questions), the accuracy floor binding only for CHOICE.
+  **H1's accuracy margin therefore becomes ±2.2 points**, wider than the spec's ±1, which is stated in the
+  pre-registration.
+- **Dev predictions** of the sweep and the seed-1 run were written by the runner but not opened; `compute_delta.py` and
+  `pick_lr.py` read calibration and selection predictions only.
+- **Phase 3 wave 1** was submitted by `scripts/expA_phase3.sh` right after the freeze (jobs 7129659–7129669: A1 seed 2,
+  the A4 sweep, A5, A6 and A6r × 3 seeds, all at 1e-4 except the A4 sweep). Wave 2 (A4 seeds 1–2, A3 × 3 at the A4
+  rate, A3 with β = 0) is submitted by the same detached driver once the A4 sweep has finished.
+- **Time limits:** 3 h 30 min per run, 4 h 30 min for A6 / A6r (candidate scoring adds about half an hour).
+- **Commit email, checked rather than assumed:** the pre-rewrite commits are still served by GitHub with the maintainer's
+  old Gmail address in author and committer fields (`gh api repos/Louiskq/open-rlcd/commits/<old sha>`, four old SHAs
+  found through the Actions runs). GitHub's "keep my email private" setting does not rewrite commit metadata made from
+  the command line (it applies to web edits, and the separate "block command line pushes that expose my email" option
+  would have rejected those pushes); so D17's delete-and-recreate step still stands before the repository is made public.
