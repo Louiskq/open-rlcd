@@ -98,9 +98,11 @@ label setting, Exp B the on-policy one.
 A sceptic can read RLCD as a **branded proper-scoring fine-tune with an on-policy data loop, and no RL in it**.
 This repo tests that reading directly instead of arguing about it:
 
-- **Exp A, A6 ("cynical RLCD")**: mine the questions the current model is least sure about, label them with the
-  teacher, fine-tune with plain log loss (RPS for `SCORE`), repeat. **A6r** is the same with random items. A6
-  sees more data than A1–A5, so any lead over A1 is data; *A6 against A6r* is the test of mining itself.
+- **Exp A, A6 ("cynical RLCD")**: mine the questions the current model is least sure about, take their labels
+  (which arrive with generation and stay hidden until after selection), fine-tune with plain log loss (RPS for
+  `SCORE`), repeat. **A6r** is the same with random items inside the same per-type quotas. A6 sees more data than
+  A1–A5, but it gets the **same total optimiser steps** (a quarter per round, continuing from the previous round's
+  weights), so any lead over A1 is data, not extra training; *A6 against A6r* is the test of mining itself.
 - **Exp B, B4 ("cynical")**: take B1's final policy, fit the belief heads by supervised log loss on that
   policy's rollouts, then temperature-scale. B3 trains the beliefs jointly and on-policy.
 
@@ -272,8 +274,8 @@ the code before the first run and not tuned.
 
 That per-stratum temperature uses the known difficulty, which a real model does not have. The point is diagnosis,
 not a recommended fix. This is one toy configuration and says nothing yet about a 9B model, but it is the reason
-the plan reports Murphy resolution and per-answer-type results next to pooled ECE: H5 as stated (pooled ECE after
-temperature scaling) could pass while the strata disagree.
+the plan pre-registers **H5b** (after temperature scaling, A3 has worse per-domain ECE and lower resolution than
+A1) next to H5, which is stated on pooled ECE and could pass while the strata disagree.
 
 ## Honest caveats
 
@@ -296,6 +298,9 @@ Written *before* the language-model results exist, so they cannot be shaped by t
   calibration, so it appears only as a separate "as served" reference row), how `SCORE` answers are read out
   (decider's one yes/no pass per level, normalised into a distribution), and RPS normalisation (which gives
   `SCORE` questions less gradient than their share of the pool).
+- **Seeds share candidate data.** The cynical arms (A6, A6r) draw their candidate questions from one pool per
+  round that is shared by both arms and by all seeds; selection still differs per seed. Their seed spread therefore
+  understates data variance.
 - **Planned-experiment limitations, stated now:** the independent dev set was written by the same teacher as the
   training data; JevBench hard has 111 items (standard error about 4.4 points), too few to separate the arms.
 - **Results that went against a hypothesis** will be listed here by name. None yet, because no hypothesis has

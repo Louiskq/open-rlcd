@@ -1,6 +1,6 @@
 # Compute budget (Isambard-AI, one GH200 unless stated)
 
-Written 2026-10-06 for the phase 2 go/no-go. Every rate below is **measured** from a completed Slurm job of the
+Written 2026-10-06 for the phase 2 go/no-go; revised the same day for decisions D9–D13. Every rate below is **measured** from a completed Slurm job of the
 old project (job ids given, `sacct` and the run logs on the cluster) unless it is marked *assumed*. A
 fresh probe (`slurm/throughput_probe.sh`, job 7114048) confirms today's training and scoring rates; its status
 is recorded at the end of this file. These are budget estimates, not results; the README does not quote them.
@@ -22,51 +22,54 @@ readout (`docs/decisions.md` D3) every level is its own forward pass over the fu
 of the questions but roughly **40% of the forward-pass rows**. That is a cost factor, and it also bears on D4: after
 RPS is divided by K − 1, SCORE carries less gradient per question than the log score does.
 
-## Estimate by phase
+## Estimate by phase (revised 2026-10-06 for decisions D9–D13)
 
 | phase | GPU-hours | what dominates |
 |---|---|---|
-| **2. smoke run** | **about 12**, of which about 7 are teacher generation that phase 3 reuses | see below |
-| **3. Exp A in full** | **about 290** (range 200–330) | teacher candidate pools (about 136), A6/A6r training (about 75), the 30 supervised/RL runs (about 56) |
+| **2. smoke run** | **about 18**, of which about 7.5 are A1 runs phase 3 needs anyway and about 7 are teacher generation that phase 3 reuses | see below |
+| **3. Exp A in full** | **about 220** (range 190–250) | teacher candidate pools (about 133), then the 25 non-A1 runs (about 47) and A6/A6r (about 24) |
 | **4. Exp B in full** | **about 38** | 15 Breakout runs at about 1.9 each |
-| total | about 340 GPU-hours (about 14 GPU-days) | |
+| total | **about 275 GPU-hours** (about 11.5 GPU-days) | |
+
+With the fallback of one 40k candidate pool (D10) the pools cost about 70 instead of about 140, so phase 3 is
+about 150 and the total about 205.
 
 ### Phase 2 in detail
 
-- 9 training runs at 10% of the steps (A1 ×2 seeds for δ, A3, A4 ×2 clips, A5, A6, A6r, A7): about 15 min each, **2.3**.
-- Evaluation of 10 models (adds A0 and A0 as served): **1.2**. Per-answer-type gradient-norm share: **0.3**.
-- A6 / A6r smoke: 2 rounds, N = 500, a candidate pool of 2,000 per round, so 4,000 generated questions at
-  570/GPU-h is **about 7 (reused in phase 3: it is the start of the real round-1 and round-2 pools)**; fine-tuning
-  and scoring about **1.2**.
-- Breakout label validation (20 sampled episodes per belief, base rates, log-score skill): **0.3**.
-- If the two A1 seeds for δ are run at full length instead of 10% (a recommendation, see `docs/decisions.md` D5):
-  **+3.4**.
+- **A1 at full length (D13): a three-value learning-rate sweep (seed 0) plus a second seed at the chosen rate, 4 runs
+  at about 1.87 each, 7.5.** These count as A1's phase 3 runs, so phase 3 needs one more A1 seed only.
+- The other arms (A3, A4 ×2 clips, A5, A7) at 10% of the steps, 5 runs at about 15 min each: **1.25**.
+- A6 / A6r smoke, 2 rounds at 10% scale (S/4 steps per round, D11): **0.6**. Its candidate slice is the first 2,000
+  questions of each of the first two shared pools, generated at 570 per GPU-hour: **about 7, reused in phase 3**.
+- Evaluation of about 10 models (selection split only for the two δ runs, D13): **1.2**; per-answer-type
+  gradient-norm share: **0.3**; Breakout label validation: **0.3**.
 
 ### Phase 3 in detail
 
-- **Candidate pools: 4 rounds × 4N = 80k questions at N = 5k, about 136 GPU-h.** This is independent of any model,
-  so it can start as soon as N is fixed and run on up to 4 GPUs in parallel (about 34 h of wall time). It only
-  stays at this size if **one pool per round is shared by A6, A6r and all seeds**; generating per run would
-  multiply it by 6 (about 800 GPU-h) and is not feasible.
-- 6 arms (A1, A3, A4 ∞, A4 clip 10, A5, A7) × (3 learning rates + 2 more seeds) = 30 runs at about 1.87 each (the
-  old 654-step setting): **56**; the exploratory A3 with β = 0: **2**.
-- A6 and A6r: 2 arms × 5 runs, each 4 fine-tune rounds. If every round trains for the shared step count that is
-  about 7.5 per run, **75**; if rounds 1–3 use a quarter of the steps it is about 3.3 per run, **33**.
-- Scoring candidates at the dev-eval rate (at least 17 questions/s, so at most about 20 min per 20k pool): 40 round-runs, **12**.
+- **Candidate pools: 4 rounds × 20k = 80k questions, about 140 GPU-h in all (about 133 left after phase 2).** They
+  are generated once and shared by A6, A6r and all seeds (D9); generating per run would multiply the cost by 6.
+  The pools are independent of any model, so they can run on up to 4 GPUs in parallel (about 35 h of wall time) and
+  can start as soon as the budget is confirmed.
+- A1 needs 1 more seed: **1.9**. A3, A4 ∞, A4 clip 10, A5, A7: 5 arms × (3 learning rates + 2 more seeds) = 25 runs
+  at about 1.87: **47**. Exploratory A3 with β = 0: **1.9**.
+- **A6 and A6r (D11): each run has the shared step count in total (S/4 per round), about 1.87 plus roughly 0.5 for
+  four segments' load, tokenise and save, so about 2.4 per run; 2 arms × 5 runs = 24.**
+- **Scoring candidates is needed by A6 only** (A6r picks at random inside the quotas, D12): 5 runs × 4 rounds × 20k
+  questions at no less than 17 questions/s, about 20 min each: **about 6**.
 - Evaluation of about 45 models: **5**.
 
-### Assumptions that change the numbers (each is a decision for the maintainer)
+### Assumptions that change the numbers
 
-1. **Pools are shared** across A6, A6r and seeds (above). Without this the plan is out of budget.
-2. **Labels come with generation** (the pipeline's writer supplies the intended answer and three checks verify it).
-   If "label the selected items" means a separate teacher pass, add roughly 20–50 GPU-h.
-3. **N = 5k.** N = 2.5k roughly halves the generation and A6 training cost (saving about 70–90 GPU-h).
-4. **Steps per arm** follow the old setting (2 epochs, 654 steps); the spec leaves this open.
-5. **The candidate pools use authored questions**; seeded (templated) families were cheaper per question in the
-   old jobs but their yield was not logged, so they are not credited here.
-6. Queueing is not included. On 2026-10-06 the cluster had about 965 nodes allocated, and probe job 7114048 sat
-   pending on priority for more than 30 minutes; wall-clock time for phases 3–4 will be set by the queue, not by the
-   GPU-hours above.
+1. **Step count per arm** follows the old setting (2 epochs, 654 steps); the spec leaves it open, and it scales the
+   training lines above.
+2. **The candidate pools use authored questions** at the measured rate (about 570 kept per GPU-hour); seeded
+   (templated) families were cheaper per question in the old jobs but their yield was not logged, so they are not
+   credited.
+3. **Labels come with generation** (D12), so there is no separate labelling pass.
+4. **The δ runs count as A1 phase 3 seeds** only if they use the learning rate the sweep selects (D13); if that fails,
+   add about 3.7 for two more A1 seeds.
+5. Queueing is not included. On 2026-10-06 the cluster had about 965 nodes allocated, and probe job 7114048 had
+   waited more than an hour; wall-clock time for phases 3 and 4 will be set by the queue, not by the GPU-hours above.
 
 ## Probe job 7114048
 
