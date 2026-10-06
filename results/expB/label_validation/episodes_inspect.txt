@@ -1,0 +1,1684 @@
+=== episode seed 3098: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED return   legacy=1 independent=1
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED life30   legacy=0 independent=0
+  t= 32  BRICK score 0->1
+  t= 32  ASKED return   legacy=1 independent=1
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED life30   legacy=0 independent=0
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED return   legacy=1 independent=1
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED brick30  legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED brick30  legacy=1 independent=1
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED brick30  legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED return   legacy=1 independent=1
+  t=168  ASKED life30   legacy=0 independent=0
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED life30   legacy=0 independent=0
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED brick30  legacy=1 independent=1
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED life30   legacy=1 independent=1
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED life30   legacy=0 independent=0
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3107: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED return   legacy=1 independent=1
+  t= 28  ASKED life30   legacy=0 independent=0
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED return   legacy=1 independent=1
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED life30   legacy=0 independent=0
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED life30   legacy=0 independent=0
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED return   legacy=1 independent=1
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED brick30  legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED return   legacy=0 independent=0
+  t=148  ASKED return   legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED brick30  legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED brick30  legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED return   legacy=0 independent=0
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED brick30  legacy=0 independent=0
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3010: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED return   legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED return   legacy=1 independent=1
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED life30   legacy=0 independent=0
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED life30   legacy=0 independent=0
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED return   legacy=1 independent=1
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED brick30  legacy=1 independent=1
+  t=132  ASKED return   legacy=0 independent=0
+  t=136  ASKED return   legacy=0 independent=0
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED return   legacy=0 independent=0
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  ASKED life30   legacy=1 independent=1
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED life30   legacy=0 independent=0
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED brick30  legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED return   legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED return   legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED return   legacy=0 independent=0
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED brick30  legacy=0 independent=0
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED brick30  legacy=0 independent=0
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED return   legacy=1 independent=1
+  t=272  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3066: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED return   legacy=1 independent=1
+  t=  8  ASKED brick30  legacy=1 independent=1
+  t= 12  ASKED life30   legacy=0 independent=0
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED return   legacy=1 independent=1
+  t= 28  ASKED return   legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED brick30  legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED brick30  legacy=1 independent=1
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED brick30  legacy=0 independent=0
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED brick30  legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED return   legacy=1 independent=1
+  t=168  ASKED life30   legacy=0 independent=0
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED return   legacy=1 independent=1
+  t=188  ASKED brick30  legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED life30   legacy=1 independent=1
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED return   legacy=0 independent=0
+  t=240  ASKED return   legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED life30   legacy=1 independent=1
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED life30   legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3130: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED brick30  legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED return   legacy=1 independent=1
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED return   legacy=0 independent=0
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED return   legacy=1 independent=1
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED return   legacy=0 independent=0
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED brick30  legacy=0 independent=0
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=272  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3124: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED return   legacy=1 independent=1
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED brick30  legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED life30   legacy=0 independent=0
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED life30   legacy=0 independent=0
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED brick30  legacy=1 independent=1
+  t= 92  ASKED life30   legacy=0 independent=0
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  ASKED life30   legacy=1 independent=1
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED life30   legacy=0 independent=0
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED return   legacy=0 independent=0
+  t=228  ASKED life30   legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED brick30  legacy=0 independent=0
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED brick30  legacy=0 independent=0
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3103: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED brick30  legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED life30   legacy=0 independent=0
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED return   legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED return   legacy=1 independent=1
+  t= 48  ASKED return   legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED life30   legacy=0 independent=0
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED return   legacy=1 independent=1
+  t= 88  ASKED brick30  legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED return   legacy=0 independent=0
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED life30   legacy=0 independent=0
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED brick30  legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED life30   legacy=0 independent=0
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED return   legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED life30   legacy=1 independent=1
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3077: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED brick30  legacy=1 independent=1
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED life30   legacy=0 independent=0
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED life30   legacy=0 independent=0
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED brick30  legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED return   legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED return   legacy=1 independent=1
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED return   legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED return   legacy=0 independent=0
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED return   legacy=0 independent=0
+  t=152  ASKED life30   legacy=1 independent=1
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED life30   legacy=0 independent=0
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED return   legacy=1 independent=1
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED return   legacy=1 independent=1
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED return   legacy=1 independent=1
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED life30   legacy=0 independent=0
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED return   legacy=0 independent=0
+  t=240  ASKED return   legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED life30   legacy=1 independent=1
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3122: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED brick30  legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED return   legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED return   legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED return   legacy=1 independent=1
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED return   legacy=1 independent=1
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED brick30  legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED return   legacy=1 independent=1
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED brick30  legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED brick30  legacy=1 independent=1
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED brick30  legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED life30   legacy=1 independent=1
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED life30   legacy=0 independent=0
+  t=268  ASKED life30   legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3091: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED brick30  legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED life30   legacy=0 independent=0
+  t= 72  ASKED brick30  legacy=0 independent=0
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED brick30  legacy=1 independent=1
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED brick30  legacy=0 independent=0
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED brick30  legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED return   legacy=0 independent=0
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED life30   legacy=0 independent=0
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED return   legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED life30   legacy=0 independent=0
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED brick30  legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED return   legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED return   legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED life30   legacy=1 independent=1
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED return   legacy=1 independent=1
+  t=272  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3149: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED brick30  legacy=1 independent=1
+  t= 12  ASKED life30   legacy=0 independent=0
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED brick30  legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED brick30  legacy=0 independent=0
+  t= 76  ASKED life30   legacy=0 independent=0
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED brick30  legacy=0 independent=0
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED return   legacy=0 independent=0
+  t=136  ASKED return   legacy=0 independent=0
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED brick30  legacy=0 independent=0
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED life30   legacy=0 independent=0
+  t=184  ASKED return   legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED life30   legacy=0 independent=0
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED brick30  legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED return   legacy=0 independent=0
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED return   legacy=0 independent=0
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED brick30  legacy=0 independent=0
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED life30   legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3055: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED return   legacy=1 independent=1
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED return   legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED brick30  legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED life30   legacy=0 independent=0
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED life30   legacy=0 independent=0
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED brick30  legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED life30   legacy=0 independent=0
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED brick30  legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED return   legacy=0 independent=0
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3129: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED brick30  legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED life30   legacy=0 independent=0
+  t= 44  ASKED return   legacy=1 independent=1
+  t= 48  ASKED return   legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED life30   legacy=0 independent=0
+  t= 64  ASKED life30   legacy=0 independent=0
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED return   legacy=1 independent=1
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED return   legacy=0 independent=0
+  t=148  ASKED return   legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED brick30  legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED return   legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED life30   legacy=0 independent=0
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED return   legacy=0 independent=0
+  t=228  ASKED life30   legacy=1 independent=1
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED brick30  legacy=0 independent=0
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED return   legacy=0 independent=0
+  t=248  ASKED life30   legacy=1 independent=1
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3035: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED life30   legacy=0 independent=0
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED brick30  legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED life30   legacy=0 independent=0
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED return   legacy=1 independent=1
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED return   legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED life30   legacy=0 independent=0
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED return   legacy=1 independent=1
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED return   legacy=0 independent=0
+  t=132  ASKED return   legacy=0 independent=0
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED brick30  legacy=0 independent=0
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED life30   legacy=1 independent=1
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED brick30  legacy=0 independent=0
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED life30   legacy=0 independent=0
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED return   legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED brick30  legacy=1 independent=1
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED brick30  legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED brick30  legacy=1 independent=1
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED brick30  legacy=0 independent=0
+  t=248  ASKED life30   legacy=1 independent=1
+  t=252  ASKED return   legacy=0 independent=0
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED life30   legacy=0 independent=0
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3072: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED brick30  legacy=1 independent=1
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED brick30  legacy=1 independent=1
+  t= 56  ASKED life30   legacy=0 independent=0
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED return   legacy=1 independent=1
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED return   legacy=1 independent=1
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED brick30  legacy=1 independent=1
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED return   legacy=0 independent=0
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED return   legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED life30   legacy=0 independent=0
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED life30   legacy=0 independent=0
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED life30   legacy=0 independent=0
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED brick30  legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED brick30  legacy=0 independent=0
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED return   legacy=0 independent=0
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED return   legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3024: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED return   legacy=1 independent=1
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED return   legacy=1 independent=1
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED brick30  legacy=1 independent=1
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED life30   legacy=0 independent=0
+  t= 56  ASKED life30   legacy=0 independent=0
+  t= 60  ASKED return   legacy=1 independent=1
+  t= 64  ASKED brick30  legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED life30   legacy=0 independent=0
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED return   legacy=1 independent=1
+  t=100  ASKED return   legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED brick30  legacy=1 independent=1
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED life30   legacy=0 independent=0
+  t=124  ASKED life30   legacy=0 independent=0
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED brick30  legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED life30   legacy=1 independent=1
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED life30   legacy=0 independent=0
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED return   legacy=1 independent=1
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED life30   legacy=0 independent=0
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED return   legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED brick30  legacy=0 independent=0
+  t=208  ASKED life30   legacy=0 independent=0
+  t=212  ASKED brick30  legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED life30   legacy=0 independent=0
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED return   legacy=0 independent=0
+  t=244  ASKED life30   legacy=1 independent=1
+  t=248  ASKED brick30  legacy=0 independent=0
+  t=252  ASKED life30   legacy=1 independent=1
+  t=256  ASKED life30   legacy=1 independent=1
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED life30   legacy=0 independent=0
+  t=268  ASKED brick30  legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3158: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED brick30  legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED life30   legacy=0 independent=0
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED life30   legacy=0 independent=0
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED life30   legacy=0 independent=0
+  t= 40  ASKED life30   legacy=0 independent=0
+  t= 44  ASKED life30   legacy=0 independent=0
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED life30   legacy=0 independent=0
+  t= 65  BRICK score 1->2
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 72  ASKED brick30  legacy=0 independent=0
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED life30   legacy=0 independent=0
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED brick30  legacy=1 independent=1
+  t= 92  ASKED return   legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED return   legacy=1 independent=1
+  t=112  ASKED return   legacy=1 independent=1
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED brick30  legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED life30   legacy=0 independent=0
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED life30   legacy=0 independent=0
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=197  BRICK score 4->5
+  t=200  ASKED life30   legacy=0 independent=0
+  t=204  ASKED life30   legacy=0 independent=0
+  t=208  ASKED brick30  legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=220  ASKED brick30  legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED return   legacy=0 independent=0
+  t=228  ASKED brick30  legacy=1 independent=1
+  t=232  ASKED life30   legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED brick30  legacy=0 independent=0
+  t=240  ASKED brick30  legacy=0 independent=0
+  t=244  ASKED return   legacy=0 independent=0
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=0 independent=0
+  t=256  ASKED return   legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3064: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED life30   legacy=0 independent=0
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED return   legacy=1 independent=1
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED return   legacy=1 independent=1
+  t= 24  ASKED life30   legacy=0 independent=0
+  t= 28  ASKED brick30  legacy=1 independent=1
+  t= 32  BRICK score 0->1
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED brick30  legacy=1 independent=1
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED return   legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED life30   legacy=0 independent=0
+  t= 65  BRICK score 1->2
+  t= 68  ASKED life30   legacy=0 independent=0
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED brick30  legacy=1 independent=1
+  t= 80  ASKED return   legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED brick30  legacy=1 independent=1
+  t= 88  ASKED life30   legacy=0 independent=0
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED brick30  legacy=0 independent=0
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED life30   legacy=0 independent=0
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED brick30  legacy=1 independent=1
+  t=132  ASKED life30   legacy=1 independent=1
+  t=136  ASKED brick30  legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  ASKED life30   legacy=1 independent=1
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED return   legacy=1 independent=1
+  t=160  ASKED return   legacy=1 independent=1
+  t=164  ASKED life30   legacy=0 independent=0
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED brick30  legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED brick30  legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED brick30  legacy=1 independent=1
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  ASKED brick30  legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED brick30  legacy=0 independent=0
+  t=204  ASKED life30   legacy=0 independent=0
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED return   legacy=1 independent=1
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED return   legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED return   legacy=0 independent=0
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  BRICK score 5->6
+  t=236  ASKED brick30  legacy=0 independent=0
+  t=240  ASKED return   legacy=0 independent=0
+  t=244  ASKED brick30  legacy=0 independent=0
+  t=248  ASKED return   legacy=0 independent=0
+  t=252  ASKED return   legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED return   legacy=1 independent=1
+  t=264  ASKED life30   legacy=0 independent=0
+  t=268  ASKED life30   legacy=0 independent=0
+  t=275  RETURN ball (60,180) paddle x=62
+=== episode seed 3136: 300 steps, final score 6, truncated
+  t=  0  ASKED life30   legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=0 independent=0
+  t=  8  ASKED brick30  legacy=0 independent=0
+  t= 12  ASKED brick30  legacy=1 independent=1
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=66
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED return   legacy=0 independent=0
+  t= 28  ASKED return   legacy=0 independent=0
+  t= 32  ASKED life30   legacy=0 independent=0
+  t= 36  ASKED return   legacy=0 independent=0
+  t= 40  BRICK score 0->1
+  t= 40  ASKED life30   legacy=0 independent=0
+  t= 44  ASKED return   legacy=0 independent=0
+  t= 48  ASKED life30   legacy=1 independent=1
+  t= 52  ASKED life30   legacy=1 independent=1
+  t= 56  ASKED life30   legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=0 independent=0
+  t= 64  ASKED return   legacy=0 independent=0
+  t= 68  ASKED brick30  legacy=0 independent=0
+  t= 71  LIFE LOST lives 5->4
+  t= 72  ASKED return   legacy=1 independent=1
+  t= 76  ASKED return   legacy=1 independent=1
+  t= 80  ASKED brick30  legacy=0 independent=0
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 89  RETURN ball (60,180) paddle x=62
+  t= 92  ASKED brick30  legacy=1 independent=1
+  t= 96  ASKED life30   legacy=0 independent=0
+  t=100  ASKED brick30  legacy=1 independent=1
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED life30   legacy=0 independent=0
+  t=112  ASKED return   legacy=1 independent=1
+  t=113  BRICK score 1->2
+  t=116  ASKED life30   legacy=0 independent=0
+  t=120  ASKED return   legacy=1 independent=1
+  t=124  ASKED return   legacy=1 independent=1
+  t=128  ASKED return   legacy=1 independent=1
+  t=132  ASKED return   legacy=1 independent=1
+  t=136  ASKED life30   legacy=0 independent=0
+  t=137  RETURN ball (61,175) paddle x=57
+  t=140  ASKED life30   legacy=0 independent=0
+  t=144  ASKED life30   legacy=1 independent=1
+  t=148  ASKED life30   legacy=1 independent=1
+  t=152  BRICK score 2->3
+  t=152  ASKED brick30  legacy=0 independent=0
+  t=156  ASKED brick30  legacy=0 independent=0
+  t=160  ASKED life30   legacy=1 independent=1
+  t=164  ASKED life30   legacy=1 independent=1
+  t=168  ASKED return   legacy=0 independent=0
+  t=172  ASKED return   legacy=0 independent=0
+  t=173  LIFE LOST lives 4->3
+  t=176  ASKED return   legacy=1 independent=1
+  t=180  ASKED return   legacy=1 independent=1
+  t=184  ASKED brick30  legacy=0 independent=0
+  t=188  ASKED return   legacy=1 independent=1
+  t=192  RETURN ball (55,180) paddle x=55
+  t=192  ASKED life30   legacy=0 independent=0
+  t=196  ASKED brick30  legacy=1 independent=1
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED brick30  legacy=1 independent=1
+  t=217  BRICK score 3->4
+  t=220  ASKED life30   legacy=0 independent=0
+  t=224  ASKED return   legacy=1 independent=1
+  t=228  ASKED return   legacy=1 independent=1
+  t=232  ASKED brick30  legacy=1 independent=1
+  t=236  ASKED return   legacy=1 independent=1
+  t=240  ASKED life30   legacy=0 independent=0
+  t=242  RETURN ball (64,176) paddle x=55
+  t=244  ASKED return   legacy=1 independent=1
+  t=248  ASKED life30   legacy=0 independent=0
+  t=252  ASKED brick30  legacy=1 independent=1
+  t=256  ASKED return   legacy=1 independent=1
+  t=257  BRICK score 4->5
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED brick30  legacy=0 independent=0
+  t=268  ASKED return   legacy=1 independent=1
+  t=272  ASKED return   legacy=1 independent=1
+  t=274  RETURN ball (190,179) paddle x=191
+  t=297  BRICK score 5->6
+=== episode seed 3154: 300 steps, final score 6, truncated
+  t=  0  ASKED brick30  legacy=0 independent=0
+  t=  4  ASKED brick30  legacy=1 independent=1
+  t=  8  ASKED return   legacy=1 independent=1
+  t= 12  ASKED return   legacy=1 independent=1
+  t= 16  ASKED life30   legacy=0 independent=0
+  t= 17  RETURN ball (64,176) paddle x=55
+  t= 20  ASKED brick30  legacy=1 independent=1
+  t= 24  ASKED brick30  legacy=1 independent=1
+  t= 28  ASKED life30   legacy=0 independent=0
+  t= 32  BRICK score 0->1
+  t= 32  ASKED brick30  legacy=0 independent=0
+  t= 36  ASKED return   legacy=1 independent=1
+  t= 40  ASKED return   legacy=1 independent=1
+  t= 44  ASKED brick30  legacy=1 independent=1
+  t= 48  ASKED life30   legacy=0 independent=0
+  t= 49  RETURN ball (168,175) paddle x=154
+  t= 52  ASKED return   legacy=1 independent=1
+  t= 56  ASKED brick30  legacy=1 independent=1
+  t= 60  ASKED brick30  legacy=1 independent=1
+  t= 64  ASKED return   legacy=1 independent=1
+  t= 65  BRICK score 1->2
+  t= 68  ASKED return   legacy=1 independent=1
+  t= 72  ASKED life30   legacy=0 independent=0
+  t= 76  ASKED life30   legacy=0 independent=0
+  t= 80  ASKED brick30  legacy=1 independent=1
+  t= 81  RETURN ball (72,175) paddle x=62
+  t= 84  ASKED life30   legacy=0 independent=0
+  t= 88  ASKED return   legacy=1 independent=1
+  t= 92  ASKED life30   legacy=0 independent=0
+  t= 96  ASKED brick30  legacy=1 independent=1
+  t=100  ASKED life30   legacy=0 independent=0
+  t=104  BRICK score 2->3
+  t=104  ASKED life30   legacy=0 independent=0
+  t=108  ASKED brick30  legacy=0 independent=0
+  t=112  ASKED return   legacy=1 independent=1
+  t=116  ASKED brick30  legacy=1 independent=1
+  t=120  ASKED brick30  legacy=1 independent=1
+  t=124  ASKED brick30  legacy=1 independent=1
+  t=128  RETURN ball (64,175) paddle x=55
+  t=128  ASKED life30   legacy=1 independent=1
+  t=132  ASKED brick30  legacy=1 independent=1
+  t=136  ASKED life30   legacy=1 independent=1
+  t=139  BRICK score 3->4
+  t=140  ASKED return   legacy=0 independent=0
+  t=144  ASKED return   legacy=0 independent=0
+  t=148  ASKED brick30  legacy=0 independent=0
+  t=152  ASKED return   legacy=0 independent=0
+  t=155  LIFE LOST lives 5->4
+  t=156  ASKED life30   legacy=0 independent=0
+  t=160  ASKED life30   legacy=0 independent=0
+  t=164  ASKED brick30  legacy=0 independent=0
+  t=168  ASKED brick30  legacy=1 independent=1
+  t=172  ASKED return   legacy=1 independent=1
+  t=173  RETURN ball (60,180) paddle x=62
+  t=176  ASKED return   legacy=1 independent=1
+  t=180  ASKED brick30  legacy=1 independent=1
+  t=184  ASKED return   legacy=1 independent=1
+  t=188  ASKED life30   legacy=0 independent=0
+  t=192  ASKED brick30  legacy=1 independent=1
+  t=196  ASKED life30   legacy=0 independent=0
+  t=197  BRICK score 4->5
+  t=200  ASKED return   legacy=1 independent=1
+  t=204  ASKED return   legacy=1 independent=1
+  t=208  ASKED return   legacy=1 independent=1
+  t=212  ASKED life30   legacy=0 independent=0
+  t=216  ASKED life30   legacy=0 independent=0
+  t=220  ASKED return   legacy=1 independent=1
+  t=221  RETURN ball (61,175) paddle x=55
+  t=224  ASKED life30   legacy=0 independent=0
+  t=228  ASKED life30   legacy=1 independent=1
+  t=232  ASKED return   legacy=0 independent=0
+  t=236  BRICK score 5->6
+  t=236  ASKED life30   legacy=1 independent=1
+  t=240  ASKED life30   legacy=1 independent=1
+  t=244  ASKED brick30  legacy=0 independent=0
+  t=248  ASKED life30   legacy=1 independent=1
+  t=252  ASKED return   legacy=0 independent=0
+  t=256  ASKED brick30  legacy=0 independent=0
+  t=257  LIFE LOST lives 4->3
+  t=260  ASKED life30   legacy=0 independent=0
+  t=264  ASKED return   legacy=1 independent=1
+  t=268  ASKED return   legacy=1 independent=1
+  t=272  ASKED return   legacy=1 independent=1
+  t=275  RETURN ball (60,180) paddle x=62

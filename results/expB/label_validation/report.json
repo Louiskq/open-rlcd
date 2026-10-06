@@ -1,0 +1,123 @@
+{
+ "episodes": 160,
+ "steps": 48000,
+ "mean_final_score": 6.0375,
+ "terminal_episodes": 0,
+ "beliefs_asked_and_resolved": {
+  "return": 3586,
+  "life30": 3663,
+  "brick30": 3693
+ },
+ "agreement": {
+  "return": {
+   "agree": 3586,
+   "disagree": 0
+  },
+  "brick30": {
+   "agree": 3693,
+   "disagree": 0
+  },
+  "life30": {
+   "agree": 3663,
+   "disagree": 0
+  }
+ },
+ "unresolvable_by_independent_labeller": {},
+ "disagreements": [],
+ "base_rate_legacy": {
+  "return": {
+   "rate": 0.7780256553262688,
+   "n": 3586
+  },
+  "life30": {
+   "rate": 0.22085722085722087,
+   "n": 3663
+  },
+  "brick30": {
+   "rate": 0.6347143243975089,
+   "n": 3693
+  }
+ },
+ "base_rate_independent": {
+  "return": {
+   "rate": 0.7780256553262688,
+   "n": 3586
+  },
+  "life30": {
+   "rate": 0.22085722085722087,
+   "n": 3663
+  },
+  "brick30": {
+   "rate": 0.6347143243975089,
+   "n": 3693
+  }
+ },
+ "returns": {
+  "n": 1121,
+  "ball_y_at_return_min_median_max": [
+   175,
+   175,
+   182
+  ],
+  "abs_dx_to_paddle_median_p90_max": [
+   9.0,
+   14.0,
+   20.0
+  ],
+  "turning_points_between_y100_and_150": 0
+ },
+ "mean_independent_label_by_threshold(all kinds)": {
+  "140": 0.5431365381100347,
+  "150": 0.5431365381100347,
+  "160": 0.5431365381100347,
+  "170": 0.5431365381100347
+ },
+ "model_skill_vs_base_rate": {
+  "sft": {
+   "return": {
+    "n": 3586,
+    "base_rate": 0.7780256553262688,
+    "nll": 2.1111816755254704,
+    "nll_base_rate": 0.5296321327243014,
+    "skill": -2.9861283805913645
+   },
+   "life30": {
+    "n": 3663,
+    "base_rate": 0.22085722085722087,
+    "nll": 1.4164340376795257,
+    "nll_base_rate": 0.5282052064497402,
+    "skill": -1.6815980236164183
+   },
+   "brick30": {
+    "n": 3693,
+    "base_rate": 0.6347143243975089,
+    "nll": 1.203698848732179,
+    "nll_base_rate": 0.6565599083910555,
+    "skill": -0.8333419895861818
+   }
+  },
+  "v2_last": {
+   "return": {
+    "n": 3586,
+    "base_rate": 0.7780256553262688,
+    "nll": 0.49464300481458423,
+    "nll_base_rate": 0.5296321327243014,
+    "skill": 0.0660630761387937
+   },
+   "life30": {
+    "n": 3663,
+    "base_rate": 0.22085722085722087,
+    "nll": 0.5006894088180277,
+    "nll_base_rate": 0.5282052064497402,
+    "skill": 0.05209300721713106
+   },
+   "brick30": {
+    "n": 3693,
+    "base_rate": 0.6347143243975089,
+    "nll": 0.29125664100283416,
+    "nll_base_rate": 0.6565599083910555,
+    "skill": 0.5563898476277995
+   }
+  }
+ }
+}
