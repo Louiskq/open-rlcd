@@ -41,8 +41,8 @@
 | Exp 0 (toy) | RLCD-bandit | **[0.011 (0.008–0.014)](results/toy/rlcd_bandit.json)** | [0.498 (0.496–0.501)](results/toy/rlcd_bandit.json) | [1.221 (1.219–1.225)](results/toy/rlcd_bandit.json) |
 | Exp 0 (toy) | RLCD-bandit, clip 10 | [0.060 (0.056–0.066)](results/toy/rlcd_bandit_clip10.json) | [0.499 (0.496–0.502)](results/toy/rlcd_bandit_clip10.json) | [1.241 (1.238–1.244)](results/toy/rlcd_bandit_clip10.json) |
 | Exp 0 (toy) | Supervised log loss (= RLCD-full) | **[0.009 (0.006–0.012)](results/toy/supervised.json)** | [0.498 (0.495–0.500)](results/toy/supervised.json) | [1.220 (1.218–1.222)](results/toy/supervised.json) |
-| Exp A (9B decider, teacher labels) | A1–A7 | _pending_ | _pending_ | _pending_ |
-| Exp B (Breakout, on-policy) | B1–B6 | _pending_ | _pending_ | _pending_ |
+| Exp A (9B decider, teacher labels) | A1–A6r | _pending_ | _pending_ | _pending_ |
+| Exp B (Breakout, on-policy) | B1–B5 | _pending_ | _pending_ | _pending_ |
 <!-- END gen:tldr -->
 
 <sub>Seed mean (min–max). Bold: best, or within the best arm's seed range. Every number links to the JSON it
@@ -95,19 +95,22 @@ label setting, Exp B the on-policy one.
 
 ## Is RLCD just a data engine?
 
-A sceptic can read RLCD as a **branded proper-scoring fine-tune with an on-policy data loop, and no RL in it**.
-This repo tests that reading directly instead of arguing about it:
+A sceptic can read RLCD as a **branded proper-scoring fine-tune, with at most a data loop around it, and no RL in
+it**. This repo tests that reading in three places instead of arguing about it:
 
-- **Exp A, A6 ("cynical RLCD")**: mine the questions the current model is least sure about, take their labels
-  (which arrive with generation and stay hidden until after selection), fine-tune with plain log loss (RPS for
-  `SCORE`), repeat. **A6r** is the same with random items inside the same per-type quotas. A6 sees more data than
-  A1–A5, but it gets the **same total optimiser steps** (a quarter per round, continuing from the previous round's
-  weights), so any lead over A1 is data, not extra training; *A6 against A6r* is the test of mining itself.
+- **The main test, Exp A: A2 against the RL arms.** A2 is "train normally, calibrate afterwards": continue the start
+  model with plain log loss (RPS for `SCORE`), then fit one temperature per answer type. If the cynical reading is
+  right, A2 should match the RL arms (A3 RLVR, A4 RLCD-bandit, A5 RLCD-full) once those are temperature-scaled too.
+  That is pre-registered hypothesis **H5**, with **H5b** checking the per-domain calibration and resolution that
+  pooled ECE can hide (Exp 0b).
+- **Does mining add anything? A6 against A6r.** No new data is generated. The training pool is split in half by
+  hash. **A6** starts on half A and, over four rounds, mines the questions the current model is least sure about
+  from half B (labels stay hidden until after selection), fine-tuning with plain log loss; **A6r** selects from the
+  same half B at random with the same per-type quotas. Both get the same total optimiser steps as every other arm
+  (a quarter per round, continuing from the previous round's weights). Because both only choose among data already
+  in the pool, A6 against A6r tests the *selection rule*, not data volume (**H4**).
 - **Exp B, B4 ("cynical")**: take B1's final policy, fit the belief heads by supervised log loss on that
-  policy's rollouts, then temperature-scale. B3 trains the beliefs jointly and on-policy.
-
-Pre-registered predictions: **H4** (A6 is no better than A6r beyond seed noise) and **H7** (B3 beats B4 on belief
-log loss at a matched game score; if not, the cynical reading wins in this setting too).
+  policy's rollouts, then temperature-scale. B3 trains the beliefs jointly and on-policy (**H7**).
 
 **Result: pending** (phases 3 and 4). It will be reported here with the same prominence whichever way it goes.
 
@@ -298,9 +301,15 @@ Written *before* the language-model results exist, so they cannot be shaped by t
   calibration, so it appears only as a separate "as served" reference row), how `SCORE` answers are read out
   (decider's one yes/no pass per level, normalised into a distribution), and RPS normalisation (which gives
   `SCORE` questions less gradient than their share of the pool).
-- **Seeds share candidate data.** The cynical arms (A6, A6r) draw their candidate questions from one pool per
-  round that is shared by both arms and by all seeds; selection still differs per seed. Their seed spread therefore
-  understates data variance.
+- **Seeds share candidate data.** A6 and A6r choose from the same held-back half of the pool, shared by both arms
+  and by all seeds; selection still differs per seed. Their seed spread therefore understates data variance.
+- **A6 never sees more data than A1**: it trains on half A plus what it selects from half B. A6 against A1 is
+  therefore not a volume comparison and is not pre-registered; the clean contrast is A6 against A6r.
+- **A lean experiment set, chosen for budget** ([`docs/decisions.md`](docs/decisions.md) D-lean). Dropped: the
+  clipped RLCD-bandit arm in Exp A (Exp 0 already measures the clipping bias), the RPS-versus-log-loss ablation on
+  `SCORE` (and its hypothesis), and the belief-weight sensitivity in Exp B. Run on one seed only: A5 (a
+  correctness check) and B5 (a descriptive ablation). Learning-rate sweeps are shared (A1 with A6 and A6r; A3 with
+  A4), so RLVR is run at a rate tuned for RLCD-bandit, not at its own best.
 - **Planned-experiment limitations, stated now:** the independent dev set was written by the same teacher as the
   training data; JevBench hard has 111 items (standard error about 4.4 points), too few to separate the arms.
 - **Results that went against a hypothesis** will be listed here by name. None yet, because no hypothesis has

@@ -51,6 +51,8 @@ Decisions made later are appended; an entry is never silently rewritten.
 - **Implemented:** `rlcd.isolated` (`combine`, `mass_deviation`, `score_grad_level_logits`), tested against
   decider's `combine_isolated` formula and by finite differences.
 
+*Amended by D-lean: A7 and H6 are dropped, so the statement that H6 is a comparison of A1 and A7 no longer applies. A4 on SCORE items still optimises the log score, A5 and A1 still use RPS.*
+
 ## D4. RPS stays divided by K − 1
 
 - **Decided:** RPS is normalised by `K − 1`, so it lies in [0, 1].
@@ -117,6 +119,8 @@ once the Exp A results are in.
 - Because A6 and A6r draw from the same pool, A6 against A6r also isolates the selection rule from the quality of
   the candidates.
 
+*Amended by D-lean: there is no generated pool any more. A6 and A6r select from the same held-back half B of the existing pool, shared by both arms and all seeds; the README caveat that seed spread understates data variance stands.*
+
 ## D10. N stays at 5k; the fallback is one 40k pool
 
 - **Decided:** N = 5k, so 4N = 20k candidates per round and 80k over four rounds. H4 predicts a null result, and a
@@ -126,6 +130,8 @@ once the Exp A results are in.
   40k drawn without replacement across all four rounds. *Interpretation to confirm before it is used:* each round
   scores the not-yet-selected part of that pool and takes N, so selection pressure is weaker (about 2:1, not 4:1).
   **Not** N = 2.5k.
+
+*Superseded by D-lean: no new teacher generation, so N = 5k per round, the 80k pool and the 40k-pool fallback are void. N per round is now proposed at 1,500 from the 10.3k held-back half.*
 
 ## D11. A6 and A6r get the same total optimiser steps as every other arm
 
@@ -166,6 +172,8 @@ once the Exp A results are in.
 - The δ rule itself is unchanged from D5: twice the observed between-seed difference on the selection split,
   accuracy floored at 1.0 point.
 
+*Amended by D-lean: A1's three-value sweep is shared with A6 and A6r (one sweep chooses the learning rate for all three), which does not change the δ procedure.*
+
 ## D14. H5b, a pre-registered secondary hypothesis
 
 - **Decided:** add **H5b**: *after temperature scaling, A3 has worse per-domain ECE (equal-mass bins, the 4 dev
@@ -193,6 +201,8 @@ Train 90% / calibration 5% / selection 5% (`rlcd.data.make_splits`, salt `rlcd-v
 - On-policy belief metrics (each arm's own rollouts) are secondary and reported as such.
 - This replaces the earlier proposed matching rule in the pre-registration draft.
 
+*Amended by D-lean: B6 is dropped and B5 runs on one seed; the H7 rule is unchanged.*
+
 ## D17. Commit identity before the repository goes public
 
 - **Decided:** before the repository goes public, rewrite every commit's author and committer email to the
@@ -210,3 +220,53 @@ Train 90% / calibration 5% / selection 5% (`rlcd.data.make_splits`, salt `rlcd-v
 Phase 2 is held until the maintainer confirms the remaining Isambard allocation. The only job submitted is the
 ~15 minute throughput probe requested earlier (job 7114048), which was still waiting in the queue at the time of
 writing; nothing else has been submitted.
+
+---
+
+## D-lean. A lean plan before phase 2 (2026-10-06)
+
+Decided by the maintainer to cut the cost of Exp A and Exp B. **Nothing has been submitted under this plan.**
+
+1. **A6 / A6r: no new teacher generation.** Split the 22.9k pool in half by hash. **A6 starts on half A and mines
+   from half B over 4 rounds, with labels hidden until selection** (the same label-blind test as D12). **A6r selects
+   from half B at random with the same per-type quotas.** Same total optimiser steps as the other arms (D11).
+2. **README framing:** A2 against the RL arms is the **main test of the cynical reading**; A6 against A6r tests
+   **whether mining adds anything**.
+3. **Dropped:** the clipped A4 variant (Exp 0 already shows the clip bias), A7, and H6.
+4. **A5 runs on 1 seed** (correctness check only).
+5. **Learning-rate sweeps:** one shared sweep for A1 / A6 / A6r, one shared sweep for A3 / A4.
+6. **Exp B:** B6 dropped; B5 on 1 seed.
+7. **The GPU-hour estimate is recomputed and reported before anything is submitted** (`docs/compute_budget.md`:
+   about 11 / 38 / 16 GPU-hours for phases 2 / 3 / 4, about 65 in total, down from about 275).
+
+### Readings made to carry this out *(each to confirm)*
+
+- **Which pool is halved.** "The 22.9k pool" is read as its **90% training split** (D15), so the calibration and
+  selection splits stay out of training. Halves are by hashed id (`rlcd.data.split_halves`, salt `rlcd-v1-halves`,
+  independent of the 90/5/5 assignment): about 10.3k questions each.
+- **What each arm trains on.** A1–A5 train on the whole training split (A ∪ B). A6 and A6r train on half A plus
+  whatever they select from half B, so **they never see more data than A1**. A6 against A1 is therefore *not* a
+  volume comparison and is **not pre-registered**; A6 against A6r is the clean contrast (same half A, same candidate
+  half B, same quotas, only the selection rule differs).
+- **Mechanics.** Four rounds. The candidate set is the not-yet-selected part of half B (it shrinks). Each round:
+  score the candidates (A6 only) with the model after the previous segment (round 1: the start model); select N per
+  round with the per-type quotas of D5; reveal their labels; train S/4 steps on half A plus everything selected so
+  far, continuing from the previous weights (D11).
+- **N per round: proposed 1,500** (6k of the 10.3k, so round 1 takes the top 15% of the candidates and round 4
+  about the top 26%). This is a real trade-off: a larger N adds more data but is less selective, and at N ≈ 2,570
+  all of half B would be taken by round 4, leaving no selection effect in the final data at all. A smaller N is
+  more selective but adds less data, which is the "enough added data to have mattered" worry behind D10.
+- **Which arm is swept.** One sweep on **A1** picks the learning rate for A1, A6 and A6r. One sweep on **A4** (three
+  rates, seed 0) picks it for A3 and A4. *Risk to note:* RLVR is sensitive to the learning rate (a smaller rate
+  means less collapse in a fixed number of steps), so A3 is run at a rate tuned for RLCD-bandit, not at its own best.
+  H1 is then a statement about A3 at that rate. The alternative, sweeping A3 and A4 separately, costs about 5.6 more
+  GPU-hours.
+- **H2** is evaluated as **A5 seed 0 against A1 seed 0**, equivalence within ±δ. The two objectives are identical,
+  so the paired difference should be near zero up to numerical non-determinism; δ comes from A1's seed spread (D5).
+- **H3** loses its clipping clause in Exp A (the clipped arm is dropped); the toy gradient-noise table remains the
+  evidence for the bias. Its first clause (A4 has higher across-seed variance than A1) stays, descriptively.
+- **Comparisons.** C3 keeps only A4 against A1; C5 becomes A2 against each of A3, A4 and A5, each after temperature
+  scaling; C6 is deleted. H5b is unchanged (D14), run with A3 at the shared learning rate above.
+- **Exp B** runs B1 (3 seeds), B2 (temperature scaling on B1's rollouts, 3 seeds), B3 (3 seeds), B4 (from B1's
+  policy, 3 seeds) and B5 (1 seed, descriptive, no pre-registered test). B6 and the belief-weight sensitivity are not
+  tested.
