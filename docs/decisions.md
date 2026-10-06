@@ -357,3 +357,16 @@ Choices the design left open, made while building the Exp A runner (`rlcd/train_
   found through the Actions runs). GitHub's "keep my email private" setting does not rewrite commit metadata made from
   the command line (it applies to web edits, and the separate "block command line pushes that expose my email" option
   would have rejected those pushes); so D17's delete-and-recreate step still stands before the repository is made public.
+- **Correction to D17 (found 2026-10-06 by comparing with the maintainer's other repositories).** The noreply address
+  used for the rewrite, `02479386+Louiskq@users.noreply.github.com`, is **missing the leading 1** of the account id:
+  `gh api user` gives id **102479386**, so the address is `102479386+Louiskq@users.noreply.github.com`. GitHub resolves
+  the number, so every commit rewritten under D17 (and every commit since) is attributed to a *different* account
+  (`darkarco`, id 2479386), not to the maintainer. The repository's local git config now carries the correct address
+  (commits from this one on), and **the history must be rewritten again with it**, at the delete-and-recreate step
+  before the repository is public. Not done now, because it would change the SHA of the frozen pre-registration commit
+  while Exp A is running. **Anchor that survives a rewrite:** `PREREGISTRATION.md` as frozen has SHA-256
+  `c5841df6a6164ae179a7f878ab53cfde15155509c12088bdfbe4eda52e337a00`; the commit introducing it was `112dc50` before the
+  rewrite and its pre-rewrite push is recorded by the GitHub Actions run of that SHA.
+- The maintainer's public repositories were checked the same day: `phone-to-hpc` and `paper-finder` carry the correct
+  noreply address; `jev-class-9b` carries the old Gmail address in all 29 commits. No repository (open-rlcd included)
+  contains the address, a university address or the name in file contents.
