@@ -21,7 +21,9 @@ jobs:
           uv run ruff format --check .
       - name: Unit tests
         run: uv run pytest
-      - name: Exp 0 (quick config)
-        run: uv run python -m toy.run --quick --out /tmp/rlcd-toy-quick
+      - name: Exp 0 and Exp 0b (quick config)
+        run: |
+          uv run python -m toy.run --quick --out /tmp/rlcd-toy-quick
+          uv run python -m toy.exp0b --quick --out /tmp/rlcd-toy-quick
       - name: README tables are in sync with results/
         run: uv run python scripts/make_readme_tables.py --check

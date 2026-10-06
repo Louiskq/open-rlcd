@@ -1,4 +1,4 @@
-.PHONY: help install test lint format toy toy-quick readme readme-check notebook figures
+.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures
 
 PY ?= uv run python
 
@@ -7,7 +7,8 @@ help:
 	@echo "make test         run the unit tests"
 	@echo "make lint         ruff check + format check"
 	@echo "make toy          Exp 0 (full): results/toy/*.json + figures/ (about 1-2 min on a laptop CPU)"
-	@echo "make toy-quick    Exp 0 with 3 seeds and 1,500 steps (CI)"
+	@echo "make toy0b        Exp 0b (exploratory): difficulty varies by input"
+	@echo "make toy-quick    Exp 0 and 0b with 3 seeds and 1,500 steps (CI)"
 	@echo "make readme       regenerate the tables inside README.md from results/"
 	@echo "make readme-check fail if README.md is out of date with results/"
 	@echo "make notebook     rebuild and execute notebooks/toy_rlcd.ipynb"
@@ -30,8 +31,12 @@ format:
 toy:
 	$(PY) -m toy.run
 
+toy0b:
+	$(PY) -m toy.exp0b
+
 toy-quick:
 	$(PY) -m toy.run --quick --out /tmp/rlcd-toy-quick
+	$(PY) -m toy.exp0b --quick --out /tmp/rlcd-toy-quick
 
 readme:
 	$(PY) scripts/make_readme_tables.py

@@ -20,9 +20,9 @@
 </p>
 <p align="center"><sub>Same model, same data, same optimiser. Only the reward differs. (Exp 0: a toy where the true probabilities are known.)</sub></p>
 
-> **Status: phase 1 of 5.** The metrics, the estimators (with unbiasedness tests) and the toy experiment are
-> done. Exp A (a 9B model, teacher labels) and Exp B (Breakout) have **not been run**; their rows say
-> *pending* rather than guess. See [Status](#status).
+> **Status: phase 1 of 5 done.** The metrics, the estimators (with unbiasedness tests), the toy experiments and
+> the recorded design [decisions](docs/decisions.md) are in place. Exp A (a 9B model, teacher labels) and Exp B
+> (Breakout) have **not been run**; their rows say *pending* rather than guess. See [Status](#status).
 
 ## TL;DR
 
@@ -157,8 +157,8 @@ What the figure and table say:
 - **Clipping the weight at 10 is measurably biased**: options whose true probability is under 0.1 are
   under-weighted, so the policy ends up too sharp (next table).
 - **Supervised log loss and RLCD-full are one curve**: with fixed labels they are the same objective.
-- **One temperature repairs RLVR in this toy** (the hollow markers). See the caveats before reading anything
-  into that.
+- **One temperature repairs RLVR in this toy** (the hollow markers). See the caveats, and Exp 0b below for
+  what happens when difficulty varies.
 
 ### Why: bias and noise of each gradient estimator at the truth
 
@@ -222,13 +222,67 @@ Final ECE under several learning rates, so the comparison is not an artefact of 
 | RLCD-full | [0.010 (0.008–0.012)](results/toy/lr_sensitivity.json) | [0.009 (0.006–0.012)](results/toy/lr_sensitivity.json) | [0.016 (0.011–0.023)](results/toy/lr_sensitivity.json) |
 <!-- END gen:toy_lr -->
 
+## Exp 0b (exploratory, not pre-registered): what if difficulty varies?
+
+In Exp 0 one temperature repairs RLVR, partly because RLVR sharpens every input by about the same factor. Exp 0b
+asks what happens when it cannot. The *scale* of the true logits now changes with the input (hard inputs have
+near-uniform true probabilities, easy ones near-deterministic ones) while the policy can still represent the truth
+exactly, so any miscalibration left after temperature scaling comes from the reward. The scale range was fixed in
+the code before the first run and not tuned.
+
+<!-- BEGIN gen:toy0b_setup -->
+10 seeds × 4,000 Adam steps per arm, 20,000 held-out contexts, true-logit scale between 0.3 (hard) and 3.0 (easy).
+<!-- END gen:toy0b_setup -->
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/toy0b-dark.png">
+    <img alt="Three panels after one temperature. Pooled ECE is at the noise floor for every arm. Confidence minus accuracy by difficulty tercile is large and of opposite signs for RLVR, near zero for the RLCD arms. RLVR has lower Murphy resolution." src="figures/toy0b.png" width="900">
+  </picture>
+</p>
+
+<!-- BEGIN gen:toy0b_table -->
+| arm | ECE | ECE after one temperature | resolution after | KL(truth ‖ model) after | confidence − accuracy after, hard / medium / easy |
+|---|---|---|---|---|---|
+| RLVR | [0.405 (0.403–0.407)](results/toy0b/rlvr.json) | [0.010 (0.007–0.012)](results/toy0b/rlvr.json) (T = 7.2) | [0.158 (0.157–0.159)](results/toy0b/rlvr.json) | [0.030 (0.029–0.031)](results/toy0b/rlvr.json) | [+0.093](results/toy0b/rlvr.json) / [−0.018](results/toy0b/rlvr.json) / [−0.087](results/toy0b/rlvr.json) |
+| RLCD-bandit | [0.010 (0.006–0.018)](results/toy0b/rlcd_bandit.json) | [0.008 (0.005–0.012)](results/toy0b/rlcd_bandit.json) (T = 1.0) | [0.165 (0.161–0.167)](results/toy0b/rlcd_bandit.json) | [0.010 (0.007–0.015)](results/toy0b/rlcd_bandit.json) | [−0.000](results/toy0b/rlcd_bandit.json) / [−0.002](results/toy0b/rlcd_bandit.json) / [−0.011](results/toy0b/rlcd_bandit.json) |
+| RLCD-bandit, clip 10 | [0.050 (0.042–0.064)](results/toy0b/rlcd_bandit_clip10.json) | [0.010 (0.007–0.014)](results/toy0b/rlcd_bandit_clip10.json) (T = 1.3) | [0.166 (0.165–0.167)](results/toy0b/rlcd_bandit_clip10.json) | [0.007 (0.005–0.008)](results/toy0b/rlcd_bandit_clip10.json) | [−0.010](results/toy0b/rlcd_bandit_clip10.json) / [−0.004](results/toy0b/rlcd_bandit_clip10.json) / [−0.011](results/toy0b/rlcd_bandit_clip10.json) |
+| Supervised log loss | [0.009 (0.006–0.015)](results/toy0b/supervised.json) | [0.009 (0.007–0.013)](results/toy0b/supervised.json) (T = 1.0) | [0.166 (0.164–0.167)](results/toy0b/supervised.json) | [0.007 (0.005–0.010)](results/toy0b/supervised.json) | [+0.000](results/toy0b/supervised.json) / [−0.003](results/toy0b/supervised.json) / [−0.013](results/toy0b/supervised.json) |
+| RLCD-full | [0.009 (0.006–0.015)](results/toy0b/rlcd_full.json) | [0.009 (0.007–0.013)](results/toy0b/rlcd_full.json) (T = 1.0) | [0.166 (0.164–0.167)](results/toy0b/rlcd_full.json) | [0.007 (0.005–0.010)](results/toy0b/rlcd_full.json) | [+0.000](results/toy0b/rlcd_full.json) / [−0.003](results/toy0b/rlcd_full.json) / [−0.013](results/toy0b/rlcd_full.json) |
+| _the true probabilities_ | [0.006](results/toy0b/meta.json) | | [0.169](results/toy0b/meta.json) | 0 | |
+<!-- END gen:toy0b_table -->
+
+- **Judged by pooled ECE alone, temperature scaling "fixes" RLVR**: after one temperature every arm is at the noise
+  floor.
+- **The pooled number hides the problem.** RLVR is still too confident on hard inputs and not confident enough on
+  easy ones; averaging the two cancels. The RLCD arms are close to calibrated in every stratum.
+- **RLVR also ends with lower resolution and a larger distance to the true probabilities** after temperature
+  scaling than the RLCD arms (table above).
+- RLVR needs a *different* temperature in each stratum, while the RLCD arms need about the same everywhere:
+
+<!-- BEGIN gen:toy0b_group -->
+| arm | temperature per tercile (hard / medium / easy) | ECE after | resolution after | KL(truth ‖ model) after |
+|---|---|---|---|---|
+| RLVR | 11.5 / 6.7 / 5.3 | [0.007 (0.005–0.009)](results/toy0b/rlvr.json) | [0.166 (0.165–0.167)](results/toy0b/rlvr.json) | [0.009 (0.008–0.009)](results/toy0b/rlvr.json) |
+| RLCD-bandit | 1.0 / 1.0 / 1.0 | [0.008 (0.005–0.012)](results/toy0b/rlcd_bandit.json) | [0.165 (0.161–0.166)](results/toy0b/rlcd_bandit.json) | [0.009 (0.007–0.015)](results/toy0b/rlcd_bandit.json) |
+| RLCD-bandit, clip 10 | 1.3 / 1.3 / 1.3 | [0.010 (0.007–0.013)](results/toy0b/rlcd_bandit_clip10.json) | [0.166 (0.165–0.167)](results/toy0b/rlcd_bandit_clip10.json) | [0.007 (0.005–0.008)](results/toy0b/rlcd_bandit_clip10.json) |
+| Supervised log loss | 1.0 / 1.0 / 1.0 | [0.009 (0.006–0.011)](results/toy0b/supervised.json) | [0.166 (0.164–0.167)](results/toy0b/supervised.json) | [0.007 (0.005–0.010)](results/toy0b/supervised.json) |
+| RLCD-full | 1.0 / 1.0 / 1.0 | [0.009 (0.006–0.011)](results/toy0b/rlcd_full.json) | [0.166 (0.164–0.167)](results/toy0b/rlcd_full.json) | [0.007 (0.005–0.010)](results/toy0b/rlcd_full.json) |
+<!-- END gen:toy0b_group -->
+
+That per-stratum temperature uses the known difficulty, which a real model does not have. The point is diagnosis,
+not a recommended fix. This is one toy configuration and says nothing yet about a 9B model, but it is the reason
+the plan reports Murphy resolution and per-answer-type results next to pooled ECE: H5 as stated (pooled ECE after
+temperature scaling) could pass while the strata disagree.
+
 ## Honest caveats
 
 Written *before* the language-model results exist, so they cannot be shaped by them.
 
 - **The toy is well-specified, and that flatters temperature scaling.** The policy class contains the truth, so
-  RLVR only distorts the scale of the logits and a single temperature undoes it. Whether that holds for a real
-  model is exactly what A2 / A3 and hypothesis **H5** test. The toy shows the *mechanism*, not the size of the
+  RLVR only distorts the scale of the logits and a single temperature undoes it. Exp 0b shows that stops being
+  true when difficulty varies. Whether it holds for a real model is exactly what A2 / A3 and hypothesis **H5**
+  test. The toy shows the *mechanism*, not the size of the
   effect in a 9B model.
 - **All arms start underconfident** (a uniform policy), so the early part of every curve is a start-up effect
   shared by all arms, not an RLCD property.
@@ -251,7 +305,7 @@ Written *before* the language-model results exist, so they cannot be shaped by t
 
 | phase | what | state |
 |---|---|---|
-| 1 | scaffold, metrics, estimators, tests, Exp 0, notebook, README skeleton, loss-weight check | **done** |
+| 1 | scaffold, metrics, estimators, tests, Exp 0 (+ exploratory Exp 0b), notebook, README skeleton, loss-weight check, design decisions | **done** |
 | 2 | Exp A smoke run (all arms, 1 seed, 10% of steps); Breakout label validation | not started |
 | 3 | commit the pre-registration, then Exp A in full | not started |
 | 4 | Exp B in full | not started |
@@ -264,6 +318,7 @@ uv sync --extra dev        # Python 3.10+; installs the package and dev tools
 make test                  # unit tests (metrics, estimators, splits, toy invariants)
 make lint
 make toy                   # Exp 0 -> results/toy/*.json, figures/
+make toy0b                 # Exp 0b (exploratory) -> results/toy0b/*.json, figures/
 make readme                # regenerate every table in this file from results/
 make notebook              # rebuild and execute notebooks/toy_rlcd.ipynb
 ```
@@ -273,11 +328,12 @@ scripts arrive with phases 2–4 (`configs/`, `slurm/`).
 
 ```
 rlcd/        scoring.py (metrics, scoring rules) · estimators.py (RLVR / RLCD rewards and gradients)
-             calibrate.py (temperature scaling) · data.py (splits, leakage checks) · plots.py · results.py
-toy/         Exp 0
+             calibrate.py (temperature scaling) · data.py (splits, leakage checks) · isolated.py (SCORE readout)
+             mining.py (A6 / A6r selection) · plots.py · results.py
+toy/         Exp 0 and Exp 0b (exploratory)
 tests/       estimator unbiasedness, metric correctness, split disjointness, toy invariants
 results/     one JSON per run; every table and figure is generated from these
-docs/        loss_weights.md (the Breakout weight verification)
+docs/        decisions.md (amendments to the spec) · loss_weights.md (the Breakout weight verification)
 ```
 
 ## Citation, acknowledgements, licence

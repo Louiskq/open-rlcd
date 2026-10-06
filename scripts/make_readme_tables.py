@@ -200,6 +200,75 @@ def gen_tldr() -> str:
     return head + "\n".join(rows) + "\n"
 
 
+def load_toy0b() -> dict | None:
+    path = ROOT / "results/toy0b/meta.json"
+    return read_json(path) if path.exists() else None
+
+
+def signed(s: dict[str, float], rel: str) -> str:
+    return link(f"{s['mean']:+.3f}".replace("-", "\u2212"), rel)
+
+
+def gen_toy0b_setup() -> str:
+    meta = load_toy0b()
+    if meta is None:
+        return pending("run `python -m toy.exp0b`") + "\n"
+    c, lo_hi = meta["config"], meta["scale_range"]
+    return (
+        f"{len(meta['seed_sets']['train'])} seeds × {c['steps']:,} Adam steps per arm, "
+        f"{c['n_eval']:,} held-out contexts, true-logit scale between {lo_hi[0]} (hard) and "
+        f"{lo_hi[1]} (easy).\n"
+    )
+
+
+def gen_toy0b_table() -> str:
+    meta = load_toy0b()
+    if meta is None:
+        return pending("run `python -m toy.exp0b`") + "\n"
+    rel0 = "results/toy0b/meta.json"
+    summ, grp, o = meta["summary"], meta["by_difficulty"], meta["oracle"]
+    head = (
+        "| arm | ECE | ECE after one temperature | resolution after | KL(truth ‖ model) after | "
+        "confidence − accuracy after, hard / medium / easy |\n|---|---|---|---|---|---|\n"
+    )
+    rows = []
+    for arm in TOY_ROWS:
+        rel = f"results/toy0b/{arm}.json"
+        t = summ[arm]["ts"]
+        gaps = " / ".join(signed(g, rel) for g in grp[arm]["ts"]["gap"])
+        rows.append(
+            f"| {ARM_STYLES[arm].label} | {num(summ[arm]['raw']['ece'], rel)} | "
+            f"{num(t['ece'], rel)} (T = {summ[arm]['temperature']['mean']:.1f}) | "
+            f"{num(t['resolution'], rel)} | {num(t['kl_to_truth'], rel)} | {gaps} |"
+        )
+    ece = link(f"{o['ece']:.3f}", rel0)
+    res = link(f"{o['resolution']:.3f}", rel0)
+    rows.append(f"| _the true probabilities_ | {ece} | | {res} | 0 | |")
+    return head + "\n".join(rows) + "\n"
+
+
+def gen_toy0b_group() -> str:
+    meta = load_toy0b()
+    if meta is None:
+        return pending("run `python -m toy.exp0b`") + "\n"
+    grp = meta["by_difficulty"]
+    head = (
+        "| arm | temperature per tercile (hard / medium / easy) | ECE after | resolution after | "
+        "KL(truth ‖ model) after |\n|---|---|---|---|---|\n"
+    )
+    rows = []
+    for arm in TOY_ROWS:
+        rel = f"results/toy0b/{arm}.json"
+        g = grp[arm]
+        temps = " / ".join(f"{t['mean']:.1f}" for t in g["group_temperature"])
+        t = g["ts_group_overall"]
+        rows.append(
+            f"| {ARM_STYLES[arm].label} | {temps} | {num(t['ece'], rel)} | "
+            f"{num(t['resolution'], rel)} | {num(t['kl_to_truth'], rel)} |"
+        )
+    return head + "\n".join(rows) + "\n"
+
+
 GENERATORS = {
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
@@ -207,6 +276,9 @@ GENERATORS = {
     "toy_noise": gen_toy_noise,
     "toy_mix": gen_toy_mix,
     "toy_lr": gen_toy_lr,
+    "toy0b_setup": gen_toy0b_setup,
+    "toy0b_table": gen_toy0b_table,
+    "toy0b_group": gen_toy0b_group,
 }
 
 
