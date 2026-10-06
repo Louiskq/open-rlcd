@@ -88,11 +88,9 @@ ARM_STYLES: dict[str, ArmStyle] = {
     "A1": ArmStyle("A1 supervised", "supervised"),
     "A3": ArmStyle("A3 RLVR", "improper"),
     "A4": ArmStyle("A4 RLCD-bandit", "rlcd"),
-    "A4_clip10": ArmStyle("A4 RLCD-bandit, clip 10", "rlcd", "--", "s"),
     "A5": ArmStyle("A5 RLCD-full", "rlcd_full"),
     "A6": ArmStyle("A6 cynical RLCD", "cynical"),
     "A6r": ArmStyle("A6r cynical, random", "cynical_control"),
-    "A7": ArmStyle("A7 log loss on SCORE", "ablation"),
     # Exp B
     "B1": ArmStyle("B1 plain PPO", "improper"),
     "B3": ArmStyle("B3 RLCD", "rlcd"),

@@ -194,9 +194,9 @@ def gen_tldr() -> str:
                 f"{num(summ[arm]['raw']['acc'], rel)} | {num(summ[arm]['raw']['log_loss'], rel)} |"
             )
     rows.append(
-        f"| Exp A (9B decider, teacher labels) | A1–A7 | {PENDING} | {PENDING} | {PENDING} |"
+        f"| Exp A (9B decider, teacher labels) | A1–A6r | {PENDING} | {PENDING} | {PENDING} |"
     )
-    rows.append(f"| Exp B (Breakout, on-policy) | B1–B6 | {PENDING} | {PENDING} | {PENDING} |")
+    rows.append(f"| Exp B (Breakout, on-policy) | B1–B5 | {PENDING} | {PENDING} | {PENDING} |")
     return head + "\n".join(rows) + "\n"
 
 

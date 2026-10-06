@@ -132,6 +132,25 @@ def make_splits(
     return out
 
 
+HALVES_SALT = "rlcd-v1-halves"
+
+
+def split_halves(
+    items: Iterable[TypedQuestion], salt: str = HALVES_SALT
+) -> tuple[list[TypedQuestion], list[TypedQuestion]]:
+    """Split the *training* split in half by hashed id (``docs/decisions.md`` D-lean).
+
+    Half A is what A6 / A6r start on; half B is the held-back candidate pool they select from, with
+    labels hidden until after selection. Use the training split, never the whole pool: the
+    calibration and selection splits must stay out of training. A different salt from
+    ``make_splits`` keeps the halves independent of the 90 / 5 / 5 assignment.
+    """
+    halves = {"A": [], "B": []}
+    for q in items:
+        halves[assign_split(q.qid, {"A": 0.5, "B": 0.5}, salt)].append(q)
+    return halves["A"], halves["B"]
+
+
 class LeakError(AssertionError):
     """Two splits that must be disjoint share an item."""
 

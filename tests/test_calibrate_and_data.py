@@ -140,3 +140,24 @@ def test_seed_sets_must_be_disjoint():
         D.SeedSets(train=(0, 1, 2), select=(100,), evaluate=(2, 1000))
     with pytest.raises(D.LeakError, match="select and evaluate"):
         D.SeedSets(train=(0,), select=(100, 101), evaluate=(101,))
+
+
+def test_halves_are_a_stable_disjoint_even_split_of_the_training_split():
+    items = make_items(20_000)
+    train = D.make_splits(items)["train"]
+    a, b = D.split_halves(train)
+    assert len(a) + len(b) == len(train)
+    assert len(a) == pytest.approx(len(b), rel=0.05)
+    D.assert_disjoint({"A": a, "B": b})
+    a2, b2 = D.split_halves(list(reversed(train)))  # independent of file order
+    assert {q.qid for q in a} == {q.qid for q in a2} and {q.qid for q in b} == {q.qid for q in b2}
+    # halving never touches the calibration or selection splits
+    held_out = D.make_splits(items)
+    D.assert_disjoint({"A": a, "B": b, "cal": held_out["cal"], "select": held_out["select"]})
+
+
+def test_halves_do_not_depend_on_the_ninety_five_five_assignment():
+    train = D.make_splits(make_items(20_000))["train"]
+    a, _ = D.split_halves(train)
+    other, _ = D.split_halves(train, salt="another-salt")
+    assert {q.qid for q in a} != {q.qid for q in other}
