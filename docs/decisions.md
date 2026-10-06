@@ -208,7 +208,15 @@ Train 90% / calibration 5% / selection 5% (`rlcd.data.make_splits`, salt `rlcd-v
 - **Decided:** before the repository goes public, rewrite every commit's author and committer email to the
   maintainer's GitHub no-reply address, set it in this repository's git config, force-push, and confirm with
   `git log --format='%ae %ce' | sort -u`.
-- **Status:** waiting for the address. Nothing has been rewritten.
+- **Status: done 2026-10-06.** All 18 commits on `main` were rewritten (author and committer email only; names,
+  dates, messages and file contents unchanged, tree-identical to before) to the GitHub no-reply address, set in
+  this repository's git config, and force-pushed with `--force-with-lease`. Verified with
+  `git log --format='%ae %ce' | sort -u` (one line, the no-reply address) and against GitHub's API for all 18
+  commits.
+- **Caveat found afterwards:** GitHub still serves the pre-rewrite commits **by their hash** (checked for two of them),
+  with the old address, and the Actions runs reference them. Nothing is exposed while the repository is private. If
+  the old address must never be reachable, delete and recreate the repository and push the rewritten history **before
+  it is made public**; that has not been done.
 - **Two things to weigh when doing it (raised, not decided):** a rewrite changes every commit hash, so it is best done
   **before the pre-registration commit** is made, so that the commit that freezes the pre-registration never has
   its hash changed afterwards. And a force-push does not remove the old commits from GitHub at once: Actions runs and
