@@ -1,0 +1,58 @@
+{
+ "train_A": {
+  "records": 6014,
+  "questions": 10312,
+  "by_type": {
+   "noul": 3498,
+   "choice": 5599,
+   "score": 1215
+  },
+  "domains": 47,
+  "id_digest": "451af84effd08517"
+ },
+ "train_B": {
+  "records": 5992,
+  "questions": 10284,
+  "by_type": {
+   "noul": 3514,
+   "choice": 5514,
+   "score": 1256
+  },
+  "domains": 47,
+  "id_digest": "0dabd6ea3900b8f5"
+ },
+ "cal": {
+  "records": 686,
+  "questions": 1176,
+  "by_type": {
+   "noul": 426,
+   "choice": 607,
+   "score": 143
+  },
+  "domains": 47,
+  "id_digest": "977cd1b7e392b4c2"
+ },
+ "select": {
+  "records": 695,
+  "questions": 1189,
+  "by_type": {
+   "noul": 413,
+   "choice": 634,
+   "score": 142
+  },
+  "domains": 47,
+  "id_digest": "2c93bf49b0e23c38"
+ },
+ "dev": {
+  "records": 951,
+  "questions": 2791,
+  "by_type": {
+   "noul": 814,
+   "choice": 1375,
+   "score": 602
+  },
+  "domains": 4,
+  "id_digest": "e6f025d157320fb8"
+ },
+ "_seed": 0
+}

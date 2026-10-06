@@ -28,6 +28,10 @@ Decisions made later are appended; an entry is never silently rewritten.
   from the T = 1 logits. It is never composed with the stored 1.30.
 - **Implemented:** `rlcd.calibrate` fits from raw logits; the served-temperature row is evaluation-only.
 
+*Correction, 2026-10-06: the stored temperature of this checkpoint (`decider9b-sft`, read from its
+`decider_config.json`) is **1.05**, not 1.30. The 1.30 quoted above is the 2B model's value in decider's `RL.md`. The
+"A0 as served" row therefore uses T = 1.05, and "+TS" rows still fit their own temperatures from scratch.*
+
 ## D3. SCORE readout: decider's isolated levels, normalised
 
 - **Decided:** keep decider's one yes/no pass per level for **all arms**, because the start model was trained
@@ -278,3 +282,56 @@ Decided by the maintainer to cut the cost of Exp A and Exp B. **Nothing has been
 - **Exp B** runs B1 (3 seeds), B2 (temperature scaling on B1's rollouts, 3 seeds), B3 (3 seeds), B4 (from B1's
   policy, 3 seeds) and B5 (1 seed, descriptive, no pre-registered test). B6 and the belief-weight sensitivity are not
   tested.
+
+---
+
+## D-impl. Implementation choices made in phase 2 (2026-10-06)
+
+Choices the design left open, made while building the Exp A runner (`rlcd/train_labels.py`). Items marked
+*[to confirm]* fix the shared settings of every Exp A arm and are therefore part of what the pre-registration freezes.
+
+**Data and rendering**
+- **Records and splits.** The pool is 13,387 records / 22,961 questions (CHOICE 54%, NOUL 34%, SCORE 12%). Splits are
+  by *record* (a state and its questions stay together): train 12,006 records / 20,596 questions, split into half A
+  (6,014 records, 10,312 questions) and half B (5,992 records, 10,284); calibration 686 records / 1,176 questions;
+  selection 695 / 1,189 (`results/expA/splits.json`). The dev set (951 records, 2,791 questions, **4 domains**, SCORE
+  21.6% of its questions against 12% of the pool) shares no record id and no state text with the pool.
+- **One row per question, no packing, no replay, no augmentation.** Each question is its own row (as the server scores
+  it), state-first plain layout, no "none of the above" augmentation, no layout mixing, no replayed rows from decider's
+  mixture (the forward-KL term, D1, plays that role). Options are shuffled once per question from a fixed seed, so every
+  arm and every training seed sees the same prompts; each row stores its permutation, so readouts are mapped back to the
+  original option order. SCORE is read only through its isolated rows (D3).
+
+**Training** *[to confirm: all of these]*
+- LoRA rank 64, alpha 128 on decider's usual target modules (as in the old text-LoRA runs), bf16 base, fp32 adapters;
+  AdamW (0.9, 0.95), no weight decay, 20 warm-up steps then cosine to zero, gradient clip 1.0, 4 micro-batches of up to
+  16,384 tokens per optimiser step.
+- **S = 734 optimiser steps for every arm**: two epochs over the whole training split (A ∪ B), computed once from its
+  micro-batch plan. A6 and A6r run S/4 per round on their own, smaller data (D11).
+- **K = 8** sampled answers per question for A3 and A4, group-mean baseline. **β = 0.1** on the forward KL(p_ref ‖ p),
+  identical across arms. Observed at 10% of S, learning rate 1e-4: the mean per-question KL to the start model is about
+  0.2 nats for A1 and A5, i.e. a penalty of about 0.02 against a log loss of about 0.5, so β = 0.1 is a mild
+  regulariser for the supervised arms and a real constraint only for arms that move further.
+- **Learning-rate grid 5e-5, 1e-4, 2e-4**, chosen on the **selection split by mean per-question log loss over all
+  answer types**. The A1 sweep (full length, seed 0) is running; A6 / A6r take its rate, and A3 / A4 take the rate of an
+  A4 sweep (D-lean).
+- No checkpoint/resume: a run is under about 2.5 h. Runs save the LoRA adapter (`lora_adapter.pt`), not a merged model.
+
+**Evaluation**
+- A run saves the **raw readout of every question** at T = 1 on the calibration, selection and dev splits; everything
+  else (SCORE normalisation, temperatures, all metrics, per-domain ECE) is computed offline from those arrays
+  (`rlcd/evaluate.py`), so one forward pass serves raw, "as served" (T = 1.05) and "+TS" rows.
+- **Temperatures are fitted on the calibration split, which is drawn from the training distribution and is harder than
+  the dev set** (the start model scores 0.69 accuracy on the selection split and 0.81 on dev). A temperature fitted
+  there is therefore not tuned to dev, and can slightly *worsen* dev log loss (seen for A1 in the smoke run).
+- **JevBench is deferred to phase 3**: it needs a merged checkpoint served through decider (`jevbench_decider.sh`),
+  which the adapter-only runs do not produce. Merging is a one-off step after the final runs.
+- The start model scores **0.808 dev accuracy** in this pipeline, not the 0.815 of the old evaluation (different option
+  shuffles and layout details); A0 here is the baseline for everything.
+
+**Measurements (D4)**
+- Per-type gradient share is the norm of each type's gradient accumulated over **all micro-batches of one optimiser
+  step**, as a fraction of the sum of the three norms, recorded at several steps (`grad_share` in `run.json`). A first
+  version measured a single micro-batch and fluctuated wildly (SCORE 1% to 64%); it was replaced before any number was
+  reported.
+
