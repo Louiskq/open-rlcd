@@ -2,8 +2,8 @@
 
 Written 2026-10-06 for the phase 2 go/no-go; revised the same day for decisions D9–D13 and again for the lean plan (D-lean). Every rate below is **measured** from a completed Slurm job of the
 old project (job ids given, `sacct` and the run logs on the cluster) unless it is marked *assumed*. A
-fresh probe (`slurm/throughput_probe.sh`, job 7114048) confirms today's training and scoring rates; its status
-is recorded at the end of this file. These are budget estimates, not results; the README does not quote them.
+probe (`slurm/throughput_probe.sh`, job 7114048) confirmed today's training and scoring rates; its result is at
+the end of this file. These are budget estimates, not results; the README does not quote them.
 
 ## Measured rates
 
@@ -95,9 +95,18 @@ final model on the dev sets, calibration and selection splits is **0.12**; Break
 Teacher-generation throughput (about 570 kept questions per GPU-hour, above) is kept in the measured-rates table
 for the record; the lean plan does not use it.
 
-## Probe job 7114048
+## Probe job 7114048 (ran 2026-10-06, node nid011115, 14 min 9 s)
 
-Status when this file was written: **pending (Priority)**. When it runs, its log will give today's tokens/s and
-memory for the 40-step training probe and the wall time of forward-only scoring of the dev set at batch sizes 16
-and 48. If any of those differ from the measured rates above by more than about 25%, the table above is
-re-derived and this file is updated with a dated note.
+It reproduced the measured rates, so the estimate above is **unchanged** (about 65 GPU-hours).
+
+| quantity | probe | old measured | verdict |
+|---|---|---|---|
+| LoRA training, same settings as `arm_scaleAll` | 6.3k tokens/s at step 20, 6.6k at step 40; about 9.9 s per optimizer step; 30 GB peak | 6.2–6.45k tokens/s, 30 GB | within about 3% |
+| model load, tokenise 19.1M tokens, 40 steps | 452 s in all (tokenising 30 s) | tokenising 29 s | as before |
+| forward-only scoring of the 2,791-question dev set, batch 16 | **164 s including model load: 17.0 questions/s** | at least 17 questions/s | matches the figure the A6 scoring cost uses |
+| the same at batch 48 | **221 s (12.6 questions/s): slower** | not measured | keep batch 16 |
+
+The probe removed its own output directory. **Queue wait is the real constraint:** this single-GPU, 35-minute job
+was submitted at about 00:20 UTC and started at 06:10 UTC, so it waited about 5 h 50 min. Plan phases 2–4 as a few
+longer or batched jobs (for example job arrays, or one allocation running several arms in sequence) so that each
+arm does not pay its own wait.
