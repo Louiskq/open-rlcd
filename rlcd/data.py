@@ -45,6 +45,46 @@ class TypedQuestion:
             raise ValueError(f"{self.qid}: gold {self.gold} outside {len(self.options)} options")
 
 
+@dataclass(frozen=True)
+class UnlabelledQuestion:
+    """A question without its gold label: all that selection and scoring are allowed to see."""
+
+    qid: str
+    state: str
+    question: str
+    answer_type: str
+    options: tuple[str, ...]
+    source: str = ""
+
+
+def unlabelled(q: TypedQuestion) -> UnlabelledQuestion:
+    """The same question with the label dropped."""
+    return UnlabelledQuestion(q.qid, q.state, q.question, q.answer_type, q.options, q.source)
+
+
+class CandidatePool:
+    """Generated candidates whose labels stay hidden until ``reveal``.
+
+    The teacher pipeline emits a label with every question it generates, so no separate labelling
+    call exists. To keep "selected before labelled" true anyway, labelling is *simulated* by hiding
+    the labels: ``questions`` (and ``types``) carry no gold, and ``reveal(indices)`` is the only way
+    to get it, called after selection. The selection functions in ``rlcd.mining`` take distributions
+    and answer types only; ``tests/test_label_hiding.py`` fails if that ever changes.
+    """
+
+    def __init__(self, items: Sequence[TypedQuestion]):
+        self._labelled = tuple(items)
+        self.questions: tuple[UnlabelledQuestion, ...] = tuple(unlabelled(q) for q in items)
+        self.types: tuple[str, ...] = tuple(q.answer_type for q in items)
+
+    def __len__(self) -> int:
+        return len(self.questions)
+
+    def reveal(self, indices: Sequence[int]) -> list[TypedQuestion]:
+        """The labelled questions at ``indices``: call only once they have been selected."""
+        return [self._labelled[int(i)] for i in indices]
+
+
 def content_key(q: TypedQuestion) -> str:
     """Hash of the question's normalised text (state, question, options), for duplicate detection.
 

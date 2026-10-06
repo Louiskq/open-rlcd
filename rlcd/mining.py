@@ -9,11 +9,15 @@ tests mining and not a shift in the mix of answer types.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+import inspect
+from collections.abc import Callable, Sequence
 
 import numpy as np
 
+from rlcd.data import CandidatePool, LeakError, TypedQuestion, UnlabelledQuestion
 from rlcd.scoring import ANSWER_TYPES
+
+LABEL_NAMES = frozenset({"gold", "golds", "label", "labels", "y", "target", "targets", "answer"})
 
 
 def normalised_entropy(rows: Sequence[Sequence[float]]) -> np.ndarray:
@@ -66,3 +70,39 @@ def select_random_matched(types: Sequence[str], n: int, rng: np.random.Generator
         for t, q in type_quotas(types, n).items()
     ]
     return np.sort(np.concatenate(picked))
+
+
+def assert_label_free(fn: Callable[..., object]) -> None:
+    """Raise ``LeakError`` if ``fn`` has a parameter that could carry a label.
+
+    Selection must happen before labelling, so the selection functions take distributions and answer
+    types only. This guard is called on them in ``tests/test_label_hiding.py``: adding a ``gold``
+    (or similar) parameter to one of them breaks the build.
+    """
+    bad = LABEL_NAMES & set(inspect.signature(fn).parameters)
+    if bad:
+        raise LeakError(f"{fn.__name__} takes label-like parameters {sorted(bad)}")
+
+
+def mine_round(
+    pool: CandidatePool,
+    score_fn: Callable[[Sequence[UnlabelledQuestion]], Sequence[Sequence[float]]],
+    n: int,
+    mode: str,
+    rng: np.random.Generator | None = None,
+) -> tuple[np.ndarray, list[TypedQuestion]]:
+    """One selection round: score the unlabelled candidates, pick ``n``, then reveal their labels.
+
+    ``mode='mined'`` is A6 (``select_mined`` on the current model's distributions);
+    ``mode='random'`` is A6r (``select_random_matched``, which needs ``rng``). ``score_fn`` sees
+    unlabelled questions only. Returns the selected indices and the now-labelled questions.
+    """
+    if mode == "mined":
+        idx = select_mined(score_fn(pool.questions), pool.types, n)
+    elif mode == "random":
+        if rng is None:
+            raise ValueError("mode='random' needs an rng")
+        idx = select_random_matched(pool.types, n, rng)
+    else:
+        raise ValueError("mode must be 'mined' or 'random'")
+    return idx, pool.reveal(idx)

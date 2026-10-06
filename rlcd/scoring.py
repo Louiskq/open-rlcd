@@ -262,6 +262,31 @@ def classwise_ece(probs: np.ndarray, y: np.ndarray, bins: int = 15) -> float:
     return float(np.mean(errs))
 
 
+def grouped_ece(
+    probs: np.ndarray,
+    y: np.ndarray,
+    groups: Sequence[str],
+    bins: int = 15,
+    binning: str = "mass",
+) -> dict[str, float]:
+    """Top-label ECE within each group (e.g. a dev domain), and the unweighted mean as ``mean``.
+
+    Equal-mass bins by default (pre-registered H5b): groups can be small and uneven in how their
+    confidences spread. Pooled ECE can hide opposite miscalibration in different groups; this
+    cannot (Exp 0b).
+    """
+    p = as_probs(probs)
+    y = as_labels(y, p.shape[1])
+    g = np.asarray(groups)
+    if g.shape != y.shape:
+        raise ValueError("groups must have one entry per item")
+    out = {
+        str(name): top_label_ece(p[g == name], y[g == name], bins, binning) for name in np.unique(g)
+    }
+    out["mean"] = float(np.mean(list(out.values())))
+    return out
+
+
 def murphy_decomposition(probs: np.ndarray, y: np.ndarray, bins: int = 15) -> dict[str, float]:
     """Murphy decomposition of the multiclass Brier score (sum over options).
 
