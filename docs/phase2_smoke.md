@@ -68,11 +68,33 @@ measure at 4 steps each, which gives 12 points for A1.
 * The first launch of the Breakout validation ran out of GPU memory next to two training runs; relaunched when
   memory was free.
 
+## A1 learning-rate sweep (full length, seed 0)
+
+Three full-length A1 runs (734 steps) finished; none diverged. The rule (`scripts/pick_lr.py`: lowest log loss on the
+**selection** split, diverged runs excluded) was fixed before any of them ran. Selection-split log loss, per answer
+type:
+
+| learning rate | all | NOUL | CHOICE | SCORE | selection accuracy (all types: NOUL / CHOICE / SCORE) |
+|---|---|---|---|---|---|
+| 5e-5 | 0.367 | 0.327 | 0.349 | 0.566 | 0.860 / 0.857 / 0.824 |
+| **1e-4 (chosen)** | **0.341** | 0.308 | 0.312 | 0.569 | 0.855 / 0.872 / 0.810 |
+| 2e-4 | 0.360 | 0.305 | 0.349 | 0.575 | 0.862 / 0.855 / 0.775 |
+
+The start model's selection log loss is 0.699, so full-length training takes it to about half. **The differences
+between rates (0.02 to 0.026) are about the size of the same-seed rerun noise measured at 10% length (0.015)**, so 1e-4
+is the pre-declared choice, not a sharp optimum; 2e-4 is best on NOUL, 1e-4 on CHOICE, and SCORE is flat in log loss
+while its accuracy drops with the rate (0.824, 0.810, 0.775).
+
+**Gradient share by answer type, supervised A1** (12 measurements: four steps in each of the three runs; steps 2, 100,
+300 and 600): NOUL **0.46** of the gradient norm for 0.46 of the questions, CHOICE **0.44** for 0.40, SCORE **0.10** for
+0.15 (range 0.01 to 0.25). So for the supervised loss SCORE gets *less* gradient than its share of questions, the
+direction D4 anticipated, whereas the 4-point smoke measurements for the sampled-answer arms A3/A4 showed SCORE above its
+share (0.43–0.47 for 0.17). Both are noisy and at different training stages; they are descriptive only.
+
 ## In flight
 
-The three full-length A1 runs of the learning-rate sweep (5e-5, 1e-4, 2e-4; seed 0; 734 steps) are running on Isambard.
-When they finish, a detached driver (`scripts/a1_followup.sh`) picks the rate with the lowest **selection-split** log
-loss (diverged runs excluded, `scripts/pick_lr.py`) and submits A1 seed 1 at that rate. δ is then twice the difference
-of those two runs on the selection split (`scripts/compute_delta.py`). **The dev predictions of these runs are written
-by the runner but are not opened until the pre-registration is committed** (D13); both scripts read only calibration
-and selection predictions.
+A1 seed 1 at 1e-4 (job 7128147, submitted by the detached driver at 15:28 UTC) is running; with the sweep's 1e-4 run it
+gives the two A1 runs from which δ is computed (`scripts/compute_delta.py`, calibration and selection predictions
+only). **The dev predictions of these runs exist on the cluster but have not been opened** (D13): the local copies of
+`run.json` have had their `eval` block (which contains the dev metrics) removed until the pre-registration is
+committed, and `scripts/pick_lr.py` and `scripts/compute_delta.py` read only the selection split.

@@ -1,0 +1,20 @@
+{
+ "rows": [
+  {
+   "lr": "1e-4",
+   "select_nll": 0.341238,
+   "diverged": false
+  },
+  {
+   "lr": "2e-4",
+   "select_nll": 0.360477,
+   "diverged": false
+  },
+  {
+   "lr": "5e-5",
+   "select_nll": 0.367281,
+   "diverged": false
+  }
+ ],
+ "chosen": "1e-4"
+}

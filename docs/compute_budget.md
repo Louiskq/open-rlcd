@@ -22,6 +22,22 @@ readout (`docs/decisions.md` D3) every level is its own forward pass over the fu
 of the questions but roughly **40% of the forward-pass rows**. That is a cost factor, and it also bears on D4: after
 RPS is divided by K − 1, SCORE carries less gradient per question than the log score does.
 
+## Measured in phase 2 (2026-10-06, Exp A on `decider9b-sft`)
+
+| quantity | measured | source |
+|---|---|---|
+| **One full-length A run** (S = 734 steps, LoRA r = 64, 2 epochs of half the 90% training split) | training **6,565–6,605 s (1.83 h)**; whole job **1 h 55 min 03 s – 1 h 55 min 50 s (1.93 GPU-h)** including load, in-training gradient-share measurement and the calibration, selection and dev predictions | jobs 7125954/5/6 (`sacct`) |
+| Training speed | 6.5k tokens/s, about 9 s per optimizer step, 35 GB peak (the 654-step job of the old project: 30 GB) | the three sweep runs' logs |
+| Smoke run (73 steps) | about 0.35 GPU-h per arm, as estimated | `docs/phase2_smoke.md` |
+| Queue wait | the dev-session allocation 7120786 (4 h 38 min used) hosted the smoke runs; the three sweep jobs started within the hour | `squeue`, `sacct` |
+
+A full-length run is therefore **1.93 GPU-h**, 3% above the 1.87 used below. The estimate below is rescaled by that
+factor and JevBench (deferred to phase 3; it needs a merged checkpoint served) is added.
+
+**Revised estimate (2026-10-06, after the sweep): phase 2 about 13 (actual to date, including seed 1 of A1 in the
+queue), phase 3 about 42 (including about 5 for JevBench), phase 4 about 16, total about 71 GPU-hours.** The ±30% band
+and the assumptions below are unchanged.
+
 ## Estimate by phase (lean plan, D-lean, 2026-10-06)
 
 | phase | GPU-hours | what dominates |
