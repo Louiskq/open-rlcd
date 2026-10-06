@@ -62,7 +62,7 @@ def arm_json(arm: E.Arm, cfg: X.ToyConfig, runs: list[X.Run]) -> dict:
             np.stack([getattr(r, attr)["conf_sum"] for r in runs]),
             np.stack([getattr(r, attr)["correct_sum"] for r in runs]),
         )
-    return {
+    out = {
         "arm": arm.name,
         "kind": arm.kind,
         "clip": arm.clip,
@@ -81,13 +81,16 @@ def arm_json(arm: E.Arm, cfg: X.ToyConfig, runs: list[X.Run]) -> dict:
         "reliability": {"steps": runs[0].steps, **rel},
         "reliability_final": final_rel,
     }
+    if runs[0].by_difficulty is not None:  # Exp 0b only; absent from Exp 0 files
+        out["by_difficulty"] = [r.by_difficulty for r in runs]
+    return out
 
 
-def final_summary(runs: list[X.Run]) -> dict:
+def final_summary(runs: list[X.Run], metrics: tuple[str, ...] = FINAL_METRICS) -> dict:
     """Seed mean/range of the headline metrics, raw and after temperature scaling."""
     return {
-        "raw": {k: mean_range(_stack(runs, "final_raw", k)) for k in FINAL_METRICS},
-        "ts": {k: mean_range(_stack(runs, "final_ts", k)) for k in FINAL_METRICS},
+        "raw": {k: mean_range(_stack(runs, "final_raw", k)) for k in metrics},
+        "ts": {k: mean_range(_stack(runs, "final_ts", k)) for k in metrics},
         "temperature": mean_range([r.temperature for r in runs]),
     }
 

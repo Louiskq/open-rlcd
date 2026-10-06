@@ -659,6 +659,182 @@ def fig_toy_gallery(
 
 
 # ---------------------------------------------------------------------------------------------
+# Exp 0b (exploratory)
+# ---------------------------------------------------------------------------------------------
+
+TOY0B_ARMS = ("rlvr", "rlcd_bandit", "rlcd_bandit_clip10", "supervised")
+
+
+def load_toy0b(res_dir: str | Path) -> dict[str, Any]:
+    res_dir = Path(res_dir)
+    out: dict[str, Any] = {name: read_json(res_dir / f"{name}.json") for name in TOY_ARMS}
+    out["meta"] = read_json(res_dir / "meta.json")
+    return out
+
+
+def _range_dot(
+    ax: Any, x: float, s: dict[str, float], arm_id: str, theme: Theme, **kw: Any
+) -> None:
+    st = ARM_STYLES[arm_id]
+    col = color(arm_id, theme)
+    ax.plot([x, x], [s["min"], s["max"]], color=col, lw=1.4, solid_capstyle="round", zorder=2)
+    ax.plot(
+        [x],
+        [s["mean"]],
+        ls="",
+        marker=st.marker,
+        ms=8,
+        color=col,
+        mec=theme.surface,
+        mew=1.6,
+        zorder=3,
+        **kw,
+    )
+
+
+def fig_toy0b(data: dict[str, Any], theme: Theme) -> Any:
+    """After one temperature: pooled ECE, calibration by difficulty tercile, and resolution."""
+    meta = data["meta"]
+    summ, grp, oracle = meta["summary"], meta["by_difficulty"], meta["oracle"]
+    n_seeds = len(meta["seed_sets"]["train"])
+    labels = [ARM_STYLES[a].label.replace(" log loss", "") for a in TOY0B_ARMS]
+    with plt.rc_context(rc(theme)):
+        fig, axes = plt.subplots(1, 3, figsize=(11.6, 4.9))
+        fig.subplots_adjust(left=0.065, right=0.985, top=0.68, bottom=0.22, wspace=0.28)
+        ax1, ax2, ax3 = axes
+
+        # 1. pooled ECE after one global temperature
+        for i, arm in enumerate(TOY0B_ARMS):
+            _range_dot(ax1, i, summ[arm]["ts"]["ece"], arm, theme)
+        ax1.axhline(oracle["ece"], color=theme.muted, lw=0.9)
+        ax1.text(
+            0.012,
+            oracle["ece"] - 0.0003,
+            f"noise floor {oracle['ece']:.3f}",
+            transform=ax1.get_yaxis_transform(),
+            ha="left",
+            va="top",
+            fontsize=8,
+            color=theme.muted,
+        )
+        ax1.set_xticks(range(len(TOY0B_ARMS)), labels, fontsize=8, rotation=18, ha="right")
+        ax1.set_xlim(-0.5, len(TOY0B_ARMS) - 0.5)
+        ax1.set_ylim(0, 0.02)
+        ax1.set_ylabel("pooled ECE, lower is better")
+        ax1.set_title("Pooled ECE looks fixed")
+        ax1.grid(axis="x", visible=False)
+
+        # 2. signed confidence gap by difficulty tercile, after the same temperature
+        names = grp[TOY0B_ARMS[0]]["names"]
+        for arm in TOY0B_ARMS:
+            col, st = color(arm, theme), ARM_STYLES[arm]
+            gaps = grp[arm]["ts"]["gap"]
+            ax2.plot(
+                range(3), [g["mean"] for g in gaps], color=col, lw=2.0, ls=st.linestyle, zorder=2
+            )
+            for j, g in enumerate(gaps):
+                _range_dot(ax2, j, g, arm, theme)
+        ax2.axhline(0, color=theme.muted, lw=0.9)
+        ax2.set_xticks(range(3), list(names), fontsize=9)
+        ax2.set_xlabel("input difficulty (hard = true probabilities near-uniform)")
+        ax2.set_xlim(-0.35, 2.35)
+        ax2.set_ylabel("mean confidence \u2212 accuracy")
+        ax2.set_title("by difficulty it is not")
+        ax2.grid(axis="x", visible=False)
+        ax2.text(
+            0.98,
+            0.97,
+            "overconfident",
+            transform=ax2.transAxes,
+            fontsize=8,
+            color=theme.muted,
+            va="top",
+            ha="right",
+        )
+        ax2.text(
+            0.02, 0.03, "underconfident", transform=ax2.transAxes, fontsize=8, color=theme.muted
+        )
+
+        # 3. resolution after one temperature
+        for i, arm in enumerate(TOY0B_ARMS):
+            _range_dot(ax3, i, summ[arm]["ts"]["resolution"], arm, theme)
+        ax3.axhline(oracle["resolution"], color=theme.muted, lw=0.9)
+        _hline_label(
+            ax3, oracle["resolution"] + 0.0003, "true probabilities", theme, x=0.99, ha="right"
+        )
+        ax3.set_xticks(range(len(TOY0B_ARMS)), labels, fontsize=8, rotation=18, ha="right")
+        ax3.set_xlim(-0.5, len(TOY0B_ARMS) - 0.5)
+        lo = min(summ[a]["ts"]["resolution"]["min"] for a in TOY0B_ARMS)
+        ax3.set_ylim(lo - 0.006, oracle["resolution"] + 0.004)
+        ax3.set_ylabel("Murphy resolution, higher is better")
+        ax3.set_title("and resolution is lower")
+        ax3.grid(axis="x", visible=False)
+
+        fig.text(
+            0.065,
+            0.955,
+            "Exploratory: pooled ECE after one temperature hides what RLVR got wrong",
+            fontsize=13.5,
+            fontweight="bold",
+            color=theme.ink,
+        )
+        fig.text(
+            0.065,
+            0.915,
+            "Exp 0b. The scale of the true logits changes with the input; the policy can represent "
+            "the truth exactly.\nAll numbers are after one temperature fitted on a separate "
+            "calibration set.",
+            fontsize=9.5,
+            color=theme.ink2,
+            va="top",
+            linespacing=1.5,
+        )
+        handles = [
+            Line2D(
+                [],
+                [],
+                color=color(a, theme),
+                lw=2.0,
+                ls=ARM_STYLES[a].linestyle,
+                marker=ARM_STYLES[a].marker,
+                ms=7,
+                mec=theme.surface,
+                mew=1.5,
+            )
+            for a in TOY0B_ARMS
+        ]
+        fig.legend(
+            handles,
+            labels,
+            ncol=4,
+            loc="upper left",
+            bbox_to_anchor=(0.06, 0.835),
+            handlelength=2.4,
+            columnspacing=1.8,
+        )
+        fig.text(
+            0.065,
+            0.025,
+            f"Not pre-registered. {n_seeds} seeds; bars are the seed range. "
+            "Supervised log loss and RLCD-full coincide.",
+            fontsize=8,
+            color=theme.muted,
+        )
+    return fig
+
+
+def make_toy0b_figures(res_dir: str | Path, fig_dir: str | Path) -> list[Path]:
+    mpl.rcParams["svg.fonttype"] = "path"
+    data = load_toy0b(res_dir)
+    out: list[Path] = []
+    for theme in THEMES:
+        fig = fig_toy0b(data, theme)
+        out += save_figure(fig, "toy0b", fig_dir, theme)
+        plt.close(fig)
+    return out
+
+
+# ---------------------------------------------------------------------------------------------
 # Hero animation
 # ---------------------------------------------------------------------------------------------
 

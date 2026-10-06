@@ -25,6 +25,7 @@ import time
 from dataclasses import asdict, dataclass, replace
 
 import numpy as np
+from scipy.special import ndtr
 
 from rlcd import calibrate as C
 from rlcd import estimators as E
@@ -86,20 +87,78 @@ def ground_truth(cfg: ToyConfig) -> np.ndarray:
     return rng.normal(size=(cfg.n_options, cfg.dim)) * cfg.logit_scale / math.sqrt(cfg.dim)
 
 
+@dataclass(frozen=True)
+class Problem:
+    """The true logits of a toy and the features the policy sees.
+
+    ``scale_range=None`` is Exp 0: ``z*(x) = W* x`` and the policy is linear in ``x``.
+
+    ``scale_range=(lo, hi)`` is Exp 0b (exploratory): the *scale* of the true logits varies with the
+    input, ``z*(x) = s(x) W* x`` with ``s = lo + (hi - lo) u(x)`` and ``u(x) = Phi(x_0)`` uniform on
+    (0, 1). Small ``u`` is a hard input (near-uniform truth), large ``u`` an easy one. The policy
+    sees ``[x, u(x) x]``, so it can represent the truth exactly: any miscalibration comes from the
+    reward, not from a misspecified model.
+    """
+
+    w: np.ndarray
+    scale_range: tuple[float, float] | None = None
+
+    @property
+    def dim(self) -> int:
+        return self.w.shape[1]
+
+    @property
+    def dim_feat(self) -> int:
+        return self.dim if self.scale_range is None else 2 * self.dim
+
+    def difficulty(self, x: np.ndarray) -> np.ndarray | None:
+        """``u(x)`` in (0, 1), or None for the plain problem."""
+        return None if self.scale_range is None else ndtr(x[:, 0])
+
+    def true_logits(self, x: np.ndarray) -> np.ndarray:
+        z = x @ self.w.T
+        if self.scale_range is None:
+            return z
+        lo, hi = self.scale_range
+        return z * (lo + (hi - lo) * self.difficulty(x))[:, None]
+
+    def features(self, x: np.ndarray) -> np.ndarray:
+        if self.scale_range is None:
+            return x
+        return np.concatenate([x, self.difficulty(x)[:, None] * x], axis=1)
+
+
+def as_problem(p: np.ndarray | Problem) -> Problem:
+    """Accept a bare ``W*`` (Exp 0) or a ``Problem``."""
+    return p if isinstance(p, Problem) else Problem(np.asarray(p))
+
+
+def hetero_problem(cfg: ToyConfig, lo: float = 0.3, hi: float = 3.0) -> Problem:
+    """Exp 0b: unit-scale ``W*`` times an input-dependent scale between ``lo`` and ``hi``."""
+    return Problem(ground_truth(replace(cfg, logit_scale=1.0)), (lo, hi))
+
+
 @dataclass
 class Dataset:
-    """Contexts, sampled labels and the true distributions ``q`` behind them."""
+    """Policy features, sampled labels and the true distributions ``q`` behind them.
+
+    ``x`` is what the policy sees (the context in Exp 0). ``difficulty`` is ``u(x)`` in Exp 0b.
+    """
 
     x: np.ndarray
     y: np.ndarray
     q: np.ndarray
+    difficulty: np.ndarray | None = None
 
 
-def make_dataset(w_true: np.ndarray, n: int, seed: int) -> Dataset:
+def make_dataset(problem: np.ndarray | Problem, n: int, seed: int) -> Dataset:
+    problem = as_problem(problem)
     rng = np.random.default_rng(seed)
-    x = rng.normal(size=(n, w_true.shape[1]))
-    q = E.softmax(x @ w_true.T)
-    return Dataset(x, E.sample_categorical(q, 1, rng)[:, 0], q)
+    x = rng.normal(size=(n, problem.dim))
+    q = E.softmax(problem.true_logits(x))
+    return Dataset(
+        problem.features(x), E.sample_categorical(q, 1, rng)[:, 0], q, problem.difficulty(x)
+    )
 
 
 def reference_metrics(data: Dataset) -> dict[str, float]:
@@ -184,20 +243,61 @@ class Run:
     temperature: float
     final_reliability_raw: dict[str, np.ndarray]
     final_reliability_ts: dict[str, np.ndarray]
+    by_difficulty: dict[str, object] | None = None  # Exp 0b only
+
+
+DIFFICULTY_EDGES = (0.0, 1 / 3, 2 / 3, 1.0)  # u is uniform, so these are terciles
+DIFFICULTY_NAMES = ("hard", "medium", "easy")
+
+
+def _subset(data: Dataset, mask: np.ndarray) -> Dataset:
+    return Dataset(data.x[mask], data.y[mask], data.q[mask], data.difficulty[mask])
+
+
+def _group_masks(data: Dataset) -> list[np.ndarray]:
+    u = data.difficulty
+    edges = DIFFICULTY_EDGES
+    return [
+        (u >= lo) & (u <= hi if i == 2 else u < hi)
+        for i, (lo, hi) in enumerate(zip(edges, edges[1:], strict=False))
+    ]
+
+
+def _by_difficulty(
+    z_eval: np.ndarray, z_cal: np.ndarray, temperature: float, eval_set: Dataset, cal_set: Dataset
+) -> dict[str, object] | None:
+    """Exp 0b diagnostics: per-tercile metrics raw and after the global temperature, plus one
+    temperature *per tercile* (it uses the known difficulty, which a real model would not have)."""
+    if eval_set.difficulty is None:
+        return None
+    ev_masks, cal_masks = _group_masks(eval_set), _group_masks(cal_set)
+    temps = [C.fit_temperature(z_cal[m], cal_set.y[m]) for m in cal_masks]
+    z_group = np.empty_like(z_eval)
+    out: dict[str, object] = {"names": list(DIFFICULTY_NAMES), "group_temperature": temps}
+    for key, z in (("raw", z_eval), ("ts", z_eval / temperature)):
+        out[key] = [
+            {k: v for k, v in score_logits(z[m], _subset(eval_set, m)).items() if k != "bayes_acc"}
+            for m in ev_masks
+        ]
+    for m, t in zip(ev_masks, temps, strict=True):
+        z_group[m] = z_eval[m] / t
+    out["ts_group_overall"] = score_logits(z_group, eval_set, full=True)
+    return out
 
 
 def train(
     arm: E.Arm,
     cfg: ToyConfig,
-    w_true: np.ndarray,
+    w_true: np.ndarray | Problem,
     seed: int,
     eval_set: Dataset,
     cal_set: Dataset,
 ) -> Run:
     """Train one arm for ``cfg.steps`` Adam steps from the uniform policy, evaluating on the way."""
+    problem = as_problem(w_true)
     data_rng = np.random.default_rng([seed, 0])  # contexts + labels: shared by all arms
     act_rng = np.random.default_rng([seed, 1])  # sampled answers: only the RL arms use it
-    theta = np.zeros((cfg.n_options, cfg.dim))
+    theta = np.zeros((cfg.n_options, problem.dim_feat))
     opt = Adam(theta.shape, cfg.lr)
     steps: list[int] = []
     curves: dict[str, list[float]] = {}
@@ -214,10 +314,11 @@ def train(
     marks = set(checkpoint_steps(cfg.steps, cfg.n_checkpoints))
     checkpoint(0)
     for step in range(1, cfg.steps + 1):
-        x = data_rng.normal(size=(cfg.batch, cfg.dim))
-        y = E.sample_categorical(E.softmax(x @ w_true.T), 1, data_rng)[:, 0]
-        g_z = E.logit_gradient(arm, x @ theta.T, y, act_rng)  # ascent direction on the reward
-        theta = opt.step(theta, -(g_z.T @ x) / cfg.batch)
+        x = data_rng.normal(size=(cfg.batch, problem.dim))
+        y = E.sample_categorical(E.softmax(problem.true_logits(x)), 1, data_rng)[:, 0]
+        f = problem.features(x)
+        g_z = E.logit_gradient(arm, f @ theta.T, y, act_rng)  # ascent direction on the reward
+        theta = opt.step(theta, -(g_z.T @ f) / cfg.batch)
         if step in marks:
             checkpoint(step)
 
@@ -235,13 +336,14 @@ def train(
         temperature=temperature,
         final_reliability_raw=reliability(z_eval, eval_set),
         final_reliability_ts=reliability(z_ts, eval_set),
+        by_difficulty=_by_difficulty(z_eval, z_cal, temperature, eval_set, cal_set),
     )
 
 
 def run_arm(
     arm: E.Arm, cfg: ToyConfig, verbose: bool = True, w_true=None, eval_set=None, cal_set=None
 ) -> list[Run]:
-    """All seeds of one arm."""
+    """All seeds of one arm (``w_true`` may be a ``Problem``; default is the Exp 0 problem)."""
     w_true = ground_truth(cfg) if w_true is None else w_true
     eval_set = eval_set or make_dataset(w_true, cfg.n_eval, EVAL_SEED)
     cal_set = cal_set or make_dataset(w_true, cfg.n_cal, CAL_SEED)
