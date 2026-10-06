@@ -20,9 +20,10 @@
 </p>
 <p align="center"><sub>Same model, same data, same optimiser. Only the reward differs. (Exp 0: a toy where the true probabilities are known.)</sub></p>
 
-> **Status: phase 1 of 5 done.** The metrics, the estimators (with unbiasedness tests), the toy experiments and
-> the recorded design [decisions](docs/decisions.md) are in place. Exp A (a 9B model, teacher labels) and Exp B
-> (Breakout) have **not been run**; their rows say *pending* rather than guess. See [Status](#status).
+> **Status: phases 1 and 2 of 5 done.** The metrics, estimators, toy experiments, the Exp A trainer and the Breakout
+> label validation are built and tested, and a smoke run of every Exp A arm has run (one seed, 10% of the steps:
+> [`docs/phase2_smoke.md`](docs/phase2_smoke.md)). **The full Exp A and Exp B runs have not been run**, so their rows
+> say *pending*; the smoke numbers are a wiring check, not results. See [Status](#status).
 
 ## TL;DR
 
@@ -320,7 +321,7 @@ Written *before* the language-model results exist, so they cannot be shaped by t
 | phase | what | state |
 |---|---|---|
 | 1 | scaffold, metrics, estimators, tests, Exp 0 (+ exploratory Exp 0b), notebook, README skeleton, loss-weight check, design decisions | **done** |
-| 2 | Exp A smoke run (all arms, 1 seed, 10% of steps); Breakout label validation | not started |
+| 2 | Exp A smoke run (all arms, 1 seed, 10% of steps); Breakout label validation | **smoke run and label validation done**; the A1 learning-rate sweep and δ seeds are running |
 | 3 | commit the pre-registration, then Exp A in full | not started |
 | 4 | Exp B in full | not started |
 | 5 | write-up, releases (Hugging Face), interactive explorer | not started |

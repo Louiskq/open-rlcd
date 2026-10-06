@@ -1,0 +1,193 @@
+{
+ "arm": "a1",
+ "lr": 0.0001,
+ "seed": 0,
+ "S_full": 734,
+ "steps": 73,
+ "diverged": false,
+ "train_seconds": 1647.97,
+ "peak_mem_gb": 31.5858,
+ "train_questions_end": 20596,
+ "grad_share": [
+  {
+   "step": 2,
+   "noul": {
+    "grad_norm": 7.70783,
+    "questions": 41,
+    "share_of_norms": 0.7814,
+    "share_of_questions": 0.43617
+   },
+   "choice": {
+    "grad_norm": 1.99105,
+    "questions": 45,
+    "share_of_norms": 0.201847,
+    "share_of_questions": 0.478723
+   },
+   "score": {
+    "grad_norm": 0.165257,
+    "questions": 8,
+    "share_of_norms": 0.0167533,
+    "share_of_questions": 0.0851064
+   }
+  },
+  {
+   "step": 10,
+   "noul": {
+    "grad_norm": 1.45355,
+    "questions": 26,
+    "share_of_norms": 0.374926,
+    "share_of_questions": 0.282609
+   },
+   "choice": {
+    "grad_norm": 2.27115,
+    "questions": 60,
+    "share_of_norms": 0.585815,
+    "share_of_questions": 0.652174
+   },
+   "score": {
+    "grad_norm": 0.1522,
+    "questions": 6,
+    "share_of_norms": 0.0392582,
+    "share_of_questions": 0.0652174
+   }
+  },
+  {
+   "step": 30,
+   "noul": {
+    "grad_norm": 0.323734,
+    "questions": 4,
+    "share_of_norms": 0.0407506,
+    "share_of_questions": 0.173913
+   },
+   "choice": {
+    "grad_norm": 6.93529,
+    "questions": 14,
+    "share_of_norms": 0.872993,
+    "share_of_questions": 0.608696
+   },
+   "score": {
+    "grad_norm": 0.68524,
+    "questions": 5,
+    "share_of_norms": 0.086256,
+    "share_of_questions": 0.217391
+   }
+  },
+  {
+   "step": 50,
+   "noul": {
+    "grad_norm": 0.00447557,
+    "questions": 1,
+    "share_of_norms": 0.001607,
+    "share_of_questions": 0.0625
+   },
+   "choice": {
+    "grad_norm": 0.912873,
+    "questions": 10,
+    "share_of_norms": 0.327777,
+    "share_of_questions": 0.625
+   },
+   "score": {
+    "grad_norm": 1.86769,
+    "questions": 5,
+    "share_of_norms": 0.670616,
+    "share_of_questions": 0.3125
+   }
+  }
+ ],
+ "eval": {
+  "cal": {
+   "noul": {
+    "nll": 0.419924,
+    "acc": 0.795775,
+    "n": 426
+   },
+   "choice": {
+    "nll": 0.543876,
+    "acc": 0.76112,
+    "n": 607
+   },
+   "score": {
+    "nll": 0.735322,
+    "acc": 0.643357,
+    "n": 143,
+    "rps": 0.0957342
+   },
+   "all": {
+    "nll": 0.522254,
+    "n": 1176
+   }
+  },
+  "select": {
+   "noul": {
+    "nll": 0.445067,
+    "acc": 0.769976,
+    "n": 413
+   },
+   "choice": {
+    "nll": 0.549985,
+    "acc": 0.757098,
+    "n": 634
+   },
+   "score": {
+    "nll": 0.624778,
+    "acc": 0.760563,
+    "n": 142,
+    "rps": 0.0734535
+   },
+   "all": {
+    "nll": 0.522474,
+    "n": 1189
+   }
+  },
+  "dev": {
+   "noul": {
+    "nll": 0.253597,
+    "acc": 0.899263,
+    "n": 814
+   },
+   "choice": {
+    "nll": 0.21615,
+    "acc": 0.916364,
+    "n": 1375
+   },
+   "score": {
+    "nll": 0.587605,
+    "acc": 0.73588,
+    "n": 602,
+    "rps": 0.0751217
+   },
+   "all": {
+    "nll": 0.307192,
+    "n": 2791
+   }
+  }
+ },
+ "args": {
+  "arm": "a1",
+  "lr": 0.0001,
+  "seed": 0,
+  "out": "/projects/u6xe/louisk/rlcd_expA/runs/smoke_a1b",
+  "data": "/projects/u6xe/louisk/rlcd_expA/data",
+  "model": "/projects/u6xe/louisk/models/decider9b-sft",
+  "epochs": 2.0,
+  "steps_frac": 0.1,
+  "beta": 0.1,
+  "k": 8,
+  "accum": 4,
+  "max_tokens": 16384,
+  "warmup": 20,
+  "lora_r": 64,
+  "lora_alpha": 128.0,
+  "rounds": 4,
+  "n_per_round": 1500,
+  "pool_frac": 1.0,
+  "reference": "/projects/u6xe/louisk/rlcd_expA/ref/ref_logp.pkl",
+  "eval_splits": "cal,select,dev",
+  "grad_share_steps": "2,10,30,50",
+  "stop_step": 0,
+  "eval_only": false,
+  "adapters": "on",
+  "adapter": "",
+  "compute_reference": false
+ }
+}

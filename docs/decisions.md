@@ -309,8 +309,8 @@ Choices the design left open, made while building the Exp A runner (`rlcd/train_
 - **S = 734 optimiser steps for every arm**: two epochs over the whole training split (A ∪ B), computed once from its
   micro-batch plan. A6 and A6r run S/4 per round on their own, smaller data (D11).
 - **K = 8** sampled answers per question for A3 and A4, group-mean baseline. **β = 0.1** on the forward KL(p_ref ‖ p),
-  identical across arms. Observed at 10% of S, learning rate 1e-4: the mean per-question KL to the start model is about
-  0.2 nats for A1 and A5, i.e. a penalty of about 0.02 against a log loss of about 0.5, so β = 0.1 is a mild
+  identical across arms. Observed at 10% of S, learning rate 1e-4: the mean per-question KL to the start model at the end of training is
+  about 0.17 nats for A1 and A5 (0.26 for A3, 0.29–0.32 for A6 / A6r), i.e. a penalty of about 0.017 against a log loss of about 0.5, so β = 0.1 is a mild
   regulariser for the supervised arms and a real constraint only for arms that move further.
 - **Learning-rate grid 5e-5, 1e-4, 2e-4**, chosen on the **selection split by mean per-question log loss over all
   answer types**. The A1 sweep (full length, seed 0) is running; A6 / A6r take its rate, and A3 / A4 take the rate of an

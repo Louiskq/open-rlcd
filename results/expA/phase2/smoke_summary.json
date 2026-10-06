@@ -1,0 +1,618 @@
+{
+ "setting": "10% of S = 734 steps, seed 0, lr 1e-4, beta 0.1",
+ "runs": {
+  "a0": {
+   "label": "A0 start model",
+   "temperature_by_type": {
+    "noul": 2.34369,
+    "choice": 1.43449,
+    "score": 1.02175
+   },
+   "select_raw": {
+    "log_loss": 0.699059,
+    "acc": 0.687973,
+    "ece": 0.0760221,
+    "resolution": 0.344428
+   },
+   "select_ts": {
+    "log_loss": 0.647166,
+    "acc": 0.687973,
+    "ece": 0.0322996,
+    "resolution": 0.353334
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.740392,
+     "acc": 0.62954,
+     "ece": 0.185929
+    },
+    "choice": {
+     "log_loss": 0.680773,
+     "acc": 0.714511,
+     "ece": 0.0392183
+    },
+    "score": {
+     "log_loss": 0.66049,
+     "acc": 0.739437,
+     "ece": 0.125596
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.446439,
+    "acc": 0.807596,
+    "ece": 0.0452991,
+    "resolution": 0.496215
+   },
+   "dev_ts": {
+    "log_loss": 0.429584,
+    "acc": 0.807596,
+    "ece": 0.021333,
+    "resolution": 0.506002
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.491228,
+     "acc": 0.759214,
+     "ece": 0.111505
+    },
+    "choice": {
+     "log_loss": 0.333319,
+     "acc": 0.878545,
+     "ece": 0.0285626
+    },
+    "score": {
+     "log_loss": 0.644249,
+     "acc": 0.710963,
+     "ece": 0.0576087
+    }
+   },
+   "score_mass_deviation_select": 0.404781
+  },
+  "smoke_a1": {
+   "label": "A1 supervised",
+   "temperature_by_type": {
+    "noul": 1.07856,
+    "choice": 0.788583,
+    "score": 0.891022
+   },
+   "select_raw": {
+    "log_loss": 0.537918,
+    "acc": 0.75778,
+    "ece": 0.0256027,
+    "resolution": 0.419357
+   },
+   "select_ts": {
+    "log_loss": 0.535787,
+    "acc": 0.75778,
+    "ece": 0.0235717,
+    "resolution": 0.416744
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.472019,
+     "acc": 0.760291,
+     "ece": 0.0280244
+    },
+    "choice": {
+     "log_loss": 0.56235,
+     "acc": 0.760252,
+     "ece": 0.0368767
+    },
+    "score": {
+     "log_loss": 0.6205,
+     "acc": 0.739437,
+     "ece": 0.0854548
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.318928,
+    "acc": 0.867073,
+    "ece": 0.0172286,
+    "resolution": 0.577017
+   },
+   "dev_ts": {
+    "log_loss": 0.321127,
+    "acc": 0.867073,
+    "ece": 0.0155514,
+    "resolution": 0.574673
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.260387,
+     "acc": 0.900491,
+     "ece": 0.0272801
+    },
+    "choice": {
+     "log_loss": 0.238764,
+     "acc": 0.904,
+     "ece": 0.0150688
+    },
+    "score": {
+     "log_loss": 0.581184,
+     "acc": 0.737542,
+     "ece": 0.053214
+    }
+   },
+   "score_mass_deviation_select": 0.370806,
+   "train_kl_last": 0.163841,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 1945.91,
+   "peak_mem_gb": 31.5858,
+   "train_questions_end": 20596,
+   "grad_share_mean": {
+    "noul": 0.309689,
+    "choice": 0.578031,
+    "score": 0.323266
+   }
+  },
+  "smoke_a1b": {
+   "label": "A1 rerun (same seed)",
+   "temperature_by_type": {
+    "noul": 0.917924,
+    "choice": 0.713977,
+    "score": 0.812861
+   },
+   "select_raw": {
+    "log_loss": 0.522474,
+    "acc": 0.761985,
+    "ece": 0.0336192,
+    "resolution": 0.426249
+   },
+   "select_ts": {
+    "log_loss": 0.51252,
+    "acc": 0.761985,
+    "ece": 0.0275003,
+    "resolution": 0.434383
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.445067,
+     "acc": 0.769976,
+     "ece": 0.0248197
+    },
+    "choice": {
+     "log_loss": 0.549985,
+     "acc": 0.757098,
+     "ece": 0.0377368
+    },
+    "score": {
+     "log_loss": 0.624778,
+     "acc": 0.760563,
+     "ece": 0.128097
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.307192,
+    "acc": 0.872447,
+    "ece": 0.0228157,
+    "resolution": 0.584276
+   },
+   "dev_ts": {
+    "log_loss": 0.302506,
+    "acc": 0.872447,
+    "ece": 0.0121085,
+    "resolution": 0.582173
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.253597,
+     "acc": 0.899263,
+     "ece": 0.0217429
+    },
+    "choice": {
+     "log_loss": 0.21615,
+     "acc": 0.916364,
+     "ece": 0.0201389
+    },
+    "score": {
+     "log_loss": 0.587605,
+     "acc": 0.73588,
+     "ece": 0.0763097
+    }
+   },
+   "score_mass_deviation_select": 0.350309,
+   "train_kl_last": 0.166639,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 1647.97,
+   "peak_mem_gb": 31.5858,
+   "train_questions_end": 20596,
+   "grad_share_mean": {
+    "noul": 0.299671,
+    "choice": 0.497108,
+    "score": 0.203221
+   }
+  },
+  "smoke_a5": {
+   "label": "A5 RLCD-full",
+   "temperature_by_type": {
+    "noul": 0.953786,
+    "choice": 0.724247,
+    "score": 0.820159
+   },
+   "select_raw": {
+    "log_loss": 0.52427,
+    "acc": 0.75778,
+    "ece": 0.0365658,
+    "resolution": 0.425893
+   },
+   "select_ts": {
+    "log_loss": 0.517766,
+    "acc": 0.75778,
+    "ece": 0.0211988,
+    "resolution": 0.424215
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.457864,
+     "acc": 0.772397,
+     "ece": 0.0411917
+    },
+    "choice": {
+     "log_loss": 0.544781,
+     "acc": 0.757098,
+     "ece": 0.0381534
+    },
+    "score": {
+     "log_loss": 0.625833,
+     "acc": 0.71831,
+     "ece": 0.117533
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.307669,
+    "acc": 0.867073,
+    "ece": 0.020642,
+    "resolution": 0.581062
+   },
+   "dev_ts": {
+    "log_loss": 0.305659,
+    "acc": 0.867073,
+    "ece": 0.0222748,
+    "resolution": 0.580064
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.26506,
+     "acc": 0.894349,
+     "ece": 0.0265063
+    },
+    "choice": {
+     "log_loss": 0.216977,
+     "acc": 0.915636,
+     "ece": 0.0151434
+    },
+    "score": {
+     "log_loss": 0.57243,
+     "acc": 0.719269,
+     "ece": 0.0669217
+    }
+   },
+   "score_mass_deviation_select": 0.350148,
+   "train_kl_last": 0.168759,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 1944.06,
+   "peak_mem_gb": 31.5858,
+   "train_questions_end": 20596,
+   "grad_share_mean": {
+    "noul": 0.310987,
+    "choice": 0.618244,
+    "score": 0.261648
+   }
+  },
+  "smoke_a3": {
+   "label": "A3 RLVR",
+   "temperature_by_type": {
+    "noul": 2.15958,
+    "choice": 1.36276,
+    "score": 0.97828
+   },
+   "select_raw": {
+    "log_loss": 0.610132,
+    "acc": 0.752733,
+    "ece": 0.075266,
+    "resolution": 0.394084
+   },
+   "select_ts": {
+    "log_loss": 0.555461,
+    "acc": 0.752733,
+    "ece": 0.0268858,
+    "resolution": 0.40373
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.64857,
+     "acc": 0.736077,
+     "ece": 0.135561
+    },
+    "choice": {
+     "log_loss": 0.597049,
+     "acc": 0.76183,
+     "ece": 0.0591753
+    },
+    "score": {
+     "log_loss": 0.556749,
+     "acc": 0.760563,
+     "ece": 0.0838613
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.324559,
+    "acc": 0.873522,
+    "ece": 0.0258839,
+    "resolution": 0.575104
+   },
+   "dev_ts": {
+    "log_loss": 0.325966,
+    "acc": 0.873522,
+    "ece": 0.0257841,
+    "resolution": 0.57257
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.273134,
+     "acc": 0.90172,
+     "ece": 0.040814
+    },
+    "choice": {
+     "log_loss": 0.262018,
+     "acc": 0.908364,
+     "ece": 0.026787
+    },
+    "score": {
+     "log_loss": 0.53694,
+     "acc": 0.755814,
+     "ece": 0.034871
+    }
+   },
+   "score_mass_deviation_select": 0.426656,
+   "train_kl_last": 0.257641,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 2274.38,
+   "peak_mem_gb": 31.5858,
+   "train_questions_end": 20596,
+   "grad_share_mean": {
+    "noul": 0.172998,
+    "choice": 0.355971,
+    "score": 0.471032
+   }
+  },
+  "smoke_a4": {
+   "label": "A4 RLCD-bandit",
+   "temperature_by_type": {
+    "noul": 0.978744,
+    "choice": 0.829503,
+    "score": 0.973623
+   },
+   "select_raw": {
+    "log_loss": 0.520255,
+    "acc": 0.753574,
+    "ece": 0.035561,
+    "resolution": 0.4229
+   },
+   "select_ts": {
+    "log_loss": 0.516162,
+    "acc": 0.753574,
+    "ece": 0.0229521,
+    "resolution": 0.422338
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.461944,
+     "acc": 0.760291,
+     "ece": 0.0220971
+    },
+    "choice": {
+     "log_loss": 0.552132,
+     "acc": 0.747634,
+     "ece": 0.0401896
+    },
+    "score": {
+     "log_loss": 0.547527,
+     "acc": 0.760563,
+     "ece": 0.0977269
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.304123,
+    "acc": 0.871731,
+    "ece": 0.015077,
+    "resolution": 0.578825
+   },
+   "dev_ts": {
+    "log_loss": 0.304693,
+    "acc": 0.871731,
+    "ece": 0.0126653,
+    "resolution": 0.57729
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.269336,
+     "acc": 0.888206,
+     "ece": 0.0212909
+    },
+    "choice": {
+     "log_loss": 0.222849,
+     "acc": 0.910545,
+     "ece": 0.0158331
+    },
+    "score": {
+     "log_loss": 0.536791,
+     "acc": 0.760797,
+     "ece": 0.052534
+    }
+   },
+   "score_mass_deviation_select": 0.428552,
+   "train_kl_last": 0.179214,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 2273.76,
+   "peak_mem_gb": 31.5858,
+   "train_questions_end": 20596,
+   "grad_share_mean": {
+    "noul": 0.232143,
+    "choice": 0.338186,
+    "score": 0.429671
+   }
+  },
+  "smoke_a6": {
+   "label": "A6 mined",
+   "temperature_by_type": {
+    "noul": 0.88734,
+    "choice": 0.898457,
+    "score": 0.995242
+   },
+   "select_raw": {
+    "log_loss": 0.487551,
+    "acc": 0.787216,
+    "ece": 0.0335637,
+    "resolution": 0.442109
+   },
+   "select_ts": {
+    "log_loss": 0.488457,
+    "acc": 0.787216,
+    "ece": 0.0329456,
+    "resolution": 0.443015
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.424859,
+     "acc": 0.789346,
+     "ece": 0.0332776
+    },
+    "choice": {
+     "log_loss": 0.502133,
+     "acc": 0.793375,
+     "ece": 0.040049
+    },
+    "score": {
+     "log_loss": 0.60478,
+     "acc": 0.753521,
+     "ece": 0.0875881
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.318924,
+    "acc": 0.872089,
+    "ece": 0.0196062,
+    "resolution": 0.569672
+   },
+   "dev_ts": {
+    "log_loss": 0.321256,
+    "acc": 0.872089,
+    "ece": 0.0228334,
+    "resolution": 0.569373
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.275772,
+     "acc": 0.896806,
+     "ece": 0.0324606
+    },
+    "choice": {
+     "log_loss": 0.233917,
+     "acc": 0.911273,
+     "ece": 0.017064
+    },
+    "score": {
+     "log_loss": 0.571433,
+     "acc": 0.749169,
+     "ece": 0.0683449
+    }
+   },
+   "score_mass_deviation_select": 0.318523,
+   "train_kl_last": 0.31988,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 2773.23,
+   "peak_mem_gb": 32.6826,
+   "train_questions_end": 10912,
+   "grad_share_mean": {
+    "noul": 0.322554,
+    "choice": 0.627484,
+    "score": 0.0499616
+   }
+  },
+  "smoke_a6r": {
+   "label": "A6r random",
+   "temperature_by_type": {
+    "noul": 1.25456,
+    "choice": 1.0216,
+    "score": 0.796159
+   },
+   "select_raw": {
+    "log_loss": 0.521218,
+    "acc": 0.771236,
+    "ece": 0.0320064,
+    "resolution": 0.428085
+   },
+   "select_ts": {
+    "log_loss": 0.515023,
+    "acc": 0.771236,
+    "ece": 0.035994,
+    "resolution": 0.427491
+   },
+   "select_by_type_raw": {
+    "noul": {
+     "log_loss": 0.45752,
+     "acc": 0.803874,
+     "ece": 0.0628502
+    },
+    "choice": {
+     "log_loss": 0.532386,
+     "acc": 0.764984,
+     "ece": 0.0518412
+    },
+    "score": {
+     "log_loss": 0.656614,
+     "acc": 0.704225,
+     "ece": 0.115731
+    }
+   },
+   "dev_raw": {
+    "log_loss": 0.314292,
+    "acc": 0.876388,
+    "ece": 0.0237959,
+    "resolution": 0.577005
+   },
+   "dev_ts": {
+    "log_loss": 0.310622,
+    "acc": 0.876388,
+    "ece": 0.0239388,
+    "resolution": 0.575118
+   },
+   "dev_by_type_raw": {
+    "noul": {
+     "log_loss": 0.255278,
+     "acc": 0.90172,
+     "ece": 0.0293822
+    },
+    "choice": {
+     "log_loss": 0.220198,
+     "acc": 0.912727,
+     "ece": 0.0218286
+    },
+    "score": {
+     "log_loss": 0.609006,
+     "acc": 0.759136,
+     "ece": 0.105022
+    }
+   },
+   "score_mass_deviation_select": 0.369242,
+   "train_kl_last": 0.285637,
+   "steps": 73,
+   "diverged": false,
+   "train_seconds": 1615.1,
+   "peak_mem_gb": 32.3477,
+   "train_questions_end": 10912,
+   "grad_share_mean": {
+    "noul": 0.383236,
+    "choice": 0.526858,
+    "score": 0.0899059
+   }
+  }
+ }
+}
