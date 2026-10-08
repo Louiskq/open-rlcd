@@ -20,10 +20,12 @@
 </p>
 <p align="center"><sub>Same model, same data, same optimiser. Only the reward differs. (Exp 0: a toy where the true probabilities are known.)</sub></p>
 
-> **Status: Exp A is run and analysed; Exp B is in progress.** The pre-registration was frozen before the Exp A runs
-> ([`PREREGISTRATION.md`](PREREGISTRATION.md)); its two amendments are dated. Exp A (the 9B decider with teacher labels)
-> gave a **mixed** result that does not simply confirm RLCD: see [Exp A results](#exp-a-results-a-9b-decider-with-teacher-labels).
-> Rows for Exp B say *pending* until it has run. See [Status](#status).
+> **Status: both experiments are run and analysed; the write-up is this README.** The pre-registration
+> ([`PREREGISTRATION.md`](PREREGISTRATION.md)) was frozen before any full run; its four amendments are dated and say
+> why. The results are **mixed**: the 9B model with teacher labels
+> ([Exp A](#exp-a-results-a-9b-decider-with-teacher-labels)) largely supports the sceptical reading, and Breakout
+> ([Exp B](#exp-b-results-breakout-where-the-outcomes-depend-on-the-models-own-moves)) passes the pre-registered test of
+> RLCD's one distinctive claim by a margin that rests on one seed. See [Status](#status).
 
 ## TL;DR
 
@@ -32,10 +34,11 @@
 - **The one-line fix.** When only the sampled answer `a` can be checked, use reward `1[a=y] / p(a)` (no
   gradient through the denominator) instead of `1[a=y]`. That makes REINFORCE an unbiased estimator of the
   log-likelihood gradient, so calibration is recoverable from bandit feedback.
-- **What is shown.** In the toy, the 0/1 reward makes the model more confident than accurate while leaving
-  accuracy unchanged and the importance-weighted reward does not. In the 9B model with a KL anchor the effect is
-  much smaller, and the pre-registered sceptical reading (a proper-loss fine-tune plus temperature scaling matches the
-  RL arms) is largely borne out; see below.
+- **What is shown.** In the toy, the 0/1 reward makes the model more confident than accurate while leaving accuracy
+  unchanged and the importance-weighted reward does not. In the 9B model with a KL anchor the effect is much smaller and
+  the pre-registered sceptical reading (a proper-loss fine-tune plus temperature scaling matches the RL arms) is largely
+  borne out; without the anchor RLVR's probabilities collapse. In Breakout, training beliefs jointly with the policy
+  beat the sceptic's recipe by the pre-registered test, but not robustly across seeds (see the Exp B section).
 
 <!-- BEGIN gen:tldr -->
 | setting | arm | ECE (lower is better) | accuracy | log loss |
@@ -51,11 +54,13 @@
 | Exp A (9B decider, dev set) | A5 RLCD-full | **[0.017](results/expA/analysis.json)** | [0.895](results/expA/analysis.json) | [0.282](results/expA/analysis.json) |
 | Exp A (9B decider, dev set) | A6 mined | **[0.016 (0.014–0.018)](results/expA/analysis.json)** | [0.893 (0.890–0.896)](results/expA/analysis.json) | [0.279 (0.276–0.282)](results/expA/analysis.json) |
 | Exp A (9B decider, dev set) | A6r random | [0.022 (0.017–0.026)](results/expA/analysis.json) | [0.889 (0.885–0.893)](results/expA/analysis.json) | [0.288 (0.286–0.291)](results/expA/analysis.json) |
-| Exp B (Breakout beliefs, common states) | B1–B5 | _pending_ | _pending_ | _pending_ |
+| Exp B (Breakout beliefs, common states) | B1 plain PPO | [0.221 (0.074–0.395)](results/expB/analysis.json) | [0.605 (0.540–0.646)](results/expB/analysis.json) | [0.979 (0.635–1.536)](results/expB/analysis.json) |
+| Exp B (Breakout beliefs, common states) | B3 RLCD | [0.053 (0.022–0.095)](results/expB/analysis.json) | [0.787 (0.785–0.787)](results/expB/analysis.json) | [0.488 (0.467–0.524)](results/expB/analysis.json) |
+| Exp B (Breakout beliefs, common states) | B4 cynical (+TS) | [0.082 (0.023–0.195)](results/expB/analysis.json) | [0.783 (0.748–0.809)](results/expB/analysis.json) | [0.592 (0.432–0.900)](results/expB/analysis.json) |
 <!-- END gen:tldr -->
 
 <sub>Seed mean (min–max). Bold: best, or within the best arm's seed range. Every number links to the JSON it
-came from. Rows marked *pending* have not been run.</sub>
+came from.</sub>
 
 ## What is RLCD?
 
@@ -121,11 +126,14 @@ it**. This repo tests that reading in three places instead of arguing about it:
 - **Exp B, B4 ("cynical")**: take B1's final policy, fit the belief heads by supervised log loss on that
   policy's rollouts, then temperature-scale. B3 trains the beliefs jointly and on-policy (**H7**).
 
-**Result for Exp A** (details [below](#exp-a-results-a-9b-decider-with-teacher-labels)): on the pre-registered dev set, the
-supervised control plus temperature scaling is within noise of the RL arms, and A6 is not shown to beat A6r after the
-pre-registered correction. The equivalence the hypothesis asked for (H5) was **not established** at the pre-registered
-margin, and mining's small advantage on log loss did not survive Holm correction. **Exp B (H7) is pending.** The Exp B result
-will be reported here with the same prominence whichever way it goes.
+**Result** (details below). *Exp A:* on the pre-registered dev set, the supervised control plus temperature scaling is
+within noise of the RL arms, and A6 is not shown to beat A6r after the pre-registered correction; the equivalence that H5
+asked for was **not established** at its margin, and RLVR's overconfidence is real but small with the KL anchor and
+large without it. *Exp B:* **H7 holds** by the pre-registered rule (B3's beliefs beat B4's after temperature scaling at a
+matched game score), but a supervised fit alone (B4 without temperature scaling) is nearly as good, B4 is better than B3
+in two of three seeds, and B3 plays below B1 on average. The honest summary is that **RLCD is more than a relabelled
+fine-tune only in the narrow sense that joint on-policy training did no worse than the best supervised version, and
+not clearly better.**
 
 ## Try it
 
@@ -520,21 +528,128 @@ one frozen policy (B1 seed 0, final checkpoint) meets on the evaluation seeds, s
 confound the comparison.
 
 <!-- BEGIN gen:expB_h7 -->
-_pending_: Exp B has not finished<!-- END gen:expB_h7 -->
+| quantity | value |
+|---|---|
+| belief log loss on the common states, B3 (final checkpoint, T = 1) | [0.488 (0.467–0.524)](results/expB/analysis.json) |
+| belief log loss on the common states, B4 (after temperature scaling) | [0.592 (0.432–0.900)](results/expB/analysis.json) |
+| B3 − B4, paired bootstrap over 3,513 questions | -0.1042 (95% interval -0.1168 to -0.0919) |
+| **belief condition**: interval below 0 | **met** |
+| greedy score on the evaluation seeds, B1 / B3 | [9.00 (8.00–11.00)](results/expB/analysis.json) / [6.67 (6.00–8.00)](results/expB/analysis.json) |
+| δ_game (range of B1's seeds on the selection seeds, floored at 5% of their mean) | 3.00 |
+| **game condition**: B3's score not below B1's by more than δ_game | **met** |
+| **H7** (final checkpoints, Amendment 4) | **holds** |
+<!-- END gen:expB_h7 -->
+
+**By the pre-registered rule, H7 holds. It is a fragile result, and the rest of this section is about why.**
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expB_beliefs-dark.png">
+    <img alt="Belief log loss and ECE on the common states for B1, B2, B3 and B4, and the calibration curves of B1, B3 and B4." src="figures/expB_beliefs.png" width="900">
+  </picture>
+</p>
 
 ### Belief quality on the common states
 
 <!-- BEGIN gen:expB_beliefs -->
-_pending_: Exp B has not finished<!-- END gen:expB_beliefs -->
+| arm (answers to the common-state questions) | log loss | Brier | ECE | accuracy | skill vs base rate |
+|---|---|---|---|---|---|
+| B1 plain PPO, T = 1 | [0.979 (0.635–1.536)](results/expB/analysis.json) | [0.579 (0.438–0.787)](results/expB/analysis.json) | [0.221 (0.074–0.395)](results/expB/analysis.json) | [0.605 (0.540–0.646)](results/expB/analysis.json) | [-0.419 (-1.226–0.081)](results/expB/analysis.json) |
+| B2 = B1 after temperature scaling | [0.640 (0.618–0.675)](results/expB/analysis.json) | [0.450 (0.429–0.482)](results/expB/analysis.json) | [0.055 (0.034–0.093)](results/expB/analysis.json) | [0.605 (0.540–0.646)](results/expB/analysis.json) | [0.072 (0.022–0.105)](results/expB/analysis.json) |
+| B3 RLCD, T = 1 | [0.488 (0.467–0.524)](results/expB/analysis.json) | [0.314 (0.303–0.331)](results/expB/analysis.json) | [0.053 (0.022–0.095)](results/expB/analysis.json) | [0.787 (0.785–0.787)](results/expB/analysis.json) | [0.293 (0.241–0.323)](results/expB/analysis.json) |
+| B3 after temperature scaling | [0.477 (0.466–0.489)](results/expB/analysis.json) | [0.310 (0.302–0.317)](results/expB/analysis.json) | [0.044 (0.036–0.055)](results/expB/analysis.json) | [0.787 (0.785–0.787)](results/expB/analysis.json) | [0.309 (0.292–0.325)](results/expB/analysis.json) |
+| B4 cynical: supervised fit, then temperature scaling | [0.592 (0.432–0.900)](results/expB/analysis.json) | [0.334 (0.279–0.433)](results/expB/analysis.json) | [0.082 (0.023–0.195)](results/expB/analysis.json) | [0.783 (0.748–0.809)](results/expB/analysis.json) | [0.142 (-0.305–0.374)](results/expB/analysis.json) |
+| B4 supervised fit, T = 1 (descriptive) | [0.500 (0.431–0.624)](results/expB/analysis.json) | [0.320 (0.279–0.389)](results/expB/analysis.json) | [0.067 (0.025–0.137)](results/expB/analysis.json) | [0.783 (0.748–0.809)](results/expB/analysis.json) | [0.275 (0.096–0.376)](results/expB/analysis.json) |
+| B5 no retention (1 seed), T = 1 | [0.459](results/expB/analysis.json) | [0.297](results/expB/analysis.json) | [0.027](results/expB/analysis.json) | [0.790](results/expB/analysis.json) | [0.335](results/expB/analysis.json) |
+<!-- END gen:expB_beliefs -->
+
+<sub>All arms are final checkpoints (iteration 40), seed mean (min&ndash;max over 3 seeds; B5 is one seed). Skill is
+1 &minus; log loss / the log loss of always saying the base rate. B1's beliefs are *worse* than the base rate before temperature
+scaling, as they were at the start.</sub>
+
+### How strong is the H7 result?
+
+<!-- BEGIN gen:expB_compare -->
+| comparison, belief log loss on the common states (lower is better for the first arm) | questions bootstrap | episodes bootstrap |
+|---|---|---|
+| **B3 − B4 after TS (pre-registered H7)** | **-0.1042 (-0.1168 to -0.0919)** | -0.1042 (-0.1204 to -0.0881) |
+| B3 − B4 without temperature scaling (descriptive) | -0.0125 (-0.0206 to -0.0049) | -0.0125 (-0.0211 to -0.0045) |
+| B3 + TS − B4 + TS (descriptive) | -0.1150 (-0.1282 to -0.1021) | |
+| B3 − B1 (descriptive) | -0.4914 (-0.5287 to -0.4564) | |
+| B3 − B2 = B1 after TS (descriptive) | -0.1524 (-0.1710 to -0.1324) | |
+| *B3 selected checkpoint − B4 after TS (the pre-amendment rule; two of the three B3 selections are the start model)* | *+0.4600 (+0.4216 to +0.4993)* | *+0.4600 (+0.4158 to +0.5047)* |
+<!-- END gen:expB_compare -->
+
+<!-- BEGIN gen:expB_perseed -->
+| seed | B3 (T = 1) | B3 after TS | B4 (T = 1) | B4 after TS |
+|---|---|---|---|---|
+| 0 | 0.467 | 0.466 | 0.446 | 0.444 |
+| 1 | 0.524 | 0.489 | 0.431 | 0.432 |
+| 2 | 0.472 | 0.477 | 0.624 | 0.900 |
+<!-- END gen:expB_perseed -->
+
+Three things qualify the headline.
+
+1. **Most of B3's margin is B4's temperature step, and it comes from one seed.** Supervised learning on B1's own rollouts
+   already repairs B1's beliefs (the B4 row without temperature scaling is close to B3), and B3's lead over that version is
+   small. B4 loses to B3 on average mostly because, for seed 2, the temperature fitted on B1's selection-seed questions
+   was far from the one the common states needed; for seeds 0 and 1 B4 is *better* than B3 in the per-seed table. The
+   pre-registered test resamples questions, not seeds, so it cannot see this spread; with three seeds, the per-seed table is
+   the honest picture. The reading that the data favour is: **joint on-policy training did not clearly beat a supervised
+   fit on the policy's own rollouts**, which is the sceptic's claim.
+2. **The common-state questions come from 50 episodes**, so questions are not independent. Resampling whole episodes
+   widens the intervals only slightly here (second column above); the verdict does not change.
+3. **The game-score condition is met because the margin is wide.** B1's seeds differ a lot (one learned to play much
+   better than the other two), so the pre-registered margin &delta; is large, and B3 plays below B1 on average (below).
 
 ### Game score
 
 <!-- BEGIN gen:expB_games -->
-_pending_: Exp B has not finished<!-- END gen:expB_games -->
+| arm | checkpoint | selected iteration (per seed) | greedy score | sampled score |
+|---|---|---|---|---|
+| B1 plain PPO | selected | 10, 25, 20 | [10.00 (8.00–11.00)](results/expB/analysis.json) | [8.07 (6.56–10.62)](results/expB/analysis.json) |
+| B1 plain PPO | final | 40 | [9.00 (8.00–11.00)](results/expB/analysis.json) | [8.43 (6.82–10.88)](results/expB/analysis.json) |
+| B3 RLCD | selected | 30, 0, 0 | [6.67 (6.00–8.00)](results/expB/analysis.json) | [6.27 (6.00–6.82)](results/expB/analysis.json) |
+| B3 RLCD | final | 40 | [6.67 (6.00–8.00)](results/expB/analysis.json) | [7.07 (6.98–7.22)](results/expB/analysis.json) |
+| B5 no retention (1 seed) | selected | 40 | [8.00](results/expB/analysis.json) | [6.34](results/expB/analysis.json) |
+| B5 no retention (1 seed) | final | 40 | [8.00](results/expB/analysis.json) | [6.34](results/expB/analysis.json) |
+<!-- END gen:expB_games -->
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expB_games-dark.png">
+    <img alt="Greedy and sampled Breakout scores of B1, B3 and B5, selected and final checkpoints, with the pre-registered margin around B1." src="figures/expB_games.png" width="860">
+  </picture>
+</p>
+
+The retention term keeps B3's greedy play close to the start model's, so B3 learns beliefs without learning to play much
+better; B1, which has nothing holding it back, improves more (and varies much more between seeds). **Greedy play is
+deterministic** (the same trajectory on every seed), so a "greedy score" is one number per checkpoint, which is why
+Amendment 3 adds a sampled-play condition and why the greedy columns move in steps.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expB_training-dark.png">
+    <img alt="Training curves of B1, B3 and B5: rollout score, belief cross-entropy, retention KL and the selection-seed greedy score." src="figures/expB_training.png" width="900">
+  </picture>
+</p>
+
+### What changed along the way, and what that means for the verdict
+
+- **The "selected checkpoint" was not informative.** Greedy play is one trajectory, so the selection criterion is one
+  noisy number and, because ties keep the earlier checkpoint, B3's selected checkpoint is the **untrained start model** for
+  two of its three seeds. Amendment 4 (written before any B3 evaluation file was opened) moves H7 to the final checkpoints.
+  On the original rule (selected checkpoints) H7 would **not** hold, which the comparison table shows in italics. The
+  amendment is a judgement call about which of two defensible readings of "the checkpoint" to use, made for a stated reason,
+  not a way of reaching a verdict; both are reported.
+- **B5 (no retention term, one seed)** is descriptive: it shows what the belief term does without the anchor.
+- **Not tested here:** whether beliefs help on other games, other model sizes, or beliefs about the environment's rules
+  rather than ball dynamics; and whether B3's beliefs help the policy (they were not used for acting).
 
 ## Honest caveats
 
-Written *before* the language-model results exist, so they cannot be shaped by them.
+The first group of caveats was written *before* the language-model results existed, so they could not be shaped by
+them; the later ones were added as the results came in and say so.
 
 - **The toy is well-specified, and that flatters temperature scaling.** The policy class contains the truth, so
   RLVR only distorts the scale of the logits and a single temperature undoes it. Exp 0b shows that stops being
@@ -579,10 +694,10 @@ Written *before* the language-model results exist, so they cannot be shaped by t
 | phase | what | state |
 |---|---|---|
 | 1 | scaffold, metrics, estimators, tests, Exp 0 (+ exploratory Exp 0b), notebook, README skeleton, loss-weight check, design decisions | **done** |
-| 2 | Exp A smoke run (all arms, 1 seed, 10% of steps); Breakout label validation | **smoke run and label validation done**; the A1 learning-rate sweep and δ seeds are running |
-| 3 | commit the pre-registration, then Exp A in full | not started |
-| 4 | Exp B in full | not started |
-| 5 | write-up, releases (Hugging Face), interactive explorer | not started |
+| 2 | Exp A smoke run (all arms, 1 seed, 10% of steps); Breakout label validation | **done** |
+| 3 | pre-registration frozen, then Exp A in full (21 runs), analysis, JevBench | **done** |
+| 4 | Exp B in full (B1 x 3, B3 x 3, B4 x 3, B5 x 1), common-state evaluation | **done** |
+| 5 | write-up (this README), figures, interactive explorer, release plan | **done**; the Hugging Face release is a [plan](docs/release.md), nothing is uploaded |
 
 ## Reproduce
 
@@ -594,19 +709,27 @@ make toy                   # Exp 0 -> results/toy/*.json, figures/
 make toy0b                 # Exp 0b (exploratory) -> results/toy0b/*.json, figures/
 make readme                # regenerate every table in this file from results/
 make notebook              # rebuild and execute notebooks/toy_rlcd.ipynb
+make expA-analysis         # Exp A tests from the committed predictions (about 25 min, CPU)
+make expA-figures explorer # Exp A figures and docs/explorer.html
+python scripts/analyse_expB.py analyse results/expB/runs --delta results/expB/delta_game.json --out results/expB/analysis.json
+python -m rlcd.plots_expB  # Exp B figures
 ```
 
-`make readme-check` fails if this file disagrees with `results/`; CI runs it. Exp A / Exp B configs and Slurm
-scripts arrive with phases 2–4 (`configs/`, `slurm/`).
+`make readme-check` fails if this file disagrees with `results/`; CI runs it. Training needs a GPU: the Slurm scripts of
+Exp A and Exp B are in `slurm/` and the launchers in `scripts/` (`expA_phase3.sh`, `expB_stage1.sh`, `expB_stage2.sh`); they
+assume decider and the start checkpoint as laid out in `slurm/env.sh`.
 
 ```
 rlcd/        scoring.py (metrics, scoring rules) · estimators.py (RLVR / RLCD rewards and gradients)
              calibrate.py (temperature scaling) · data.py (splits, leakage checks) · isolated.py (SCORE readout)
-             mining.py (A6 / A6r selection) · plots.py · results.py
+             mining.py (A6 / A6r selection) · train_labels.py, torch_*.py, lora.py (the Exp A trainer)
+             evaluate.py, compare.py (Exp A analysis and the pre-registered tests)
+             breakout*.py (Exp B: labels, trainer, evaluation, analysis) · demo.py · plots*.py · results.py
 toy/         Exp 0 and Exp 0b (exploratory)
-tests/       estimator unbiasedness, metric correctness, split disjointness, toy invariants
-results/     one JSON per run; every table and figure is generated from these
-docs/        decisions.md (amendments to the spec) · loss_weights.md (the Breakout weight verification)
+tests/       estimator unbiasedness, metric correctness, split disjointness, toy invariants, the analyses
+results/     one JSON per run (and the raw Exp A predictions); every table and figure is generated from these
+docs/        decisions.md (amendments to the spec) · expA_analysis.md · explorer.html · release.md
+             loss_weights.md, breakout_label_validation.md, phase2_smoke.md, compute_budget.md
 ```
 
 ## Citation, acknowledgements, licence

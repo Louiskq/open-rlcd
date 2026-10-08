@@ -154,3 +154,18 @@ def test_training_seeds_are_disjoint_from_selection_and_evaluation_seeds():
         assert not set(s.train) & set(s.select) and not set(s.train) & set(s.evaluate)
     assert BK.train_env_seed(0, 0) != BK.train_env_seed(1, 0)
     assert set(BK.SELECT_SEEDS).isdisjoint(BK.EVAL_SEEDS)
+
+
+def test_cluster_bootstrap_is_wider_than_the_item_bootstrap_when_items_are_correlated():
+    rng = np.random.default_rng(0)
+    episodes = np.repeat(np.arange(40), 25)  # 40 episodes of 25 questions
+    episode_effect = np.repeat(
+        rng.normal(size=40) * 0.5, 25
+    )  # the difference is shared inside an episode
+    a = 0.1 + episode_effect + rng.normal(size=1000) * 0.05
+    b = np.zeros(1000)
+    item = BK.paired_bootstrap_diff(a, b, B=500)
+    clus = BK.cluster_bootstrap_diff(a, b, episodes, B=500)
+    assert clus["mean_diff"] == pytest.approx(item["mean_diff"])
+    assert (clus["ci95"][1] - clus["ci95"][0]) > 3 * (item["ci95"][1] - item["ci95"][0])
+    assert clus["clusters"] == 40

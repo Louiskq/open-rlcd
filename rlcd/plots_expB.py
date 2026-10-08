@@ -83,9 +83,10 @@ def fig_beliefs(data: dict[str, Any], runs: Path, theme: Theme) -> Any:
         ("b2", "B2", True),
         ("b3_raw", "B3", False),
         ("b3_ts", "B3", True),
+        ("b4_raw", "B4", False),
         ("b4_ts", "B4", True),
     ]
-    xl = ["B1\nraw", "B2\nB1+TS", "B3\nraw", "B3\n+TS", "B4\n+TS"]
+    xl = ["B1\nraw", "B2\nB1+TS", "B3\nraw", "B3\n+TS", "B4\nraw", "B4\n+TS"]
     with plt.rc_context(rc(theme)):
         fig, axes = plt.subplots(1, 3, figsize=(12.2, 5.0))
         fig.subplots_adjust(left=0.065, right=0.985, top=0.7, bottom=0.14, wspace=0.28)
@@ -143,7 +144,7 @@ def fig_beliefs(data: dict[str, Any], runs: Path, theme: Theme) -> Any:
             fig,
             theme,
             "Exp B: belief quality on the same states",
-            "Every arm answers the same questions: B1 seed 0's final policy's sampled play on the evaluation seeds. Mean over 3 seeds, bars are the seed range.\nB4 is B1's policy with beliefs fitted by supervised learning, then temperature-scaled. H7 asks whether B3 (raw) beats B4.",
+            "Every arm answers the same questions: B1 seed 0's final policy's sampled play on the evaluation seeds. Mean over 3 seeds, bars are the seed range.\nB4 is B1's policy with beliefs fitted by supervised learning, then temperature-scaled (raw B4 is descriptive).\nAll arms are final checkpoints. H7 asks whether B3 (raw) beats B4 + TS.",
         )
         _legend(fig, theme, ["B1", "B2", "B3", "B4"], 0.85, extra=True)
     return fig
@@ -213,7 +214,7 @@ def fig_games(data: dict[str, Any], theme: Theme) -> Any:
                         labels.append(f"{arm}\n{name}")
                         x += 1
                 x += 0.6
-            b1 = data["arms"]["b1"].get("best", {}).get(kind)
+            b1 = data["arms"]["b1"].get("last", {}).get(kind)
             if b1 and delta:
                 ax.axhspan(
                     b1["mean"] - delta, b1["mean"] + delta, color=theme.grid, alpha=0.55, zorder=0
@@ -222,7 +223,7 @@ def fig_games(data: dict[str, Any], theme: Theme) -> Any:
                 ax.text(
                     0.99,
                     b1["mean"] + delta,
-                    f"B1 selected ± δ ({delta:.1f})",
+                    f"B1 final ± δ ({delta:.1f})",
                     transform=ax.get_yaxis_transform(),
                     ha="right",
                     va="bottom",
@@ -237,7 +238,7 @@ def fig_games(data: dict[str, Any], theme: Theme) -> Any:
             fig,
             theme,
             "Exp B: game score",
-            "Filled: the checkpoint chosen on the selection seeds. Hollow: the final checkpoint (no selection). The band is the pre-registered margin δ\naround B1 (range of B1's seeds on the selection seeds): H7 needs B3's mean not below it.",
+            "Filled: the checkpoint chosen on the selection seeds (for B3 seeds 1 and 2 that is the untrained start model). Hollow: the final checkpoint.\nThe band is the pre-registered margin δ around B1's final checkpoint; H7 (Amendment 4) needs B3's final mean not below its lower edge.",
         )
     return fig
 
@@ -245,8 +246,8 @@ def fig_games(data: dict[str, Any], theme: Theme) -> Any:
 def fig_training(runs: Path, theme: Theme) -> Any:
     """Training score, the belief and retention terms, and the selection-seed greedy score over iterations."""
     with plt.rc_context(rc(theme)):
-        fig, axes = plt.subplots(1, 3, figsize=(12.2, 4.7))
-        fig.subplots_adjust(left=0.065, right=0.985, top=0.7, bottom=0.14, wspace=0.28)
+        fig, axes = plt.subplots(1, 4, figsize=(15.6, 4.7))
+        fig.subplots_adjust(left=0.05, right=0.99, top=0.7, bottom=0.14, wspace=0.3)
         for arm, rel in (("B1", "b1"), ("B3", "b3"), ("B5", "b5")):
             rows = _metrics(runs, rel)
             if not rows:
@@ -261,12 +262,13 @@ def fig_training(runs: Path, theme: Theme) -> Any:
                 axes[1].plot(it, bce.mean(0), color=col, lw=1.8, ls=st.linestyle)
             if arm == "B3":
                 rk = np.array([[r["retention_kl"] for r in run] for run in rows])
-                axes[1].plot(it, 5 * rk.mean(0), color=col, lw=1.2, ls=":")
+                axes[2].plot(it, rk.mean(0), color=col, lw=1.8)
+                axes[2].fill_between(it, rk.min(0), rk.max(0), color=col, alpha=0.15, lw=0)
             ev = _sel_evals(runs, rel)
             if ev:
                 x = np.array([e[0] for e in ev[0]])
                 y = np.array([[e[1] for e in run] for run in ev])
-                axes[2].plot(
+                axes[3].plot(
                     x, y.mean(0), color=col, lw=1.8, ls=st.linestyle, marker=st.marker, ms=5
                 )
         axes[0].set_title("Training score (sampled play)")
@@ -274,10 +276,13 @@ def fig_training(runs: Path, theme: Theme) -> Any:
         axes[0].set_ylabel("mean Breakout score of the rollouts")
         axes[1].set_title("Belief log loss during training")
         axes[1].set_xlabel("iteration")
-        axes[1].set_ylabel("belief cross-entropy (dotted: retention KL × 5)")
-        axes[2].set_title("Selection-seed greedy score")
-        axes[2].set_xlabel("iteration (0 = start model)")
-        axes[2].set_ylabel("one trajectory per evaluation")
+        axes[1].set_ylabel("belief cross-entropy (B1 has no belief term)")
+        axes[2].set_title("Retention KL to the start model (B3)")
+        axes[2].set_xlabel("iteration")
+        axes[2].set_ylabel("KL on replayed supervised questions, nats")
+        axes[3].set_title("Selection-seed greedy score")
+        axes[3].set_xlabel("iteration (0 = start model)")
+        axes[3].set_ylabel("one trajectory per evaluation")
         for ax in axes:
             ax.grid(axis="x", visible=False)
         _title(

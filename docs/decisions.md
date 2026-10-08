@@ -394,3 +394,26 @@ Choices the design left open, made while building the Exp A runner (`rlcd/train_
 - **Raw predictions are committed** (`results/expA/runs/`, 2.4 MB: the readout of every question at T = 1 on the
   calibration, selection and dev splits for all 21 runs), so every number in the README can be regenerated without a GPU
   (`make expA-analysis`, `make expA-figures`, `make readme`).
+
+## D21. Exp B: implementation, the amendments it needed, and how the result is reported (2026-10-08)
+
+- **One loop for every RL arm** (`rlcd/breakout_gpu.py`); B1, B3 and B5 differ only in the weights actor : belief :
+  retention (1:0:0, 1:2:7, 1:2:0). B4 is a supervised belief fit of B1's final policy on B1's own training rollouts, with
+  its temperature fitted on B1's selection-seed questions; its policy is B1's. All of this was fixed in Amendment 2
+  before any run.
+- **Three things the pre-registration did not anticipate, each handled by a dated amendment written before the result it
+  affects was visible:** (3) greedy Breakout play is deterministic, so a greedy "game" is one trajectory: a sampled-play
+  condition was added to H7, making it stricter; (4) because of that, the selected checkpoint is the untrained start model
+  for two of B3's three seeds, so H7 moves to the final checkpoints (the selected-checkpoint comparison is reported and
+  would not hold); and the fixed margins delta_game and delta_sampled were committed before any B3 job existed.
+- **Result and its qualifications** are in the README: H7 holds by the pre-registered rule, but B4's temperature step
+  hurts it in one seed, B4 is better than B3 in two seeds, B4 without temperature scaling is nearly as good, B3 plays below B1
+  on average, and the question-level bootstrap cannot see the seed spread. Descriptive comparisons (B3 vs B4 raw, B3 + TS vs
+  B4 + TS, an episode-clustered bootstrap) were added to the analysis *before* the B3 results were read, except the clustered
+  bootstrap and per-seed table, which were added after the pre-registered result was known and are labelled as robustness.
+- **Infrastructure:** five of eight jobs of the first B3 / B4 / B5 wave died within seconds because Slurm's per-user TMPDIR
+  (`/local/user/<uid>`) was not writable on their nodes; `slurm/env.sh` now sets a per-job TMPDIR and they were resubmitted
+  unchanged (no result was involved).
+- **Process slip, recorded:** one commit (`Pre-registration Amendment 4 ...`) briefly contained a syntax error in
+  `rlcd/breakout_analysis.py` because a chained shell command committed after a failed lint; the next commit repaired it
+  before anything was run or pushed.

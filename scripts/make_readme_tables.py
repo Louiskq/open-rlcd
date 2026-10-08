@@ -604,6 +604,44 @@ def gen_expA_jev() -> str:
     return "\n".join(rows) + "\n"
 
 
+def gen_expB_compare() -> str:
+    d = load_expB()
+    if d is None:
+        return pending("Exp B has not finished")
+    h, hs = d["h7"], d["h7_selected"]
+
+    def cell(v: dict) -> str:
+        return f"{v['mean_diff']:+.4f} ({v['ci95'][0]:+.4f} to {v['ci95'][1]:+.4f})"
+
+    rows = [
+        "| comparison, belief log loss on the common states (lower is better for the first arm) | questions bootstrap | episodes bootstrap |",
+        "|---|---|---|",
+        f"| **B3 \u2212 B4 after TS (pre-registered H7)** | **{cell(h['b3_raw_vs_b4_ts'])}** | {cell(h['b3_raw_vs_b4_ts_clustered'])} |",
+        f"| B3 \u2212 B4 without temperature scaling (descriptive) | {cell(h['b3_raw_vs_b4_raw'])} | {cell(h['b3_raw_vs_b4_raw_clustered'])} |",
+        f"| B3 + TS \u2212 B4 + TS (descriptive) | {cell(h['b3_ts_vs_b4_ts'])} | |",
+        f"| B3 \u2212 B1 (descriptive) | {cell(h['b3_raw_vs_b1_raw'])} | |",
+        f"| B3 \u2212 B2 = B1 after TS (descriptive) | {cell(h['b3_raw_vs_b2'])} | |",
+        f"| *B3 selected checkpoint \u2212 B4 after TS (the pre-amendment rule; two of the three B3 selections are the start model)* | *{cell(hs['b3_raw_vs_b4_ts'])}* | *{cell(hs['b3_raw_vs_b4_ts_clustered'])}* |",
+    ]
+    return "\n".join(rows) + "\n"
+
+
+def gen_expB_perseed() -> str:
+    d = load_expB()
+    if d is None:
+        return pending("Exp B has not finished")
+    ps = d["h7"]["per_seed_log_loss"]
+    rows = [
+        "| seed | B3 (T = 1) | B3 after TS | B4 (T = 1) | B4 after TS |",
+        "|---|---|---|---|---|",
+    ]
+    for i in range(len(ps["b3_raw"])):
+        rows.append(
+            f"| {i} | {ps['b3_raw'][i]:.3f} | {ps['b3_ts'][i]:.3f} | {ps['b4_raw'][i]:.3f} | {ps['b4_ts'][i]:.3f} |"
+        )
+    return "\n".join(rows) + "\n"
+
+
 GENERATORS = {
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
@@ -625,6 +663,8 @@ GENERATORS = {
     "expB_h7": gen_expB_h7,
     "expB_games": gen_expB_games,
     "expB_beliefs": gen_expB_beliefs,
+    "expB_compare": gen_expB_compare,
+    "expB_perseed": gen_expB_perseed,
 }
 
 

@@ -256,6 +256,32 @@ def paired_bootstrap_diff(
     }
 
 
+def cluster_bootstrap_diff(
+    a: np.ndarray, b: np.ndarray, groups: np.ndarray, B: int = 2000, seed: int = 20261008
+) -> dict[str, Any]:
+    """As ``paired_bootstrap_diff`` but resampling whole groups (episodes): questions asked in one episode are not
+    independent, so this interval is the honest one for the common states (50 episodes of about 70 questions each)."""
+    a2, b2 = np.atleast_2d(a), np.atleast_2d(b)
+    d = a2.mean(axis=0) - b2.mean(axis=0)
+    ids = np.unique(groups)
+    members = [np.flatnonzero(groups == g) for g in ids]
+    sums = np.array([d[m].sum() for m in members])
+    counts = np.array([len(m) for m in members], dtype=float)
+    rng = np.random.default_rng(seed)
+    boots = np.empty(B)
+    for i in range(B):
+        pick = rng.integers(0, len(ids), len(ids))
+        boots[i] = sums[pick].sum() / counts[pick].sum()
+    lo, hi = np.quantile(boots, [0.025, 0.975])
+    return {
+        "mean_diff": float(d.mean()),
+        "ci95": [float(lo), float(hi)],
+        "p_a_lower": float(min(1.0, 2.0 * (boots >= 0).mean())),
+        "n": int(d.shape[0]),
+        "clusters": int(len(ids)),
+    }
+
+
 def item_log_loss(p_yes: np.ndarray, gold: np.ndarray) -> np.ndarray:
     p = np.clip(np.asarray(p_yes, dtype=np.float64), 1e-12, 1 - 1e-12)
     y = np.asarray(gold).astype(int)

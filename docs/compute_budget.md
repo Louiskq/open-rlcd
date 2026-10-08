@@ -38,6 +38,21 @@ factor and JevBench (deferred to phase 3; it needs a merged checkpoint served) i
 queue), phase 3 about 42 (including about 5 for JevBench), phase 4 about 16, total about 71 GPU-hours.** The ±30% band
 and the assumptions below are unchanged.
 
+## Actual spend (Slurm accounting, 2026-10-06 to 2026-10-08)
+
+| what | GPU-hours | jobs |
+|---|---|---|
+| Exp A: A1 (sweep + 3 seeds), A4 (sweep + 3 seeds), A3 x 3 plus A3 with beta = 0, A5, A6 x 3, A6r x 3 | **43.6** | 21 runs of 1.8 to 2.3 h |
+| Phase 2 dev session (smoke runs, A0, label validation, throughput) | 4.6 | 1 allocation |
+| JevBench of the 18 Exp A models | 0.8 | 3 |
+| Exp B: B1 x 3, B3 x 3, B5, B4 x 3 (fit + answers), common states, scoring | **17.7** | B1 1.6 h, B3 2.1 to 2.8 h, B5 2.0 h, B4 0.15 h each |
+| **Total** | **about 63** (including about 0.5 for jobs that failed within seconds on a node without a writable TMPDIR) | |
+
+The estimate before the runs was about 71 (phase 2 about 13, phase 3 about 42, phase 4 about 16): the actual total is
+about 11% lower, mainly because JevBench took 0.8 h, not 5, and the A6 scoring was cheaper than assumed. A full-length Exp A
+run cost 1.8 h of training (6.5k tokens/s) and about 1.95 h in all; an A6 run 2.3 h. Queue wait was the real constraint on
+2026-10-08: the first Exp B jobs waited about 3 hours while the same afternoon's Exp A jobs started at once.
+
 ## Estimate by phase (lean plan, D-lean, 2026-10-06)
 
 | phase | GPU-hours | what dominates |
