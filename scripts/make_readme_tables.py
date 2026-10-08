@@ -218,7 +218,24 @@ def gen_tldr() -> str:
                 f"| Exp A (9B decider, dev set) | {label} | {'**' + ece + '**' if bold else ece} | "
                 f"{num(blk['acc'], rel, rng=rng_)} | {num(blk['log_loss'], rel, rng=rng_)} |"
             )
-    rows.append(f"| Exp B (Breakout, on-policy) | B1–B5 | {PENDING} | {PENDING} | {PENDING} |")
+    eb = load_expB()
+    if eb is None:
+        rows.append(
+            f"| Exp B (Breakout beliefs, common states) | B1–B5 | {PENDING} | {PENDING} | {PENDING} |"
+        )
+    else:
+        relb = f"{EXPB}/analysis.json"
+        cmb = eb["h7"]["common_metrics"]
+        for key, label in (
+            ("b1_raw", "B1 plain PPO"),
+            ("b3_raw", "B3 RLCD"),
+            ("b4_ts", "B4 cynical (+TS)"),
+        ):
+            c = cmb[key]
+            rows.append(
+                f"| Exp B (Breakout beliefs, common states) | {label} | {num(c['ece'], relb)} | "
+                f"{num(c['acc'], relb)} | {num(c['log_loss'], relb)} |"
+            )
     return head + "\n".join(rows) + "\n"
 
 
@@ -463,6 +480,101 @@ def gen_expA_headline() -> str:
     )
 
 
+# ------------------------------------------------------------------------------ Exp B
+EXPB = "results/expB"
+
+
+def load_expB() -> dict | None:
+    path = ROOT / EXPB / "analysis.json"
+    if not path.exists():
+        return None
+    d = read_json(path)
+    return d if d.get("h7", {}).get("status") == "complete" else None
+
+
+def _mr(s: dict[str, float], rel: str, nd: int = 3) -> str:
+    return num(s, rel, nd, rng=s.get("n", 1) > 1)
+
+
+def gen_expB_h7() -> str:
+    d = load_expB()
+    if d is None:
+        return pending("Exp B has not finished")
+    rel, h = f"{EXPB}/analysis.json", d["h7"]
+    pb = h["b3_raw_vs_b4_ts"]
+    g = h["greedy_score_eval_seeds"]
+    yes = lambda b: "met" if b else "not met"  # noqa: E731
+    rows = [
+        "| quantity | value |",
+        "|---|---|",
+        f"| belief log loss on the common states, B3 (selected checkpoint, T = 1) | {_mr(h['belief_log_loss']['b3_raw'], rel)} |",
+        f"| belief log loss on the common states, B4 (after temperature scaling) | {_mr(h['belief_log_loss']['b4_ts'], rel)} |",
+        f"| B3 \u2212 B4, paired bootstrap over {h['common_states']:,} questions | {pb['mean_diff']:+.4f} (95% interval {pb['ci95'][0]:+.4f} to {pb['ci95'][1]:+.4f}) |",
+        f"| **belief condition**: interval below 0 | **{yes(h['belief_condition_met'])}** |",
+        f"| greedy score on the evaluation seeds, B1 / B3 | {_mr(g['b1'], rel, 2)} / {_mr(g['b3'], rel, 2)} |",
+        f"| \u03b4_game (range of B1's seeds on the selection seeds, floored at 5% of their mean) | {h['delta_game']:.2f} |",
+        f"| **game condition**: B3's score not below B1's by more than \u03b4_game | **{yes(h['game_condition_met'])}** |",
+        f"| **H7** | **{'holds' if h['h7_holds'] else 'does not hold'}** |",
+    ]
+    return "\n".join(rows) + "\n"
+
+
+def gen_expB_games() -> str:
+    d = load_expB()
+    if d is None:
+        return pending("Exp B has not finished")
+    rel = f"{EXPB}/analysis.json"
+    rows = [
+        "| arm | checkpoint | selected iteration (per seed) | greedy score | sampled score |",
+        "|---|---|---|---|---|",
+    ]
+    for arm, label in (
+        ("b1", "B1 plain PPO"),
+        ("b3", "B3 RLCD"),
+        ("b5", "B5 no retention (1 seed)"),
+    ):
+        its = ", ".join(str(r.get("selected_iter")) for r in d["runs"][arm])
+        for which, name in (("best", "selected"), ("last", "final")):
+            a = d["arms"][arm].get(which)
+            if a:
+                rows.append(
+                    f"| {label} | {name} | {its if which == 'best' else '40'} | {_mr(a['greedy'], rel, 2)} | {_mr(a['sampled'], rel, 2)} |"
+                )
+    return "\n".join(rows) + "\n"
+
+
+def gen_expB_beliefs() -> str:
+    d = load_expB()
+    if d is None:
+        return pending("Exp B has not finished")
+    rel, cm = f"{EXPB}/analysis.json", d["h7"]["common_metrics"]
+    rows = [
+        "| arm (answers to the common-state questions) | log loss | Brier | ECE | accuracy | skill vs base rate |",
+        "|---|---|---|---|---|---|",
+    ]
+    for key, label in (
+        ("b1_raw", "B1 plain PPO, T = 1"),
+        ("b2", "B2 = B1 after temperature scaling"),
+        ("b3_raw", "B3 RLCD, T = 1"),
+        ("b3_ts", "B3 after temperature scaling"),
+        ("b4_ts", "B4 cynical: supervised fit, then temperature scaling"),
+    ):
+        c = cm[key]
+        rows.append(
+            f"| {label} | "
+            + " | ".join(_mr(c[m], rel) for m in ("log_loss", "brier", "ece", "acc", "skill"))
+            + " |"
+        )
+    b5 = d["arms"]["b5"].get("best", {}).get("common_raw")
+    if b5:
+        rows.append(
+            "| B5 no retention (1 seed), T = 1 | "
+            + " | ".join(_mr(b5[m], rel) for m in ("log_loss", "brier", "ece", "acc", "skill"))
+            + " |"
+        )
+    return "\n".join(rows) + "\n"
+
+
 GENERATORS = {
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
@@ -480,6 +592,9 @@ GENERATORS = {
     "expA_tests": gen_expA_tests,
     "expA_pertype": gen_expA_pertype,
     "expA_temps": gen_expA_temps,
+    "expB_h7": gen_expB_h7,
+    "expB_games": gen_expB_games,
+    "expB_beliefs": gen_expB_beliefs,
 }
 
 

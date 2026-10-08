@@ -106,6 +106,8 @@ def test_h7_holds_when_b3_has_better_beliefs_and_a_matching_game_score(tmp_path)
     assert out["status"] == "complete"
     assert out["b3_raw_vs_b4_ts"]["ci95"][1] < 0
     assert out["belief_condition_met"] and out["game_condition_met"] and out["h7_holds"]
+    assert set(out["common_metrics"]) == {"b1_raw", "b2", "b3_raw", "b3_ts", "b4_ts"}
+    assert out["common_metrics"]["b3_raw"]["log_loss"]["n"] == 3
 
 
 def test_h7_fails_when_b3_loses_too_much_game_score(tmp_path):

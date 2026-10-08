@@ -51,7 +51,7 @@
 | Exp A (9B decider, dev set) | A5 RLCD-full | **[0.017](results/expA/analysis.json)** | [0.895](results/expA/analysis.json) | [0.282](results/expA/analysis.json) |
 | Exp A (9B decider, dev set) | A6 mined | **[0.016 (0.014–0.018)](results/expA/analysis.json)** | [0.893 (0.890–0.896)](results/expA/analysis.json) | [0.279 (0.276–0.282)](results/expA/analysis.json) |
 | Exp A (9B decider, dev set) | A6r random | [0.022 (0.017–0.026)](results/expA/analysis.json) | [0.889 (0.885–0.893)](results/expA/analysis.json) | [0.288 (0.286–0.291)](results/expA/analysis.json) |
-| Exp B (Breakout, on-policy) | B1–B5 | _pending_ | _pending_ | _pending_ |
+| Exp B (Breakout beliefs, common states) | B1–B5 | _pending_ | _pending_ | _pending_ |
 <!-- END gen:tldr -->
 
 <sub>Seed mean (min–max). Bold: best, or within the best arm's seed range. Every number links to the JSON it
@@ -477,6 +477,33 @@ anchored runs.
 - **No claim about RLCD in general.** One model, one teacher-written dataset, one learning rate shared across arms (RLVR is
   not at its own best), a forward-KL anchor that already limits RLVR, and an independent dev set written by the same
   teacher as the training data.
+
+## Exp B results: Breakout, where the outcomes depend on the model's own moves
+
+Setup (frozen in [`PREREGISTRATION.md`](PREREGISTRATION.md), Amendment 2, before any Exp B run): the decider after its
+supervised stage plays Atari Breakout from four RAM readings written as text, choosing among four moves. **B1** is plain
+PPO. **B3** adds, to the same loop, belief questions about what happens next ("will a brick break in the next 30 moves",
+"will a life be lost", "will the paddle return the ball"), scored with the log score against what happened, and a
+retention term that keeps the model close to its start on replayed supervised questions (loss weights actor : belief :
+retention = 1 : 2 : 7; B1 is 1 : 0 : 0). **B5** is B3 without retention (one seed). **B4** is the sceptic's version: B1's
+final policy with its belief answers fitted by plain supervised learning on B1's own rollouts and then temperature-scaled.
+
+**H7**: B3's beliefs beat B4's on the *same* states at a matched game score. Every arm answers exactly the questions that
+one frozen policy (B1 seed 0, final checkpoint) meets on the evaluation seeds, so a different state distribution cannot
+confound the comparison.
+
+<!-- BEGIN gen:expB_h7 -->
+_pending_: Exp B has not finished<!-- END gen:expB_h7 -->
+
+### Belief quality on the common states
+
+<!-- BEGIN gen:expB_beliefs -->
+_pending_: Exp B has not finished<!-- END gen:expB_beliefs -->
+
+### Game score
+
+<!-- BEGIN gen:expB_games -->
+_pending_: Exp B has not finished<!-- END gen:expB_games -->
 
 ## Honest caveats
 

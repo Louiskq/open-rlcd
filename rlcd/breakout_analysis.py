@@ -150,6 +150,15 @@ def aggregate(runs: list[dict[str, Any]], which: str) -> dict[str, Any]:
 # ---------------------------------------------------------------------------------------------
 
 
+def _agg_blocks(blocks: list[dict[str, Any]]) -> dict[str, Any]:
+    out = {
+        m: mean_range([b[m] for b in blocks]) for m in ("log_loss", "brier", "ece", "acc", "skill")
+    }
+    out["n"] = blocks[0]["n"]
+    out["base_rate"] = float(np.mean([b["base_rate"] for b in blocks]))
+    return out
+
+
 def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
     """PREREGISTRATION.md Amendment 2, item 9: B3 (selected checkpoint, T = 1) against B4 (+TS) on the common states,
     and the game-score condition. Also B3 + TS against B4, B3 against B2 (B1 + TS) and B1, descriptively."""
@@ -181,6 +190,11 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
             "b4_ts": mean_range([float(x.mean()) for x in l4]),
         },
     }
+    out["common_metrics"] = {
+        "b3_raw": _agg_blocks([belief_block(b) for b in b3]),
+        "b3_ts": _agg_blocks([belief_block(b, t) for b, t in zip(b3, b3_t, strict=True)]),
+        "b4_ts": _agg_blocks([belief_block(b, t) for b, t in zip(b4, b4_t, strict=True)]),
+    }
     b1 = [_npz(runs_dir / f"b1_s{s}" / "eval_best" / "beliefs_common.npz") for s in SEEDS]
     b1_sel = [
         _npz(runs_dir / f"b1_s{s}" / "eval_best" / "beliefs_onpolicy_select.npz") for s in SEEDS
@@ -189,6 +203,10 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
         t1 = [fit_temperature_on(x) for x in b1_sel]
         l1 = np.stack([_loss(b) for b in b1])
         l2 = np.stack([_loss(b, t) for b, t in zip(b1, t1, strict=True)])
+        out["common_metrics"]["b1_raw"] = _agg_blocks([belief_block(b) for b in b1])
+        out["common_metrics"]["b2"] = _agg_blocks(
+            [belief_block(b, t) for b, t in zip(b1, t1, strict=True)]
+        )
         out["b3_raw_vs_b1_raw"] = BK.paired_bootstrap_diff(l3, l1, B)
         out["b3_raw_vs_b2"] = BK.paired_bootstrap_diff(l3, l2, B)
         out["belief_log_loss"]["b1_raw"] = mean_range([float(x.mean()) for x in l1])
