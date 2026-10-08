@@ -564,8 +564,15 @@ Written *before* the language-model results exist, so they cannot be shaped by t
   A4), so RLVR is run at a rate tuned for RLCD-bandit, not at its own best.
 - **Planned-experiment limitations, stated now:** the independent dev set was written by the same teacher as the
   training data; JevBench hard has 111 items (standard error about 4.4 points), too few to separate the arms.
-- **Results that went against a hypothesis** will be listed here by name. None yet, because no hypothesis has
-  been tested yet.
+- **Results that went against a pre-registered hypothesis, by name** (the numbers are in the Exp A tables above):
+  **H1** was not met as stated (RLVR's ECE is higher but its log loss is not, on the dev set); **H5** was not established
+  (the equivalence margin, set from two A1 seeds, was narrower than the intervals could resolve); **H5b** was not met (it
+  was met only on the exploratory selection split). **H3** and **H4** held, but H3 did not under the seed-ensemble reading,
+  and A6's unadjusted log-loss lead over A6r did not survive correction. Where a result is mixed it is reported as mixed.
+- **The pooled log loss mixes training objectives** for `SCORE` (A1, A5, A6, A6r use the ranked probability score; A3, A4
+  sample answers), which was not anticipated in the pre-registration; the per-type table is the like-for-like view.
+- **Greedy Breakout play is deterministic** (found while B1 trained, before any B3 result): a greedy "game" is one
+  trajectory whatever the seed, so Amendment 3 adds a sampled-play condition to H7, making it stricter.
 
 ## Status
 
