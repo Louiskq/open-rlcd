@@ -175,10 +175,12 @@ def _agg_blocks(blocks: list[dict[str, Any]]) -> dict[str, Any]:
     return out
 
 
-def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
-    """PREREGISTRATION.md Amendment 2, item 9: B3 (selected checkpoint, T = 1) against B4 (+TS) on the common states,
-    and the game-score condition. Also B3 + TS against B4, B3 against B2 (B1 + TS) and B1, descriptively."""
-    b3 = [_npz(runs_dir / f"b3_s{s}" / "eval_best" / "beliefs_common.npz") for s in SEEDS]
+def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000, ckpt: str = "last") -> dict[str, Any]:
+    """PREREGISTRATION.md Amendment 2 item 9 as amended by Amendment 4: B3 (``ckpt``, by default the FINAL checkpoint,
+    T = 1) against B4 (+TS) on the common states, and the greedy and sampled game-score conditions. Also B3 + TS
+    against B4, B3 against B2 (B1 + TS) and B1, descriptively."""PREREGISTRATION.md Amendment 2 item 9 as amended by Amendment 4: B3 (``ckpt``, default the FINAL checkpoint, T = 1)
+    against B4 (+TS) on the common states, and the greedy and sampled game-score conditions. Also B3 + TS against B4, B3 against B2 (B1 + TS) and B1, descriptively."""
+    b3 = [_npz(runs_dir / f"b3_s{s}" / f"eval_{ckpt}" / "beliefs_common.npz") for s in SEEDS]
     b4, b4_t = [], []
     for s in SEEDS:
         c = _npz(runs_dir / f"b4_s{s}" / "eval" / "beliefs_common.npz")
@@ -189,7 +191,7 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
         return {"status": "incomplete"}
     b3_t = []
     for s in SEEDS:
-        sel = _npz(runs_dir / f"b3_s{s}" / "eval_best" / "beliefs_onpolicy_select.npz")
+        sel = _npz(runs_dir / f"b3_s{s}" / f"eval_{ckpt}" / "beliefs_onpolicy_select.npz")
         b3_t.append(fit_temperature_on(sel) if sel is not None else 1.0)
     l3 = np.stack([_loss(b) for b in b3])
     l3_ts = np.stack([_loss(b, t) for b, t in zip(b3, b3_t, strict=True)])
@@ -216,9 +218,9 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
         "b4_ts": _agg_blocks([belief_block(b, t) for b, t in zip(b4, b4_t, strict=True)]),
         "b4_raw": _agg_blocks([belief_block(b) for b in b4]),
     }
-    b1 = [_npz(runs_dir / f"b1_s{s}" / "eval_best" / "beliefs_common.npz") for s in SEEDS]
+    b1 = [_npz(runs_dir / f"b1_s{s}" / f"eval_{ckpt}" / "beliefs_common.npz") for s in SEEDS]
     b1_sel = [
-        _npz(runs_dir / f"b1_s{s}" / "eval_best" / "beliefs_onpolicy_select.npz") for s in SEEDS
+        _npz(runs_dir / f"b1_s{s}" / f"eval_{ckpt}" / "beliefs_onpolicy_select.npz") for s in SEEDS
     ]
     if all(x is not None for x in b1) and all(x is not None for x in b1_sel):
         t1 = [fit_temperature_on(x) for x in b1_sel]
@@ -235,7 +237,7 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
     games = {}
     for arm in ("b1", "b3"):
         scores = [
-            _json(runs_dir / f"{arm}_s{s}" / "eval_best" / "games.json")["greedy_scores"]
+            _json(runs_dir / f"{arm}_s{s}" / f"eval_{ckpt}" / "games.json")["greedy_scores"]
             for s in SEEDS
         ]
         games[arm] = mean_range([float(np.mean(x)) for x in scores])
@@ -244,7 +246,7 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
     sampled_games = {}
     for arm in ("b1", "b3"):
         sc = [
-            _json(runs_dir / f"{arm}_s{s}" / "eval_best" / "games.json")["sampled_scores"]
+            _json(runs_dir / f"{arm}_s{s}" / f"eval_{ckpt}" / "games.json")["sampled_scores"]
             for s in SEEDS
         ]
         sampled_games[arm] = mean_range([float(np.mean(x)) for x in sc])
@@ -282,5 +284,8 @@ def analyse(runs_dir: str | Path, delta_game_json: str | Path, B: int = 2000) ->
     out: dict[str, Any] = {"delta_game": delta, "runs": summaries, "arms": {}}
     for arm, runs in summaries.items():
         out["arms"][arm] = {w: aggregate(runs, w) for w in ("best", "last")}
-    out["h7"] = h7(runs_dir, delta, B)
+    out["h7"] = h7(runs_dir, delta, B, "last")  # pre-registered (Amendment 4): final checkpoints
+    out["h7_selected"] = h7(
+        runs_dir, delta, B, "best"
+    )  # descriptive: the selected checkpoints (may be the start model)
     return out

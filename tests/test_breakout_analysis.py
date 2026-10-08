@@ -29,7 +29,7 @@ def _write_run(
     root, name, scores, selected_iter=5, sel_scores=(5.0, 9.0, 8.0), onpolicy=None, common=None
 ):
     run = root / name
-    (run / "eval_best").mkdir(parents=True)
+    (run / "run.json").parent.mkdir(parents=True, exist_ok=True)
     (run / "run.json").write_text(json.dumps({"selected_iter": selected_iter}))
     (run / "sel_evals.json").write_text(
         json.dumps(
@@ -39,20 +39,23 @@ def _write_run(
             }
         )
     )
-    (run / "eval_best" / "games.json").write_text(
-        json.dumps(
-            {
-                "greedy_scores": list(scores),
-                "sampled_scores": list(scores),
-                "sampled_scores_select": list(scores),
-            }
+    for kind in ("best", "last"):  # the synthetic selected and final checkpoints are identical
+        d = run / f"eval_{kind}"
+        d.mkdir(parents=True)
+        (d / "games.json").write_text(
+            json.dumps(
+                {
+                    "greedy_scores": list(scores),
+                    "sampled_scores": list(scores),
+                    "sampled_scores_select": list(scores),
+                }
+            )
         )
-    )
-    if onpolicy is not None:
-        np.savez(run / "eval_best" / "beliefs_onpolicy_eval.npz", **onpolicy)
-        np.savez(run / "eval_best" / "beliefs_onpolicy_select.npz", **onpolicy)
-    if common is not None:
-        np.savez(run / "eval_best" / "beliefs_common.npz", **common)
+        if onpolicy is not None:
+            np.savez(d / "beliefs_onpolicy_eval.npz", **onpolicy)
+            np.savez(d / "beliefs_onpolicy_select.npz", **onpolicy)
+        if common is not None:
+            np.savez(d / "beliefs_common.npz", **common)
     return run
 
 
@@ -137,7 +140,7 @@ def test_h7_needs_the_sampled_condition_too(tmp_path):
     import json as _json
 
     for s in BA.SEEDS:
-        f = tmp_path / f"b3_s{s}" / "eval_best" / "games.json"
+        f = tmp_path / f"b3_s{s}" / "eval_last" / "games.json"
         g = _json.loads(f.read_text())
         g["sampled_scores"] = [5.0] * 10
         f.write_text(_json.dumps(g))
@@ -177,3 +180,20 @@ def test_analyse_runs_end_to_end(tmp_path):
     assert set(out["arms"]) == {"b1", "b3", "b5"}
     assert out["arms"]["b3"]["best"]["greedy"]["n"] == 3
     assert "common_raw" in out["arms"]["b3"]["best"]
+
+
+def test_h7_uses_the_final_checkpoint_and_the_selected_one_is_descriptive(tmp_path):
+    _layout(tmp_path, b3_score=10.5, b3_quality=1.4, b4_quality=0.3)
+    # make B3's selected checkpoint much worse than its final one (the start-model case of Amendment 4)
+    for s in BA.SEEDS:
+        f = tmp_path / f"b3_s{s}" / "eval_best" / "games.json"
+        g = json.loads(f.read_text())
+        g["greedy_scores"] = [2.0] * 10
+        g["sampled_scores"] = [2.0] * 10
+        f.write_text(json.dumps(g))
+    (tmp_path / "delta.json").write_text(
+        json.dumps({"delta_game": 1.0, "sampled": {"delta_sampled": 1.0}})
+    )
+    out = BA.analyse(tmp_path, tmp_path / "delta.json", B=100)
+    assert out["h7"]["h7_holds"] is True  # final checkpoints: B3 scores 10.5
+    assert out["h7_selected"]["h7_holds"] is False  # selected checkpoints: B3 scores 2

@@ -306,3 +306,21 @@ selection seeds. Two consequences, and what changes:
    their mean. `results/expB/delta_game.json` records both margins and is committed before any B3 job is submitted.
 3. Sampled and greedy scores of every arm and checkpoint are reported either way; the final (iteration 40) checkpoint is
    not subject to the selection bias and is shown next to the selected one.
+
+### Amendment 4 (2026-10-08): H7 is evaluated on the final checkpoints, because the "selected" checkpoint can be the untrained start model
+
+Written **before any B3 or B5 evaluation file (game scores, belief answers) was opened.** What had been seen of the B3 and
+B5 runs: their training logs (training-rollout scores, belief cross-entropy, retention KL) and the selection-seed greedy
+scores in `sel_evals.json`, which are **6 at every evaluation for B3 seeds 1 and 2** (and nearly so for B5). Greedy play is
+one trajectory (Amendment 3), the rule of Amendment 2 item 4 keeps the earlier checkpoint on a tie, so the "selected"
+checkpoint of those runs is the **untrained start model (iteration 0)**. A comparison of selected checkpoints would then set
+B4 against an untrained model and say nothing about whether joint on-policy training matters, which is what H7 asks.
+Changes:
+
+1. **H7's belief test (Amendment 2 item 9) compares B3's *final* checkpoint (iteration 40, T = 1) with B4 (+TS)** on the
+   common states, and the game-score conditions (greedy and sampled, Amendment 3) compare the **final** checkpoints of B3
+   and B1 on the evaluation seeds. B4 is itself built from B1's final policy, so the final checkpoint is its natural
+   counterpart. The margins δ_game and δ_sampled stay exactly as committed (they were computed from B1's selected
+   checkpoints on the selection seeds before any B3 job was submitted and are not recomputed).
+2. **The selected-checkpoint comparison is still computed and reported, as descriptive**, with the note that a selected
+   checkpoint can be the start model. Nothing else in Amendments 1 to 3 changes.

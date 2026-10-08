@@ -507,14 +507,14 @@ def gen_expB_h7() -> str:
     rows = [
         "| quantity | value |",
         "|---|---|",
-        f"| belief log loss on the common states, B3 (selected checkpoint, T = 1) | {_mr(h['belief_log_loss']['b3_raw'], rel)} |",
+        f"| belief log loss on the common states, B3 (final checkpoint, T = 1) | {_mr(h['belief_log_loss']['b3_raw'], rel)} |",
         f"| belief log loss on the common states, B4 (after temperature scaling) | {_mr(h['belief_log_loss']['b4_ts'], rel)} |",
         f"| B3 \u2212 B4, paired bootstrap over {h['common_states']:,} questions | {pb['mean_diff']:+.4f} (95% interval {pb['ci95'][0]:+.4f} to {pb['ci95'][1]:+.4f}) |",
         f"| **belief condition**: interval below 0 | **{yes(h['belief_condition_met'])}** |",
         f"| greedy score on the evaluation seeds, B1 / B3 | {_mr(g['b1'], rel, 2)} / {_mr(g['b3'], rel, 2)} |",
         f"| \u03b4_game (range of B1's seeds on the selection seeds, floored at 5% of their mean) | {h['delta_game']:.2f} |",
         f"| **game condition**: B3's score not below B1's by more than \u03b4_game | **{yes(h['game_condition_met'])}** |",
-        f"| **H7** | **{'holds' if h['h7_holds'] else 'does not hold'}** |",
+        f"| **H7** (final checkpoints, Amendment 4) | **{'holds' if h['h7_holds'] else 'does not hold'}** |",
     ]
     return "\n".join(rows) + "\n"
 
