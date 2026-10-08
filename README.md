@@ -449,6 +449,33 @@ two kinds of arm separate most.
 | A3 with β = 0 (exploratory, 1 run) | [4.526](results/expA/analysis.json) | [0.734](results/expA/analysis.json) | [0.253](results/expA/analysis.json) | [0.059](results/expA/analysis.json) | [0.700](results/expA/analysis.json) |
 <!-- END gen:expA_select -->
 
+### JevBench (descriptive)
+
+Each adapter is merged into the start model and served by decider at T = 1.0 (one temperature for every answer type,
+not the per-type temperatures of the "after TS" rows), then run through JevBench's public tiers. The hard tier has 111
+items, so its standard error on accuracy is about four points: **accuracy does not separate the arms.**
+
+<!-- BEGIN gen:expA_jev -->
+| model | hard accuracy | hard Brier | hard ECE | easy accuracy | original accuracy |
+|---|---|---|---|---|---|
+| A0 start model | [0.685](results/expA/jevbench.json) | [0.429](results/expA/jevbench.json) | [0.113](results/expA/jevbench.json) | [1.000](results/expA/jevbench.json) | [0.972](results/expA/jevbench.json) |
+| A1 supervised | [0.706 (0.676–0.730)](results/expA/jevbench.json) | [0.409 (0.375–0.435)](results/expA/jevbench.json) | [0.144 (0.135–0.157)](results/expA/jevbench.json) | [1.000 (1.000–1.000)](results/expA/jevbench.json) | [0.968 (0.944–0.986)](results/expA/jevbench.json) |
+| A3 RLVR | [0.694 (0.676–0.703)](results/expA/jevbench.json) | [0.470 (0.456–0.478)](results/expA/jevbench.json) | [0.197 (0.182–0.209)](results/expA/jevbench.json) | [1.000 (1.000–1.000)](results/expA/jevbench.json) | [0.968 (0.958–0.972)](results/expA/jevbench.json) |
+| A4 RLCD-bandit | [0.682 (0.658–0.694)](results/expA/jevbench.json) | [0.431 (0.416–0.447)](results/expA/jevbench.json) | [0.166 (0.146–0.181)](results/expA/jevbench.json) | [1.000 (1.000–1.000)](results/expA/jevbench.json) | [0.972 (0.972–0.972)](results/expA/jevbench.json) |
+| A5 RLCD-full | [0.712](results/expA/jevbench.json) | [0.388](results/expA/jevbench.json) | [0.168](results/expA/jevbench.json) | [1.000](results/expA/jevbench.json) | [0.972](results/expA/jevbench.json) |
+| A6 mined | [0.700 (0.685–0.721)](results/expA/jevbench.json) | [0.407 (0.402–0.418)](results/expA/jevbench.json) | [0.146 (0.127–0.160)](results/expA/jevbench.json) | [1.000 (1.000–1.000)](results/expA/jevbench.json) | [0.968 (0.958–0.972)](results/expA/jevbench.json) |
+| A6r random | [0.703 (0.694–0.721)](results/expA/jevbench.json) | [0.427 (0.403–0.451)](results/expA/jevbench.json) | [0.161 (0.149–0.172)](results/expA/jevbench.json) | [1.000 (1.000–1.000)](results/expA/jevbench.json) | [0.968 (0.958–0.972)](results/expA/jevbench.json) |
+| A3 with β = 0 (exploratory) | [0.703](results/expA/jevbench.json) | [0.580](results/expA/jevbench.json) | [0.290](results/expA/jevbench.json) | [1.000](results/expA/jevbench.json) | [0.958](results/expA/jevbench.json) |
+<!-- END gen:expA_jev -->
+
+<sub>Seed mean (min&ndash;max); A5, A0 and the &beta; = 0 run are single runs. No JevBench item is used for training or for
+choosing training data.</sub>
+
+On the hard tier the ECE of every trained arm is higher than the start model's even though accuracy is the same or
+slightly higher; the Brier score is mixed (lower for some arms, higher for RLVR). RLVR is the worst of the anchored arms
+on both, and the run without the KL penalty is far worse. This is one 111-item tier and a different distribution from the teacher-written dev set, so it is a pointer, not a
+test; the pre-registered tests do not use JevBench.
+
 ### Exploratory: RLVR without the KL anchor (E1)
 
 <p align="center">

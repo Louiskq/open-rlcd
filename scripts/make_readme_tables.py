@@ -575,6 +575,34 @@ def gen_expB_beliefs() -> str:
     return "\n".join(rows) + "\n"
 
 
+def gen_expA_jev() -> str:
+    path = ROOT / EXPA / "jevbench.json"
+    if not path.exists():
+        return pending("run scripts/collect_jevbench.py")
+    d = read_json(path)["arms"]
+    rel = f"{EXPA}/jevbench.json"
+    rows = [
+        "| model | hard accuracy | hard Brier | hard ECE | easy accuracy | original accuracy |",
+        "|---|---|---|---|---|---|",
+    ]
+    for arm, label in (
+        ("a0", "A0 start model"),
+        *EXPA_ARMS,
+        ("a3beta0", "A3 with \u03b2 = 0 (exploratory)"),
+    ):
+        v = d[arm]
+        cells = [
+            num(v["hard"][m], rel, rng=v["hard"][m].get("n", 1) > 1)
+            for m in ("accuracy", "brier", "ece")
+        ]
+        cells += [
+            num(v[t]["accuracy"], rel, rng=v[t]["accuracy"].get("n", 1) > 1)
+            for t in ("easy", "original")
+        ]
+        rows.append(f"| {label} | " + " | ".join(cells) + " |")
+    return "\n".join(rows) + "\n"
+
+
 GENERATORS = {
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
@@ -592,6 +620,7 @@ GENERATORS = {
     "expA_tests": gen_expA_tests,
     "expA_pertype": gen_expA_pertype,
     "expA_temps": gen_expA_temps,
+    "expA_jev": gen_expA_jev,
     "expB_h7": gen_expB_h7,
     "expB_games": gen_expB_games,
     "expB_beliefs": gen_expB_beliefs,
