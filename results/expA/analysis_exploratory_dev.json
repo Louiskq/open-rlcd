@@ -1,0 +1,1306 @@
+{
+ "arms": {},
+ "bootstrap": {
+  "B": 2000,
+  "seed": 20261008,
+  "split": "dev"
+ },
+ "tests": [
+  {
+   "id": "X-a3-a1-noul-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0127752,
+   "ci95": [
+    -0.00598854,
+    0.0332402
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-noul-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0151034,
+   "ci95": [
+    0.00108736,
+    0.0230887
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-noul-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0028665,
+   "ci95": [
+    -0.00778051,
+    0.0135238
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-noul-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0028581,
+   "ci95": [
+    -0.0151855,
+    0.0208225
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-noul-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000847186,
+   "ci95": [
+    -0.0172885,
+    0.0167379
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-noul-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0028665,
+   "ci95": [
+    -0.00778051,
+    0.0135238
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0127814,
+   "ci95": [
+    -0.000163348,
+    0.0267066
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00401953,
+   "ci95": [
+    -0.00273578,
+    0.00926029
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00266667,
+   "ci95": [
+    -0.00872727,
+    0.00364242
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00677227,
+   "ci95": [
+    -0.00602608,
+    0.0196988
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.000906569,
+   "ci95": [
+    -0.00680586,
+    0.00909339
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-choice-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00266667,
+   "ci95": [
+    -0.00872727,
+    0.00364242
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.054594,
+   "ci95": [
+    -0.0860719,
+    -0.021042
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.03542,
+   "ci95": [
+    -0.0594128,
+    -0.00284482
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0215947,
+   "ci95": [
+    0.00330842,
+    0.0404208
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0228767,
+   "ci95": [
+    -0.0460707,
+    0.00175526
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00603629,
+   "ci95": [
+    -0.0126119,
+    0.0200955
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a3-a1-score-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0215947,
+   "ci95": [
+    0.00330842,
+    0.0404208
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000363429,
+   "ci95": [
+    -0.0126506,
+    0.0121763
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000981657,
+   "ci95": [
+    -0.0102972,
+    0.00779262
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.002457,
+   "ci95": [
+    -0.00697174,
+    0.0118755
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00152064,
+   "ci95": [
+    -0.0145538,
+    0.0116579
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00461292,
+   "ci95": [
+    -0.0128829,
+    0.00535462
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-noul-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.002457,
+   "ci95": [
+    -0.00697174,
+    0.0118755
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0094871,
+   "ci95": [
+    -0.00205591,
+    0.0210667
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000383018,
+   "ci95": [
+    -0.00659518,
+    0.00567203
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00484848,
+   "ci95": [
+    -0.0111515,
+    0.00121212
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0129408,
+   "ci95": [
+    0.000330304,
+    0.025914
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00149155,
+   "ci95": [
+    -0.00377861,
+    0.00826455
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-choice-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00484848,
+   "ci95": [
+    -0.0111515,
+    0.00121212
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0767604,
+   "ci95": [
+    -0.104256,
+    -0.0480715
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0420043,
+   "ci95": [
+    -0.0612224,
+    -0.0089923
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0155039,
+   "ci95": [
+    -0.00166113,
+    0.0337763
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0436171,
+   "ci95": [
+    -0.0673757,
+    -0.0190296
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00369112,
+   "ci95": [
+    -0.0185728,
+    0.0122845
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a4-a1-score-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0155039,
+   "ci95": [
+    -0.00166113,
+    0.0337763
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0145632,
+   "ci95": [
+    -0.0293182,
+    0.000210986
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0107644,
+   "ci95": [
+    -0.0182205,
+    -0.000626781
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00859951,
+   "ci95": [
+    -0.000819001,
+    0.0176085
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0126688,
+   "ci95": [
+    -0.0268384,
+    0.00112704
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00970819,
+   "ci95": [
+    -0.017184,
+    0.0010451
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-noul-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00859951,
+   "ci95": [
+    -0.000819001,
+    0.0176085
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00836551,
+   "ci95": [
+    -0.0216506,
+    0.00451255
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000980396,
+   "ci95": [
+    -0.00732305,
+    0.00615631
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00218182,
+   "ci95": [
+    -0.00363636,
+    0.00848485
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0078284,
+   "ci95": [
+    -0.0205949,
+    0.0045471
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00156905,
+   "ci95": [
+    -0.00553118,
+    0.00768188
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-choice-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00218182,
+   "ci95": [
+    -0.00363636,
+    0.00848485
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00319899,
+   "ci95": [
+    -0.0129162,
+    0.00677089
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0128526,
+   "ci95": [
+    -0.0248318,
+    0.00424877
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00387597,
+   "ci95": [
+    -0.00776578,
+    0.0155039
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000948907,
+   "ci95": [
+    -0.014394,
+    0.0124858
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0110344,
+   "ci95": [
+    -0.0228144,
+    0.00975619
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a6-a6r-score-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a6",
+   "b": "a6r",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00387597,
+   "ci95": [
+    -0.00776578,
+    0.0155039
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00183832,
+   "ci95": [
+    -0.0160429,
+    0.0211884
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00150326,
+   "ci95": [
+    -0.0120735,
+    0.0141487
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0036855,
+   "ci95": [
+    -0.00985872,
+    0.017199
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0017241,
+   "ci95": [
+    -0.0210126,
+    0.0188573
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00664036,
+   "ci95": [
+    -0.0202166,
+    0.00730079
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-noul-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "noul",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0036855,
+   "ci95": [
+    -0.00985872,
+    0.017199
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00374367,
+   "ci95": [
+    -0.0148889,
+    0.023282
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.000911989,
+   "ci95": [
+    -0.00814158,
+    0.0111016
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0,
+   "ci95": [
+    -0.00945455,
+    0.00945455
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.000866492,
+   "ci95": [
+    -0.0205952,
+    0.0198288
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.00448036,
+   "ci95": [
+    -0.0132605,
+    0.00670849
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-choice-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "choice",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0,
+   "ci95": [
+    -0.00945455,
+    0.00945455
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-raw-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0142418,
+   "ci95": [
+    -0.0312529,
+    0.00112173
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-raw-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00754015,
+   "ci95": [
+    -0.0181088,
+    0.0282496
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-raw-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0166113,
+   "ci95": [
+    -0.00498339,
+    0.038206
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-ts-log_loss",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "log_loss",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": -0.0172569,
+   "ci95": [
+    -0.0402716,
+    0.00384285
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-ts-ece",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.00542026,
+   "ci95": [
+    -0.0219065,
+    0.0281069
+   ],
+   "p": null
+  },
+  {
+   "id": "X-a5-a1-score-ts-acc",
+   "family": "exploratory",
+   "hypothesis": "X",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "acc",
+   "scope": "score",
+   "kind": "diff",
+   "delta": null,
+   "observed_difference": 0.0166113,
+   "ci95": [
+    -0.00498339,
+    0.038206
+   ],
+   "p": null
+  }
+ ]
+}

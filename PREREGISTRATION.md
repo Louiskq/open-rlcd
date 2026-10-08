@@ -249,3 +249,40 @@ no hypothesis, margin or comparison.
    "not shown", with its interval.
 8. **Descriptive only, no test:** A0 (T = 1, as served, +TS), the A3 β = 0 run (E1), per-type results, the selection
    split, JevBench, risk-coverage and AURC, Murphy parts other than those above, and the learning-rate sweeps.
+
+### Amendment 2 (2026-10-08): how Exp B is run and decided
+
+Written **before any Exp B arm was trained** (only the label validation and a few-iteration smoke test of the code
+exist). It fixes details the text above leaves open; it changes no hypothesis.
+
+1. **One loop for all RL arms** (`rlcd/breakout_gpu.py`): B1, B3 and B5 differ only in the loss weights
+   actor : belief : retention = 1 : 0 : 0, 1 : 2 : 7 and 1 : 2 : 0. Settings are those of decider's plain Breakout
+   run: 40 iterations of 16 episodes, 300 decisions per episode, learning rate 4e-6, γ = 0.97, PPO clip 0.2, entropy
+   0.01, four PPO chunks of up to 6,000 decisions per iteration, stop a chunk loop when the mean KL exceeds 0.05,
+   gradient clip 1.0, AdamW (0.9, 0.95). Belief questions are asked every 4th decision in every arm (B1 records them
+   but is not trained on them); retention uses 1,000 replayed decider questions, 32 per step.
+2. **Horizon.** Every game (training, selection, evaluation) lasts 300 decisions; the score is the Atari score at the end.
+3. **Seeds.** Training environments use seeds 100,000 × (seed + 1) + episode number; selection seeds are 1000–1049;
+   evaluation seeds are 2000–2049; the label check used 3000–3159. `rlcd.breakout.seed_sets` raises on any overlap.
+4. **Checkpoint selection.** The greedy mean score on the 50 selection seeds is measured for the start model and
+   every 5 iterations; the **selected** checkpoint is the highest (ties keep the earlier; the start model if nothing
+   beats it). The **final** checkpoint (iteration 40) is also evaluated. The selected checkpoint is the primary one for
+   H7 and the tables.
+5. **Evaluation.** 50 greedy and 50 sampled games on evaluation seeds 2000–2049 for the selected and the final checkpoint.
+6. **δ_game** = range of B1's three seeds' selected-checkpoint greedy mean scores **on the selection seeds**, floored at
+   5% of their mean (the rule above); `results/expB/delta_game.json` is written and committed before any B3 job is
+   submitted.
+7. **Common states.** B1 seed 0, final checkpoint, sampled play on the evaluation seeds with belief questions every 4th
+   decision (brick30, life30, and return when a ball is in play), resolved by the validated labeller
+   (`rlcd.breakout.BeliefTracker`). Every arm and seed answers exactly these questions.
+8. **B2** = B1's selected checkpoint with one temperature fitted on its own beliefs in 50 sampled games on the selection
+   seeds. **B4 seed i** = B1 seed i's final policy fine-tuned for 160 steps (the 4 × 40 belief batches of B3) of 128 questions
+   by the log score only, on the belief questions in B1 seed i's own training rollouts, with no actor or retention term,
+   then one temperature fitted on its answers to B1 seed i's selection-seed questions. **B4's game score is B1's.**
+   B3 + TS is fitted like B2. B5 has one seed and no test.
+9. **The H7 test (C7, a family of one, no Holm).** The statistic is the mean over seeds i of B3 seed i's belief log
+   loss (selected checkpoint, T = 1) minus B4 seed i's (+TS) on the common-state questions, with a paired bootstrap over
+   those questions (2,000 replicates, random seed 20261008). **H7 holds iff** the 95% interval of that difference lies
+   below 0 **and** the mean over B3 seeds of the selected checkpoint's greedy score on the evaluation seeds is at least the B1
+   mean minus δ_game. B3 + TS against B4, B3 against B2, B5, per-kind results, ECE, accuracy, skill against the base
+   rate, on-policy beliefs and the final checkpoints are reported **descriptively**.

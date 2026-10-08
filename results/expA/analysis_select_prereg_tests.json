@@ -1,0 +1,874 @@
+{
+ "arms": {},
+ "bootstrap": {
+  "B": 2000,
+  "seed": 20261008,
+  "split": "select"
+ },
+ "tests": [
+  {
+   "id": "C1-ece",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.0312845,
+   "ci95": [
+    0.010152,
+    0.0408471
+   ],
+   "p": 0.001,
+   "p_holm": 0.013,
+   "passes": true
+  },
+  {
+   "id": "C1-log_loss",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.068837,
+   "ci95": [
+    0.0449662,
+    0.0932496
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C1-acc",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3",
+   "b": "a1",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0218671,
+   "observed_difference": -0.0154191,
+   "ci95": [
+    -0.0274811,
+    -0.00308382
+   ],
+   "p": 0.281,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C2-log_loss",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0325397,
+   "observed_difference": 0.00520139,
+   "ci95": [
+    -0.00965228,
+    0.0209573
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C2-ece",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0178469,
+   "observed_difference": -0.000681207,
+   "ci95": [
+    -0.0171072,
+    0.0176713
+   ],
+   "p": 0.047,
+   "p_holm": 0.376,
+   "passes": false
+  },
+  {
+   "id": "C2-acc",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0218671,
+   "observed_difference": 0.00504626,
+   "ci95": [
+    -0.00672834,
+    0.0176619
+   ],
+   "p": 0.009,
+   "p_holm": 0.081,
+   "passes": false
+  },
+  {
+   "id": "C2-brier",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "brier",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0191001,
+   "observed_difference": 0.00211622,
+   "ci95": [
+    -0.00806319,
+    0.012054
+   ],
+   "p": 0.001,
+   "p_holm": 0.013,
+   "passes": true
+  },
+  {
+   "id": "C2-reliability",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "reliability",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0093515,
+   "observed_difference": -0.00178405,
+   "ci95": [
+    -0.0104209,
+    0.00552556
+   ],
+   "p": 0.081,
+   "p_holm": 0.567,
+   "passes": false
+  },
+  {
+   "id": "C2-resolution",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "resolution",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0277927,
+   "observed_difference": -0.00369713,
+   "ci95": [
+    -0.0165439,
+    0.00784621
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C3-ece",
+   "family": "primary",
+   "hypothesis": "H3",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0178469,
+   "observed_difference": -0.00107776,
+   "ci95": [
+    -0.012012,
+    0.00801644
+   ],
+   "p": 0.006,
+   "p_holm": 0.06,
+   "passes": false
+  },
+  {
+   "id": "C3-log_loss",
+   "family": "primary",
+   "hypothesis": "H3",
+   "a": "a4",
+   "b": "a1",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0325397,
+   "observed_difference": 0.00136376,
+   "ci95": [
+    -0.0119363,
+    0.0149174
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C4-ece",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": 0.00126211,
+   "ci95": [
+    -0.0101743,
+    0.0106505
+   ],
+   "p": 1.0,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C4-log_loss",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": -0.0227822,
+   "ci95": [
+    -0.0363584,
+    -0.00954516
+   ],
+   "p": 0.001,
+   "p_holm": 0.013,
+   "passes": true
+  },
+  {
+   "id": "C4-acc",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6",
+   "b": "a6r",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.00616765,
+   "ci95": [
+    -0.00392487,
+    0.0168209
+   ],
+   "p": 0.251,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C5-a3",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": 0.0115194,
+   "ci95": [
+    -0.00206598,
+    0.0205314
+   ],
+   "p": 1.0,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C5-a4",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a4",
+   "b": "a1",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": -0.000672876,
+   "ci95": [
+    -0.00954118,
+    0.0101882
+   ],
+   "p": 0.122,
+   "p_holm": 0.732,
+   "passes": false
+  },
+  {
+   "id": "C5-a5",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": -0.00108569,
+   "ci95": [
+    -0.0170559,
+    0.0170472
+   ],
+   "p": 0.366,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "H5b-domain_ece",
+   "family": "H5b",
+   "hypothesis": "H5b",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "domain_ece",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.0491465,
+   "ci95": [
+    0.040515,
+    0.0590719
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "H5b-resolution",
+   "family": "H5b",
+   "hypothesis": "H5b",
+   "a": "a3",
+   "b": "a1",
+   "row": "ts",
+   "metric": "resolution",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": -0.0285202,
+   "ci95": [
+    -0.0394718,
+    -0.0167811
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  }
+ ],
+ "hypotheses": {
+  "H1": {
+   "holds": false,
+   "tests": {
+    "C1-ece": true,
+    "C1-log_loss": true,
+    "C1-acc": false
+   }
+  },
+  "H2": {
+   "holds": false,
+   "tests": {
+    "C2-log_loss": true,
+    "C2-ece": false,
+    "C2-acc": false,
+    "C2-brier": true,
+    "C2-reliability": false,
+    "C2-resolution": true
+   }
+  },
+  "H3": {
+   "holds": false,
+   "tests": {
+    "C3-ece": false,
+    "C3-log_loss": true
+   }
+  },
+  "H4": {
+   "holds": false,
+   "tests": {
+    "C4-ece": false,
+    "C4-log_loss": true,
+    "C4-acc": false
+   }
+  },
+  "H5": {
+   "holds": false,
+   "tests": {
+    "C5-a3": false,
+    "C5-a4": false,
+    "C5-a5": false
+   }
+  },
+  "H5b": {
+   "holds": true,
+   "tests": {
+    "H5b-domain_ece": true,
+    "H5b-resolution": true
+   }
+  }
+ },
+ "robustness": [
+  {
+   "id": "C1-ece",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.00808468,
+   "ci95": [
+    -0.0156738,
+    0.0256658
+   ],
+   "p": 0.606,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C1-log_loss",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.0467525,
+   "ci95": [
+    0.0241151,
+    0.0696269
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C1-acc",
+   "family": "primary",
+   "hypothesis": "H1",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0218671,
+   "observed_difference": -0.00504626,
+   "ci95": [
+    -0.020185,
+    0.0100925
+   ],
+   "p": 0.029,
+   "p_holm": 0.29,
+   "passes": false
+  },
+  {
+   "id": "C2-log_loss",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0325397,
+   "observed_difference": 0.00520139,
+   "ci95": [
+    -0.00965228,
+    0.0209573
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C2-ece",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0178469,
+   "observed_difference": -0.000681207,
+   "ci95": [
+    -0.0171072,
+    0.0176713
+   ],
+   "p": 0.047,
+   "p_holm": 0.423,
+   "passes": false
+  },
+  {
+   "id": "C2-acc",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0218671,
+   "observed_difference": 0.00504626,
+   "ci95": [
+    -0.00672834,
+    0.0176619
+   ],
+   "p": 0.009,
+   "p_holm": 0.099,
+   "passes": false
+  },
+  {
+   "id": "C2-brier",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "brier",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0191001,
+   "observed_difference": 0.00211622,
+   "ci95": [
+    -0.00806319,
+    0.012054
+   ],
+   "p": 0.001,
+   "p_holm": 0.013,
+   "passes": true
+  },
+  {
+   "id": "C2-reliability",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "reliability",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0093515,
+   "observed_difference": -0.00178405,
+   "ci95": [
+    -0.0104209,
+    0.00552556
+   ],
+   "p": 0.081,
+   "p_holm": 0.567,
+   "passes": false
+  },
+  {
+   "id": "C2-resolution",
+   "family": "primary",
+   "hypothesis": "H2",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "raw",
+   "metric": "resolution",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0277927,
+   "observed_difference": -0.00369713,
+   "ci95": [
+    -0.0165439,
+    0.00784621
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C3-ece",
+   "family": "primary",
+   "hypothesis": "H3",
+   "a": "a4 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0178469,
+   "observed_difference": 0.00666316,
+   "ci95": [
+    -0.0104279,
+    0.0185974
+   ],
+   "p": 0.068,
+   "p_holm": 0.544,
+   "passes": false
+  },
+  {
+   "id": "C3-log_loss",
+   "family": "primary",
+   "hypothesis": "H3",
+   "a": "a4 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.0325397,
+   "observed_difference": -0.00363099,
+   "ci95": [
+    -0.0161582,
+    0.00863576
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "C4-ece",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6 (seed ensemble)",
+   "b": "a6r (seed ensemble)",
+   "row": "raw",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": -0.00547098,
+   "ci95": [
+    -0.0205891,
+    0.0142438
+   ],
+   "p": 0.748,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C4-log_loss",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6 (seed ensemble)",
+   "b": "a6r (seed ensemble)",
+   "row": "raw",
+   "metric": "log_loss",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": -0.0189052,
+   "ci95": [
+    -0.03192,
+    -0.00649916
+   ],
+   "p": 0.001,
+   "p_holm": 0.013,
+   "passes": true
+  },
+  {
+   "id": "C4-acc",
+   "family": "primary",
+   "hypothesis": "H4",
+   "a": "a6 (seed ensemble)",
+   "b": "a6r (seed ensemble)",
+   "row": "raw",
+   "metric": "acc",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": -0.000841043,
+   "ci95": [
+    -0.0168209,
+    0.0142977
+   ],
+   "p": 1.0,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C5-a3",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": 0.0140262,
+   "ci95": [
+    -0.00635246,
+    0.0280118
+   ],
+   "p": 1.0,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C5-a4",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a4 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": 0.00834668,
+   "ci95": [
+    -0.00886972,
+    0.0216409
+   ],
+   "p": 0.756,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "C5-a5",
+   "family": "primary",
+   "hypothesis": "H5",
+   "a": "a5 seed 0",
+   "b": "a1 seed 0",
+   "row": "ts",
+   "metric": "ece",
+   "scope": "all",
+   "kind": "equiv",
+   "delta": 0.00832684,
+   "observed_difference": -0.00108569,
+   "ci95": [
+    -0.0170559,
+    0.0170472
+   ],
+   "p": 0.366,
+   "p_holm": 1.0,
+   "passes": false
+  },
+  {
+   "id": "H5b-domain_ece",
+   "family": "H5b",
+   "hypothesis": "H5b",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "ts",
+   "metric": "domain_ece",
+   "scope": "all",
+   "kind": "a_higher",
+   "delta": null,
+   "observed_difference": 0.0458382,
+   "ci95": [
+    0.0353439,
+    0.0566849
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  },
+  {
+   "id": "H5b-resolution",
+   "family": "H5b",
+   "hypothesis": "H5b",
+   "a": "a3 (seed ensemble)",
+   "b": "a1 (seed ensemble)",
+   "row": "ts",
+   "metric": "resolution",
+   "scope": "all",
+   "kind": "a_lower",
+   "delta": null,
+   "observed_difference": -0.0275927,
+   "ci95": [
+    -0.0404637,
+    -0.0131555
+   ],
+   "p": 0.0,
+   "p_holm": 0.0,
+   "passes": true
+  }
+ ],
+ "hypotheses_ensemble": {
+  "H1": {
+   "holds": false,
+   "tests": {
+    "C1-ece": false,
+    "C1-log_loss": true,
+    "C1-acc": false
+   }
+  },
+  "H2": {
+   "holds": false,
+   "tests": {
+    "C2-log_loss": true,
+    "C2-ece": false,
+    "C2-acc": false,
+    "C2-brier": true,
+    "C2-reliability": false,
+    "C2-resolution": true
+   }
+  },
+  "H3": {
+   "holds": false,
+   "tests": {
+    "C3-ece": false,
+    "C3-log_loss": true
+   }
+  },
+  "H4": {
+   "holds": false,
+   "tests": {
+    "C4-ece": false,
+    "C4-log_loss": true,
+    "C4-acc": false
+   }
+  },
+  "H5": {
+   "holds": false,
+   "tests": {
+    "C5-a3": false,
+    "C5-a4": false,
+    "C5-a5": false
+   }
+  },
+  "H5b": {
+   "holds": true,
+   "tests": {
+    "H5b-domain_ece": true,
+    "H5b-resolution": true
+   }
+  }
+ }
+}
