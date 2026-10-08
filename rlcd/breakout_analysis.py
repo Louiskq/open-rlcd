@@ -50,11 +50,27 @@ def selected_selection_score(run_dir: Path) -> float:
     return scores[int(info["selected_iter"])]
 
 
+def selected_sampled_selection_score(run_dir: Path) -> float:
+    """Mean sampled score on the 50 selection seeds of the run's selected checkpoint (Amendment 3, item 2)."""
+    games = json.loads((run_dir / "eval_best" / "games.json").read_text())
+    return float(np.mean(games["sampled_scores_select"]))
+
+
 def compute_delta_game(runs_dir: Path, arm: str = "b1") -> dict[str, Any]:
+    """delta_game (greedy, Amendment 2) and delta_sampled (Amendment 3) from the B1 runs' selection-seed scores."""
     names = [f"{arm}_s{s}" for s in SEEDS]
-    per_seed = [selected_selection_score(runs_dir / n) for n in names]
-    out = BK.delta_game(per_seed)
-    out.update({"runs": names, "selected_selection_scores": per_seed, "seeds": list(SEEDS)})
+    greedy = [selected_selection_score(runs_dir / n) for n in names]
+    out = BK.delta_game(greedy)
+    out.update({"runs": names, "selected_selection_scores": greedy, "seeds": list(SEEDS)})
+    sampled = [selected_sampled_selection_score(runs_dir / n) for n in names]
+    ds = BK.delta_game(sampled)
+    out["sampled"] = {
+        "delta_sampled": ds["delta_game"],
+        "range": ds["range"],
+        "floor": ds["floor"],
+        "mean": ds["mean"],
+        "selected_sampled_selection_scores": sampled,
+    }
     return out
 
 
@@ -219,10 +235,28 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
         ]
         games[arm] = mean_range([float(np.mean(x)) for x in scores])
     margin = float(delta["delta_game"])
-    game_ok = games["b3"]["mean"] >= games["b1"]["mean"] - margin
+    greedy_ok = games["b3"]["mean"] >= games["b1"]["mean"] - margin
+    sampled_games = {}
+    for arm in ("b1", "b3"):
+        sc = [
+            _json(runs_dir / f"{arm}_s{s}" / "eval_best" / "games.json")["sampled_scores"]
+            for s in SEEDS
+        ]
+        sampled_games[arm] = mean_range([float(np.mean(x)) for x in sc])
+    ds = delta.get("sampled", {}).get("delta_sampled")
+    sampled_ok = (
+        True
+        if ds is None
+        else sampled_games["b3"]["mean"] >= sampled_games["b1"]["mean"] - float(ds)
+    )
+    game_ok = bool(greedy_ok and sampled_ok)
     out["greedy_score_eval_seeds"] = games
+    out["sampled_score_eval_seeds"] = sampled_games
     out["delta_game"] = margin
-    out["game_condition_met"] = bool(game_ok)
+    out["delta_sampled"] = ds
+    out["greedy_condition_met"] = bool(greedy_ok)
+    out["sampled_condition_met"] = bool(sampled_ok)
+    out["game_condition_met"] = game_ok
     belief_ok = bool(primary["ci95"][1] < 0)
     out["belief_condition_met"] = belief_ok
     out["h7_holds"] = bool(belief_ok and game_ok)

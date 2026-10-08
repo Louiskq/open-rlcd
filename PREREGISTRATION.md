@@ -286,3 +286,23 @@ exist). It fixes details the text above leaves open; it changes no hypothesis.
    below 0 **and** the mean over B3 seeds of the selected checkpoint's greedy score on the evaluation seeds is at least the B1
    mean minus δ_game. B3 + TS against B4, B3 against B2, B5, per-kind results, ECE, accuracy, skill against the base
    rate, on-policy beliefs and the final checkpoints are reported **descriptively**.
+
+### Amendment 3 (2026-10-08): greedy play is deterministic, so the game-score condition also uses sampled play
+
+Written while B1 was training (iteration 15 of 40; **no B3, B4 or B5 run had been submitted** and no B3 result existed).
+The Breakout environment has no randomness once the policy is greedy: every greedy game, on any seed, is the same
+trajectory, so the greedy score of a checkpoint is a single number (the selection-seed "mean" of 50 greedy games is that
+one score, e.g. exactly 6.00 for the start model), and the greedy score on the evaluation seeds equals the one on the
+selection seeds. Two consequences, and what changes:
+
+1. **Checkpoint selection (item 4 of Amendment 2) is unchanged** but is a selection on one noisy trajectory per
+   evaluation; the selected checkpoint's greedy score is optimistically biased and the evaluation seeds do not remove that
+   bias for greedy play. Sampled play is random and its evaluation-seed games are fresh, so it is unbiased.
+2. **The H7 game-score condition (item 9 of Amendment 2) is made stricter, never looser: it now has two parts and both
+   must hold.** (a) the greedy condition exactly as pre-registered, δ_game from B1's selected checkpoints' greedy
+   selection-seed scores; (b) **the same condition on sampled play**: the mean over B3 seeds of the selected checkpoint's
+   mean sampled score on the 50 evaluation seeds is at least the B1 mean minus **δ_sampled**, where δ_sampled is the range
+   over B1's three seeds of the selected checkpoint's mean sampled score on the 50 selection seeds, floored at 5% of
+   their mean. `results/expB/delta_game.json` records both margins and is committed before any B3 job is submitted.
+3. Sampled and greedy scores of every arm and checkpoint are reported either way; the final (iteration 40) checkpoint is
+   not subject to the selection bias and is shown next to the selected one.

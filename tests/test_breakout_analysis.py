@@ -40,7 +40,13 @@ def _write_run(
         )
     )
     (run / "eval_best" / "games.json").write_text(
-        json.dumps({"greedy_scores": list(scores), "sampled_scores": list(scores)})
+        json.dumps(
+            {
+                "greedy_scores": list(scores),
+                "sampled_scores": list(scores),
+                "sampled_scores_select": list(scores),
+            }
+        )
     )
     if onpolicy is not None:
         np.savez(run / "eval_best" / "beliefs_onpolicy_eval.npz", **onpolicy)
@@ -97,6 +103,10 @@ def test_delta_game_uses_selected_selection_scores_and_the_floor(tmp_path):
     assert d["selected_selection_scores"] == [9.0, 9.5, 10.0]
     assert d["range"] == pytest.approx(1.0)
     assert d["delta_game"] == pytest.approx(max(1.0, 0.05 * 9.5))
+    assert d["sampled"]["delta_sampled"] == pytest.approx(
+        0.05 * 10.0
+    )  # B1 sampled scores are all 10 in the layout
+    assert len(d["sampled"]["selected_sampled_selection_scores"]) == 3
 
 
 def test_h7_holds_when_b3_has_better_beliefs_and_a_matching_game_score(tmp_path):
@@ -114,6 +124,24 @@ def test_h7_fails_when_b3_loses_too_much_game_score(tmp_path):
     _layout(tmp_path, b3_score=5.0, b3_quality=1.4, b4_quality=0.3)  # B1 scores 10; margin 1
     out = BA.h7(tmp_path, {"delta_game": 1.0}, B=200)
     assert out["belief_condition_met"] and not out["game_condition_met"] and not out["h7_holds"]
+    assert not out["greedy_condition_met"]
+
+
+def test_h7_needs_the_sampled_condition_too(tmp_path):
+    _layout(tmp_path, b3_score=10.5, b3_quality=1.4, b4_quality=0.3)
+    # greedy margin generous, sampled margin tiny: B3's sampled mean (10.5) is above B1's (10): still met
+    ok = BA.h7(tmp_path, {"delta_game": 1.0, "sampled": {"delta_sampled": 0.1}}, B=100)
+    assert ok["sampled_condition_met"] and ok["h7_holds"]
+    # make B3's sampled scores drop below B1's by more than the sampled margin while greedy stays fine
+    import json as _json
+
+    for s in BA.SEEDS:
+        f = tmp_path / f"b3_s{s}" / "eval_best" / "games.json"
+        g = _json.loads(f.read_text())
+        g["sampled_scores"] = [5.0] * 10
+        f.write_text(_json.dumps(g))
+    bad = BA.h7(tmp_path, {"delta_game": 1.0, "sampled": {"delta_sampled": 0.5}}, B=100)
+    assert bad["greedy_condition_met"] and not bad["sampled_condition_met"] and not bad["h7_holds"]
 
 
 def test_h7_fails_when_the_beliefs_are_no_better(tmp_path):
