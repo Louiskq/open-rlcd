@@ -20,10 +20,10 @@
 </p>
 <p align="center"><sub>Same model, same data, same optimiser. Only the reward differs. (Exp 0: a toy where the true probabilities are known.)</sub></p>
 
-> **Status: phases 1 and 2 of 5 done.** The metrics, estimators, toy experiments, the Exp A trainer and the Breakout
-> label validation are built and tested, and a smoke run of every Exp A arm has run (one seed, 10% of the steps:
-> [`docs/phase2_smoke.md`](docs/phase2_smoke.md)). **The full Exp A and Exp B runs have not been run**, so their rows
-> say *pending*; the smoke numbers are a wiring check, not results. See [Status](#status).
+> **Status: Exp A is run and analysed; Exp B is in progress.** The pre-registration was frozen before the Exp A runs
+> ([`PREREGISTRATION.md`](PREREGISTRATION.md)); its two amendments are dated. Exp A (the 9B decider with teacher labels)
+> gave a **mixed** result that does not simply confirm RLCD: see [Exp A results](#exp-a-results-a-9b-decider-with-teacher-labels).
+> Rows for Exp B say *pending* until it has run. See [Status](#status).
 
 ## TL;DR
 
@@ -32,8 +32,10 @@
 - **The one-line fix.** When only the sampled answer `a` can be checked, use reward `1[a=y] / p(a)` (no
   gradient through the denominator) instead of `1[a=y]`. That makes REINFORCE an unbiased estimator of the
   log-likelihood gradient, so calibration is recoverable from bandit feedback.
-- **What is shown so far (toy only).** The 0/1 reward makes the model more confident than accurate while
-  leaving accuracy unchanged; the importance-weighted reward does not.
+- **What is shown.** In the toy, the 0/1 reward makes the model more confident than accurate while leaving
+  accuracy unchanged and the importance-weighted reward does not. In the 9B model with a KL anchor the effect is
+  much smaller, and the pre-registered sceptical reading (a proper-loss fine-tune plus temperature scaling matches the
+  RL arms) is largely borne out; see below.
 
 <!-- BEGIN gen:tldr -->
 | setting | arm | ECE (lower is better) | accuracy | log loss |
@@ -42,7 +44,13 @@
 | Exp 0 (toy) | RLCD-bandit | **[0.011 (0.008–0.014)](results/toy/rlcd_bandit.json)** | [0.498 (0.496–0.501)](results/toy/rlcd_bandit.json) | [1.221 (1.219–1.225)](results/toy/rlcd_bandit.json) |
 | Exp 0 (toy) | RLCD-bandit, clip 10 | [0.060 (0.056–0.066)](results/toy/rlcd_bandit_clip10.json) | [0.499 (0.496–0.502)](results/toy/rlcd_bandit_clip10.json) | [1.241 (1.238–1.244)](results/toy/rlcd_bandit_clip10.json) |
 | Exp 0 (toy) | Supervised log loss (= RLCD-full) | **[0.009 (0.006–0.012)](results/toy/supervised.json)** | [0.498 (0.495–0.500)](results/toy/supervised.json) | [1.220 (1.218–1.222)](results/toy/supervised.json) |
-| Exp A (9B decider, teacher labels) | A1–A6r | _pending_ | _pending_ | _pending_ |
+| Exp A (9B decider, dev set) | A0 start model | [0.045](results/expA/analysis.json) | [0.808](results/expA/analysis.json) | [0.446](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A1 supervised | **[0.015 (0.014–0.017)](results/expA/analysis.json)** | [0.893 (0.890–0.897)](results/expA/analysis.json) | [0.274 (0.265–0.283)](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A3 RLVR | [0.030 (0.024–0.034)](results/expA/analysis.json) | [0.897 (0.895–0.901)](results/expA/analysis.json) | [0.273 (0.261–0.279)](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A4 RLCD-bandit | [0.021 (0.017–0.028)](results/expA/analysis.json) | [0.895 (0.893–0.896)](results/expA/analysis.json) | [0.262 (0.257–0.268)](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A5 RLCD-full | **[0.017](results/expA/analysis.json)** | [0.895](results/expA/analysis.json) | [0.282](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A6 mined | **[0.016 (0.014–0.018)](results/expA/analysis.json)** | [0.893 (0.890–0.896)](results/expA/analysis.json) | [0.279 (0.276–0.282)](results/expA/analysis.json) |
+| Exp A (9B decider, dev set) | A6r random | [0.022 (0.017–0.026)](results/expA/analysis.json) | [0.889 (0.885–0.893)](results/expA/analysis.json) | [0.288 (0.286–0.291)](results/expA/analysis.json) |
 | Exp B (Breakout, on-policy) | B1–B5 | _pending_ | _pending_ | _pending_ |
 <!-- END gen:tldr -->
 
@@ -113,7 +121,11 @@ it**. This repo tests that reading in three places instead of arguing about it:
 - **Exp B, B4 ("cynical")**: take B1's final policy, fit the belief heads by supervised log loss on that
   policy's rollouts, then temperature-scale. B3 trains the beliefs jointly and on-policy (**H7**).
 
-**Result: pending** (phases 3 and 4). It will be reported here with the same prominence whichever way it goes.
+**Result for Exp A** (details [below](#exp-a-results-a-9b-decider-with-teacher-labels)): on the pre-registered dev set, the
+supervised control plus temperature scaling is within noise of the RL arms, and A6 is not shown to beat A6r after the
+pre-registered correction. The equivalence the hypothesis asked for (H5) was **not established** at the pre-registered
+margin, and mining's small advantage on log loss did not survive Holm correction. **Exp B (H7) is pending.** The Exp B result
+will be reported here with the same prominence whichever way it goes.
 
 ## Try it
 
@@ -280,6 +292,191 @@ That per-stratum temperature uses the known difficulty, which a real model does 
 not a recommended fix. This is one toy configuration and says nothing yet about a 9B model, but it is the reason
 the plan pre-registers **H5b** (after temperature scaling, A3 has worse per-domain ECE and lower resolution than
 A1) next to H5, which is stated on pooled ECE and could pass while the strata disagree.
+
+## Exp A results: a 9B decider with teacher labels
+
+Setup (all frozen in [`PREREGISTRATION.md`](PREREGISTRATION.md) before the runs): the Qwen3.5-9B decider after its
+supervised stage is trained further for 734 steps on typed questions (`NOUL`, `CHOICE`, `SCORE`) written by a teacher
+model, with LoRA, one shared learning rate, a forward-KL anchor to the start model and three seeds per arm. The arms
+differ only in the loss: **A1** supervised log loss (ranked probability score for `SCORE`), **A2** = A1 plus one
+temperature per answer type, **A3** RLVR, **A4** RLCD-bandit, **A5** RLCD-full through the RL code path, **A6** mining by
+predictive entropy over a held-back half of the pool, **A6r** the same with random selection. The test set is an
+independent dev set of four unseen domains; temperatures are fitted on a separate calibration split. Every test below
+is a paired bootstrap over items with Holm correction and equivalence margins set from the A1 seed spread.
+
+<!-- BEGIN gen:expA_headline -->
+On the independent dev set, continued training from the start model takes log loss from 0.446 to between 0.262 and 0.288 and accuracy from 0.808 to between 0.889 and 0.897, whatever the arm. RLVR (A3) ends with an ECE of 0.030 against 0.015 for the supervised control (difference +0.0148, 95% interval +0.0046 to +0.0197) at the same accuracy, and without a worse log loss (difference -0.0018, 95% interval -0.0129 to +0.0099). After one temperature per answer type the ECEs are 0.021 (A3) and 0.019 (A1).
+<!-- END gen:expA_headline -->
+
+### Hypotheses, as pre-registered
+
+<!-- BEGIN gen:expA_verdicts -->
+| hypothesis (pre-registered) | what the dev set shows | verdict | same test, seed-ensembled | same test, selection split (exploratory) |
+|---|---|---|---|---|
+| **H1** A3 (RLVR) has higher ECE and log loss than A1, accuracy within ±δ | ECE +0.0148 (+0.0046 to +0.0197), log loss -0.0018 (-0.0129 to +0.0099); C1-acc passed | **does not hold** | does not hold | does not hold |
+| **H2** A5 matches A1 on every metric | C2-log_loss passed, C2-ece passed, C2-acc passed, C2-brier passed, C2-reliability passed, C2-resolution passed | **holds** | holds | does not hold |
+| **H3** A4 reaches A1's calibration | ECE +0.0052 (-0.0033 to +0.0094), log loss -0.0120 (-0.0212 to -0.0023); C3-ece passed, C3-log_loss passed | **holds** | does not hold | does not hold |
+| **H4** A6 is no better than A6r | ECE -0.0057 (-0.0099 to +0.0010), log loss -0.0091 (-0.0173 to -0.0018), accuracy +0.0044 (-0.0002 to +0.0094); none passed after Holm | **holds** | holds | does not hold |
+| **H5** with TS, A1 is within noise of every RL arm on ECE | C5-a3 did not pass, C5-a4 did not pass, C5-a5 did not pass (margin 0.0083) | **does not hold** | does not hold | does not hold |
+| **H5b** with TS, A3 has worse per-domain ECE and lower resolution than A1 | per-domain ECE +0.0031 (-0.0045 to +0.0087), resolution +0.0019 (-0.0041 to +0.0079) | **does not hold** | does not hold | holds |
+<!-- END gen:expA_verdicts -->
+
+"Does not hold" for an equivalence hypothesis (H2, H3, H5) means the interval was not inside the margin, not that the
+arms differ. The last two columns are robustness checks (the same tests on seed-averaged probabilities, and on the
+selection split, which is *not* the test set) and are exploratory.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expA_overview-dark.png">
+    <img alt="ECE, log loss and accuracy of every Exp A arm on the dev set and the selection split, raw and after temperature scaling." src="figures/expA_overview.png" width="900">
+  </picture>
+</p>
+
+### Dev set (the pre-registered test set)
+
+<!-- BEGIN gen:expA_dev -->
+| arm | log loss | accuracy | ECE | ECE after TS | log loss after TS |
+|---|---|---|---|---|---|
+| A0 start model, T = 1 | [0.446](results/expA/analysis.json) | [0.808](results/expA/analysis.json) | [0.045](results/expA/analysis.json) | [0.021](results/expA/analysis.json) | [0.430](results/expA/analysis.json) |
+| A0 as served, T = 1.05 | [0.443](results/expA/analysis.json) | [0.808](results/expA/analysis.json) | [0.044](results/expA/analysis.json) | | |
+| A1 supervised (= A2 after TS) | [0.274 (0.265–0.283)](results/expA/analysis.json) | [0.893 (0.890–0.897)](results/expA/analysis.json) | **[0.015 (0.014–0.017)](results/expA/analysis.json)** | [0.019 (0.016–0.023)](results/expA/analysis.json) | [0.269 (0.259–0.280)](results/expA/analysis.json) |
+| A3 RLVR | **[0.273 (0.261–0.279)](results/expA/analysis.json)** | [0.897 (0.895–0.901)](results/expA/analysis.json) | [0.030 (0.024–0.034)](results/expA/analysis.json) | [0.021 (0.018–0.023)](results/expA/analysis.json) | [0.268 (0.259–0.274)](results/expA/analysis.json) |
+| A4 RLCD-bandit | **[0.262 (0.257–0.268)](results/expA/analysis.json)** | [0.895 (0.893–0.896)](results/expA/analysis.json) | [0.021 (0.017–0.028)](results/expA/analysis.json) | [0.023 (0.020–0.026)](results/expA/analysis.json) | [0.266 (0.259–0.274)](results/expA/analysis.json) |
+| A5 RLCD-full | [0.282](results/expA/analysis.json) | [0.895](results/expA/analysis.json) | **[0.017](results/expA/analysis.json)** | [0.019](results/expA/analysis.json) | [0.275](results/expA/analysis.json) |
+| A6 mined | [0.279 (0.276–0.282)](results/expA/analysis.json) | [0.893 (0.890–0.896)](results/expA/analysis.json) | **[0.016 (0.014–0.018)](results/expA/analysis.json)** | [0.020 (0.018–0.021)](results/expA/analysis.json) | [0.273 (0.271–0.276)](results/expA/analysis.json) |
+| A6r random | [0.288 (0.286–0.291)](results/expA/analysis.json) | [0.889 (0.885–0.893)](results/expA/analysis.json) | [0.022 (0.017–0.026)](results/expA/analysis.json) | [0.026 (0.021–0.031)](results/expA/analysis.json) | [0.280 (0.278–0.283)](results/expA/analysis.json) |
+| A3 with β = 0 (exploratory, 1 run) | [1.488](results/expA/analysis.json) | [0.874](results/expA/analysis.json) | [0.112](results/expA/analysis.json) | [0.107](results/expA/analysis.json) | [0.410](results/expA/analysis.json) |
+<!-- END gen:expA_dev -->
+
+<sub>Seed mean (min&ndash;max over 3 seeds; A5, A0 and the &beta; = 0 run are single runs). Bold: best, or within the best
+arm's seed range. "After TS" fits one temperature per answer type on the calibration split. A1 *is* A2 in the
+"after TS" columns.</sub>
+
+### The 19 pre-registered tests
+
+<!-- BEGIN gen:expA_tests -->
+| test | comparison (row) | difference A − B (95% interval) | margin δ | Holm p | passed |
+|---|---|---|---|---|---|
+| C1-ece | a3 vs a1 (raw), A higher | +0.0148 (+0.0046 to +0.0197) | – | 0.016 | yes |
+| C1-log_loss | a3 vs a1 (raw), A higher | -0.0018 (-0.0129 to +0.0099) | – | 1.000 | no |
+| C1-acc | a3 vs a1 (raw), equivalent | +0.0042 (-0.0017 to +0.0099) | 0.0219 | <0.001 | yes |
+| C2-log_loss | a5 seed 0 vs a1 seed 0 (raw), equivalent | -0.0007 (-0.0116 to +0.0108) | 0.0325 | <0.001 | yes |
+| C2-ece | a5 seed 0 vs a1 seed 0 (raw), equivalent | +0.0001 (-0.0100 to +0.0082) | 0.0178 | 0.009 | yes |
+| C2-acc | a5 seed 0 vs a1 seed 0 (raw), equivalent | +0.0047 (-0.0029 to +0.0125) | 0.0219 | <0.001 | yes |
+| C2-brier | a5 seed 0 vs a1 seed 0 (raw), equivalent | -0.0011 (-0.0080 to +0.0064) | 0.0191 | <0.001 | yes |
+| C2-reliability | a5 seed 0 vs a1 seed 0 (raw), equivalent | -0.0007 (-0.0042 to +0.0027) | 0.0094 | <0.001 | yes |
+| C2-resolution | a5 seed 0 vs a1 seed 0 (raw), equivalent | +0.0004 (-0.0073 to +0.0075) | 0.0278 | <0.001 | yes |
+| C3-ece | a4 vs a1 (raw), equivalent | +0.0052 (-0.0033 to +0.0094) | 0.0178 | <0.001 | yes |
+| C3-log_loss | a4 vs a1 (raw), equivalent | -0.0120 (-0.0212 to -0.0023) | 0.0325 | <0.001 | yes |
+| C4-ece | a6 vs a6r (raw), A lower | -0.0057 (-0.0099 to +0.0010) | – | 0.315 | no |
+| C4-log_loss | a6 vs a6r (raw), A lower | -0.0091 (-0.0173 to -0.0018) | – | 0.091 | no |
+| C4-acc | a6 vs a6r (raw), A higher | +0.0044 (-0.0002 to +0.0094) | – | 0.300 | no |
+| C5-a3 | a3 vs a1 (ts), equivalent | +0.0024 (-0.0058 to +0.0089) | 0.0083 | 0.300 | no |
+| C5-a4 | a4 vs a1 (ts), equivalent | +0.0039 (-0.0022 to +0.0078) | 0.0083 | 0.198 | no |
+| C5-a5 | a5 seed 0 vs a1 seed 0 (ts), equivalent | -0.0043 (-0.0109 to +0.0057) | 0.0083 | 0.384 | no |
+| H5b-domain_ece | a3 vs a1 (ts), A higher | +0.0031 (-0.0045 to +0.0087) | – | 0.944 | no |
+| H5b-resolution | a3 vs a1 (ts), A lower | +0.0019 (-0.0041 to +0.0079) | – | 1.000 | no |
+<!-- END gen:expA_tests -->
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expA_tests-dark.png">
+    <img alt="Forest plot of the 19 pre-registered tests with 95% bootstrap intervals; equivalence tests in units of their margin." src="figures/expA_tests.png" width="900">
+  </picture>
+</p>
+
+### By answer type, and why the pooled log loss needs care
+
+<!-- BEGIN gen:expA_pertype -->
+| arm | NOUL log loss | NOUL ECE | CHOICE log loss | CHOICE ECE | SCORE log loss | SCORE ECE |
+|---|---|---|---|---|---|---|
+| A0 start model | [0.491](results/expA/analysis.json) | [0.112](results/expA/analysis.json) | [0.333](results/expA/analysis.json) | [0.029](results/expA/analysis.json) | [0.644](results/expA/analysis.json) | [0.058](results/expA/analysis.json) |
+| A1 supervised | [0.235 (0.227–0.239)](results/expA/analysis.json) | [0.027 (0.025–0.030)](results/expA/analysis.json) | [0.181 (0.159–0.192)](results/expA/analysis.json) | [0.025 (0.022–0.027)](results/expA/analysis.json) | [0.542 (0.531–0.554)](results/expA/analysis.json) | [0.079 (0.076–0.082)](results/expA/analysis.json) |
+| A3 RLVR | [0.248 (0.242–0.251)](results/expA/analysis.json) | [0.042 (0.039–0.046)](results/expA/analysis.json) | [0.193 (0.178–0.205)](results/expA/analysis.json) | [0.029 (0.023–0.032)](results/expA/analysis.json) | [0.487 (0.475–0.504)](results/expA/analysis.json) | [0.043 (0.042–0.046)](results/expA/analysis.json) |
+| A4 RLCD-bandit | [0.235 (0.227–0.249)](results/expA/analysis.json) | [0.026 (0.024–0.029)](results/expA/analysis.json) | [0.190 (0.176–0.210)](results/expA/analysis.json) | [0.025 (0.020–0.033)](results/expA/analysis.json) | [0.465 (0.454–0.484)](results/expA/analysis.json) | [0.037 (0.034–0.038)](results/expA/analysis.json) |
+| A5 RLCD-full | [0.241](results/expA/analysis.json) | [0.027](results/expA/analysis.json) | [0.194](results/expA/analysis.json) | [0.027](results/expA/analysis.json) | [0.540](results/expA/analysis.json) | [0.083](results/expA/analysis.json) |
+| A6 mined | [0.239 (0.234–0.245)](results/expA/analysis.json) | [0.029 (0.026–0.034)](results/expA/analysis.json) | [0.190 (0.178–0.198)](results/expA/analysis.json) | [0.025 (0.024–0.026)](results/expA/analysis.json) | [0.535 (0.527–0.543)](results/expA/analysis.json) | [0.075 (0.073–0.077)](results/expA/analysis.json) |
+| A6r random | [0.254 (0.239–0.274)](results/expA/analysis.json) | [0.040 (0.035–0.051)](results/expA/analysis.json) | [0.199 (0.193–0.207)](results/expA/analysis.json) | [0.026 (0.025–0.027)](results/expA/analysis.json) | [0.538 (0.529–0.546)](results/expA/analysis.json) | [0.087 (0.082–0.099)](results/expA/analysis.json) |
+<!-- END gen:expA_pertype -->
+
+A1, A5, A6 and A6r train `SCORE` questions with the ranked probability score (a design decision, D3); A3 and A4 train
+them from sampled answers. So the pooled log loss compares different `SCORE` objectives, and an arm can win it for that
+reason alone. The like-for-like comparison is `NOUL` and `CHOICE`, where the arms train on the same kind of target.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expA_pertype_dev-dark.png">
+    <img alt="Log loss and ECE of every arm by answer type on the dev set." src="figures/expA_pertype_dev.png" width="900">
+  </picture>
+</p>
+
+### Temperatures fitted on the calibration split
+
+<!-- BEGIN gen:expA_temps -->
+| arm | NOUL | CHOICE | SCORE |
+|---|---|---|---|
+| A0 start model | 2.34 | 1.43 | 1.02 |
+| A1 supervised | 0.97 (0.89–1.10) | 0.95 (0.93–0.97) | 0.75 (0.73–0.76) |
+| A3 RLVR | 1.46 (1.42–1.51) | 1.17 (1.16–1.18) | 1.22 (1.14–1.35) |
+| A4 RLCD-bandit | 0.97 (0.93–1.00) | 0.88 (0.87–0.89) | 1.10 (1.06–1.15) |
+| A5 RLCD-full | 0.98 | 1.00 | 0.74 |
+| A6 mined | 1.03 (1.02–1.06) | 1.06 (1.03–1.10) | 0.77 (0.74–0.81) |
+| A6r random | 1.05 (1.00–1.08) | 1.03 (1.00–1.05) | 0.73 (0.71–0.75) |
+| A3 with β = 0 | 20.00 | 12.79 | 10.69 |
+<!-- END gen:expA_temps -->
+
+A temperature above 1 means the arm was over-confident on the calibration split, below 1 under-confident. The start model
+is over-confident; supervised training removes most of it (the `SCORE` rows, trained with the ranked probability score,
+end under-confident); RLVR keeps some. 20 is the upper limit of the search.
+
+### On the selection split (exploratory)
+
+The selection split is drawn from the training distribution and is harder than the dev set (the start model scores far
+lower on it). It was used for learning rates and checkpoints and so was *not* a pre-registered test set, but it is where the
+two kinds of arm separate most.
+
+<!-- BEGIN gen:expA_select -->
+| arm | log loss | accuracy | ECE | ECE after TS | log loss after TS |
+|---|---|---|---|---|---|
+| A0 start model, T = 1 | [0.699](results/expA/analysis.json) | [0.688](results/expA/analysis.json) | [0.076](results/expA/analysis.json) | [0.032](results/expA/analysis.json) | [0.647](results/expA/analysis.json) |
+| A0 as served, T = 1.05 | [0.692](results/expA/analysis.json) | [0.688](results/expA/analysis.json) | [0.070](results/expA/analysis.json) | | |
+| A1 supervised (= A2 after TS) | **[0.346 (0.340–0.358)](results/expA/analysis.json)** | [0.855 (0.848–0.859)](results/expA/analysis.json) | **[0.027 (0.019–0.034)](results/expA/analysis.json)** | [0.024 (0.022–0.027)](results/expA/analysis.json) | [0.341 (0.335–0.352)](results/expA/analysis.json) |
+| A3 RLVR | [0.415 (0.402–0.422)](results/expA/analysis.json) | [0.839 (0.835–0.842)](results/expA/analysis.json) | [0.058 (0.055–0.061)](results/expA/analysis.json) | [0.036 (0.030–0.039)](results/expA/analysis.json) | [0.402 (0.391–0.409)](results/expA/analysis.json) |
+| A4 RLCD-bandit | **[0.348 (0.340–0.354)](results/expA/analysis.json)** | [0.849 (0.848–0.849)](results/expA/analysis.json) | **[0.026 (0.020–0.031)](results/expA/analysis.json)** | [0.024 (0.019–0.027)](results/expA/analysis.json) | [0.347 (0.340–0.353)](results/expA/analysis.json) |
+| A5 RLCD-full | **[0.346](results/expA/analysis.json)** | [0.864](results/expA/analysis.json) | **[0.027](results/expA/analysis.json)** | [0.025](results/expA/analysis.json) | [0.341](results/expA/analysis.json) |
+| A6 mined | **[0.352 (0.343–0.359)](results/expA/analysis.json)** | [0.850 (0.843–0.861)](results/expA/analysis.json) | [0.037 (0.030–0.043)](results/expA/analysis.json) | [0.035 (0.024–0.043)](results/expA/analysis.json) | [0.348 (0.339–0.355)](results/expA/analysis.json) |
+| A6r random | [0.375 (0.362–0.384)](results/expA/analysis.json) | [0.844 (0.838–0.855)](results/expA/analysis.json) | **[0.035 (0.028–0.041)](results/expA/analysis.json)** | [0.037 (0.030–0.043)](results/expA/analysis.json) | [0.369 (0.356–0.378)](results/expA/analysis.json) |
+| A3 with β = 0 (exploratory, 1 run) | [4.526](results/expA/analysis.json) | [0.734](results/expA/analysis.json) | [0.253](results/expA/analysis.json) | [0.059](results/expA/analysis.json) | [0.700](results/expA/analysis.json) |
+<!-- END gen:expA_select -->
+
+### Exploratory: RLVR without the KL anchor (E1)
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="figures/expA_beta0-dark.png">
+    <img alt="Dev-set ECE, log loss and accuracy of A1, A3 and the A3 run without the KL penalty." src="figures/expA_beta0.png" width="820">
+  </picture>
+</p>
+
+With the forward-KL penalty removed, RLVR keeps most of its accuracy and loses its probabilities: the confidences are far
+too sharp and no single temperature repairs them (the fitted temperature reaches the search bound for `NOUL`). This is
+one run. It supports the reading that the anchor, not the reward, is what keeps RLVR's overconfidence modest in the
+anchored runs.
+
+### What Exp A does and does not show
+
+- **For the sceptical reading.** On the dev set, the arms are close after temperature scaling, A5 reproduces A1 (as it
+  must), and mining (A6) is not shown to beat random selection (A6r) once the pre-registered correction is applied.
+- **Against it.** RLVR (A3) has a clearly worse ECE than the supervised control before temperature scaling, and on the
+  harder in-distribution split it is worse on log loss, ECE and per-domain ECE even after scaling, with slightly lower
+  accuracy. So RLVR's overconfidence is real in this setting; it is small on the dev set and temperature scaling removes
+  most of it there.
+- **Not shown.** The pre-registered equivalence of H5 (margin set from two A1 seeds on a 1,189-question split) could not be
+  established: the intervals were wider than the margin, so "no difference found" is not "equivalent". Neither H1 nor
+  H5b was met as stated.
+- **No claim about RLCD in general.** One model, one teacher-written dataset, one learning rate shared across arms (RLVR is
+  not at its own best), a forward-KL anchor that already limits RLVR, and an independent dev set written by the same
+  teacher as the training data.
 
 ## Honest caveats
 

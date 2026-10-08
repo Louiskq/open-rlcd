@@ -1,4 +1,4 @@
-.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures
+.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures expA-analysis expA-figures
 
 PY ?= uv run python
 
@@ -13,6 +13,8 @@ help:
 	@echo "make readme-check fail if README.md is out of date with results/"
 	@echo "make notebook     rebuild and execute notebooks/toy_rlcd.ipynb"
 	@echo "make figures      render the concept diagram (the toy figures come from make toy)"
+	@echo "make expA-analysis  the pre-registered Exp A tests from results/expA/runs (about 25 min on a laptop CPU)"
+	@echo "make expA-figures   the Exp A figures from results/expA/analysis.json"
 
 install:
 	uv sync --extra dev
@@ -49,3 +51,12 @@ notebook:
 
 figures:
 	$(PY) -m rlcd.plots figures
+
+expA-analysis:
+	$(PY) scripts/compare_arms.py results/expA/runs --out results/expA/analysis.json
+	$(PY) scripts/compare_arms.py results/expA/runs --no_tables --split select --out results/expA/analysis_select_prereg_tests.json
+	$(PY) scripts/compare_arms.py results/expA/runs --no_tables --exploratory --split dev --out results/expA/analysis_exploratory_dev.json
+	$(PY) scripts/compare_arms.py results/expA/runs --no_tables --exploratory --split select --out results/expA/analysis_exploratory_select.json
+
+expA-figures:
+	$(PY) -m rlcd.plots_expA results/expA/analysis.json figures

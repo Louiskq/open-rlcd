@@ -23,6 +23,15 @@ from rlcd.plots import ARM_STYLES  # noqa: E402
 from rlcd.results import read_json  # noqa: E402
 
 TOY = "results/toy"
+EXPA = "results/expA"
+EXPA_ARMS = (
+    ("a1", "A1 supervised"),
+    ("a3", "A3 RLVR"),
+    ("a4", "A4 RLCD-bandit"),
+    ("a5", "A5 RLCD-full"),
+    ("a6", "A6 mined"),
+    ("a6r", "A6r random"),
+)
 BLOCK = re.compile(r"(<!-- BEGIN gen:(\w+) -->\n)(.*?)(<!-- END gen:\2 -->)", re.S)
 PENDING = "_pending_"
 TOY_ROWS = ("rlvr", "rlcd_bandit", "rlcd_bandit_clip10", "supervised", "rlcd_full")
@@ -193,9 +202,22 @@ def gen_tldr() -> str:
                 f"| Exp 0 (toy) | {label} | {'**' + ece + '**' if win[i] else ece} | "
                 f"{num(summ[arm]['raw']['acc'], rel)} | {num(summ[arm]['raw']['log_loss'], rel)} |"
             )
-    rows.append(
-        f"| Exp A (9B decider, teacher labels) | A1–A6r | {PENDING} | {PENDING} | {PENDING} |"
-    )
+    ea = load_expA()
+    if ea is None:
+        rows.append(f"| Exp A (9B decider, dev set) | A1–A6r | {PENDING} | {PENDING} | {PENDING} |")
+    else:
+        rel = f"{EXPA}/analysis.json"
+        a_ = ea["arms"]
+        win = bold_winners([a_[a]["dev"]["raw"]["all"]["ece"] for a, _ in EXPA_ARMS])
+        for i, (arm, label) in enumerate((("a0", "A0 start model"), *EXPA_ARMS)):
+            blk = a_[arm]["dev"]["raw"]["all"]
+            rng_ = blk["ece"].get("n", 1) > 1
+            ece = num(blk["ece"], rel, rng=rng_)
+            bold = i > 0 and win[i - 1]
+            rows.append(
+                f"| Exp A (9B decider, dev set) | {label} | {'**' + ece + '**' if bold else ece} | "
+                f"{num(blk['acc'], rel, rng=rng_)} | {num(blk['log_loss'], rel, rng=rng_)} |"
+            )
     rows.append(f"| Exp B (Breakout, on-policy) | B1–B5 | {PENDING} | {PENDING} | {PENDING} |")
     return head + "\n".join(rows) + "\n"
 
@@ -269,6 +291,178 @@ def gen_toy0b_group() -> str:
     return head + "\n".join(rows) + "\n"
 
 
+# ------------------------------------------------------------------------------ Exp A
+def load_expA(name: str = "analysis") -> dict | None:
+    path = ROOT / EXPA / f"{name}.json"
+    return read_json(path) if path.exists() else None
+
+
+def _p(x: float) -> str:
+    return "<0.001" if x < 0.001 else f"{x:.3f}"
+
+
+def _diff(r: dict) -> str:
+    return f"{r['observed_difference']:+.4f} ({r['ci95'][0]:+.4f} to {r['ci95'][1]:+.4f})"
+
+
+def _diff_sentence(r: dict) -> str:
+    return (
+        f"{r['observed_difference']:+.4f}, 95% interval {r['ci95'][0]:+.4f} to {r['ci95'][1]:+.4f}"
+    )
+
+
+def _by_id(rows: list[dict]) -> dict[str, dict]:
+    return {r["id"]: r for r in rows}
+
+
+def _expA_split_table(split: str) -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    rel = f"{EXPA}/analysis.json"
+    arms = d["arms"]
+
+    def cell(arm: str, row: str, metric: str, nd: int = 3) -> str:
+        return num(
+            arms[arm][split][row]["all"][metric],
+            rel,
+            nd,
+            rng=arms[arm][split][row]["all"][metric].get("n", 1) > 1,
+        )
+
+    trained = [a for a, _ in EXPA_ARMS]
+    ece_win = bold_winners([arms[a][split]["raw"]["all"]["ece"] for a in trained])
+    ll_win = bold_winners([arms[a][split]["raw"]["all"]["log_loss"] for a in trained])
+    rows = [
+        "| arm | log loss | accuracy | ECE | ECE after TS | log loss after TS |",
+        "|---|---|---|---|---|---|",
+        f"| A0 start model, T = 1 | {cell('a0', 'raw', 'log_loss')} | {cell('a0', 'raw', 'acc')} | {cell('a0', 'raw', 'ece')} | {cell('a0', 'ts', 'ece')} | {cell('a0', 'ts', 'log_loss')} |",
+        f"| A0 as served, T = 1.05 | {cell('a0', 'served', 'log_loss')} | {cell('a0', 'served', 'acc')} | {cell('a0', 'served', 'ece')} | | |",
+    ]
+    for i, (arm, label) in enumerate(EXPA_ARMS):
+        ll, ece = cell(arm, "raw", "log_loss"), cell(arm, "raw", "ece")
+        rows.append(
+            f"| {label}{' (= A2 after TS)' if arm == 'a1' else ''} | {'**' + ll + '**' if ll_win[i] else ll} | "
+            f"{cell(arm, 'raw', 'acc')} | {'**' + ece + '**' if ece_win[i] else ece} | {cell(arm, 'ts', 'ece')} | {cell(arm, 'ts', 'log_loss')} |"
+        )
+    rows.append(
+        f"| A3 with \u03b2 = 0 (exploratory, 1 run) | {cell('a3beta0', 'raw', 'log_loss')} | {cell('a3beta0', 'raw', 'acc')} | "
+        f"{cell('a3beta0', 'raw', 'ece')} | {cell('a3beta0', 'ts', 'ece')} | {cell('a3beta0', 'ts', 'log_loss')} |"
+    )
+    return "\n".join(rows) + "\n"
+
+
+def gen_expA_dev() -> str:
+    return _expA_split_table("dev")
+
+
+def gen_expA_select() -> str:
+    return _expA_split_table("select")
+
+
+def gen_expA_tests() -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    rows = [
+        "| test | comparison (row) | difference A \u2212 B (95% interval) | margin \u03b4 | Holm p | passed |",
+        "|---|---|---|---|---|---|",
+    ]
+    for r in d["tests"]:
+        delta = f"{r['delta']:.4f}" if r["delta"] else "\u2013"
+        what = {"a_higher": "A higher", "a_lower": "A lower", "equiv": "equivalent"}[r["kind"]]
+        rows.append(
+            f"| {r['id']} | {r['a']} vs {r['b']} ({r['row']}), {what} | {_diff(r)} | {delta} | "
+            f"{_p(r['p_holm'])} | {'yes' if r['passes'] else 'no'} |"
+        )
+    return "\n".join(rows) + "\n"
+
+
+def gen_expA_verdicts() -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    t, h = _by_id(d["tests"]), d["hypotheses"]
+    he = d["hypotheses_ensemble"]
+    sel = load_expA("analysis_select_prereg_tests")
+    hs = sel["hypotheses"] if sel else {}
+
+    def mark(v: dict | None) -> str:
+        return "\u2013" if v is None else ("holds" if v["holds"] else "does not hold")
+
+    def passed(*ids: str) -> str:
+        return ", ".join(f"{i} {'passed' if t[i]['passes'] else 'did not pass'}" for i in ids)
+
+    rows = [
+        "| hypothesis (pre-registered) | what the dev set shows | verdict | same test, seed-ensembled | same test, selection split (exploratory) |",
+        "|---|---|---|---|---|",
+        f"| **H1** A3 (RLVR) has higher ECE and log loss than A1, accuracy within \u00b1\u03b4 | ECE {_diff(t['C1-ece'])}, log loss {_diff(t['C1-log_loss'])}; {passed('C1-acc')} | **{mark(h['H1'])}** | {mark(he['H1'])} | {mark(hs.get('H1'))} |",
+        f"| **H2** A5 matches A1 on every metric | {passed('C2-log_loss', 'C2-ece', 'C2-acc', 'C2-brier', 'C2-reliability', 'C2-resolution')} | **{mark(h['H2'])}** | {mark(he['H2'])} | {mark(hs.get('H2'))} |",
+        f"| **H3** A4 reaches A1's calibration | ECE {_diff(t['C3-ece'])}, log loss {_diff(t['C3-log_loss'])}; {passed('C3-ece', 'C3-log_loss')} | **{mark(h['H3'])}** | {mark(he['H3'])} | {mark(hs.get('H3'))} |",
+        f"| **H4** A6 is no better than A6r | ECE {_diff(t['C4-ece'])}, log loss {_diff(t['C4-log_loss'])}, accuracy {_diff(t['C4-acc'])}; none passed after Holm | **{mark(h['H4'])}** | {mark(he['H4'])} | {mark(hs.get('H4'))} |",
+        f"| **H5** with TS, A1 is within noise of every RL arm on ECE | {passed('C5-a3', 'C5-a4', 'C5-a5')} (margin {t['C5-a3']['delta']:.4f}) | **{mark(h['H5'])}** | {mark(he['H5'])} | {mark(hs.get('H5'))} |",
+        f"| **H5b** with TS, A3 has worse per-domain ECE and lower resolution than A1 | per-domain ECE {_diff(t['H5b-domain_ece'])}, resolution {_diff(t['H5b-resolution'])} | **{mark(h['H5b'])}** | {mark(he['H5b'])} | {mark(hs.get('H5b'))} |",
+    ]
+    return "\n".join(rows) + "\n"
+
+
+def gen_expA_pertype() -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    rel = f"{EXPA}/analysis.json"
+    arms = d["arms"]
+    rows = [
+        "| arm | NOUL log loss | NOUL ECE | CHOICE log loss | CHOICE ECE | SCORE log loss | SCORE ECE |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for arm, label in (("a0", "A0 start model"), *EXPA_ARMS):
+        cells = []
+        for scope in ("noul", "choice", "score"):
+            for m in ("log_loss", "ece"):
+                s = arms[arm]["dev"]["raw"][scope][m]
+                cells.append(num(s, rel, rng=s.get("n", 1) > 1))
+        rows.append(f"| {label} | " + " | ".join(cells) + " |")
+    return "\n".join(rows) + "\n"
+
+
+def gen_expA_temps() -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    import numpy as np
+
+    arms = d["arms"]
+    rows = ["| arm | NOUL | CHOICE | SCORE |", "|---|---|---|---|"]
+    for arm, label in (("a0", "A0 start model"), *EXPA_ARMS, ("a3beta0", "A3 with \u03b2 = 0")):
+        temps = list(arms[arm]["temperatures"].values())
+        cells = []
+        for k in ("noul", "choice", "score"):
+            v = [x[k] for x in temps]
+            cells.append(
+                f"{np.mean(v):.2f}" + (f" ({min(v):.2f}\u2013{max(v):.2f})" if len(v) > 1 else "")
+            )
+        rows.append(f"| {label} | " + " | ".join(cells) + " |")
+    return "\n".join(rows) + "\n"
+
+
+def gen_expA_headline() -> str:
+    d = load_expA()
+    if d is None:
+        return pending("run scripts/compare_arms.py")
+    arms, t = d["arms"], _by_id(d["tests"])
+    m = lambda a, s, r, k: arms[a][s][r]["all"][k]["mean"]  # noqa: E731
+    return (
+        f"On the independent dev set, continued training from the start model takes log loss from "
+        f"{m('a0', 'dev', 'raw', 'log_loss'):.3f} to between {min(m(a, 'dev', 'raw', 'log_loss') for a, _ in EXPA_ARMS):.3f} and "
+        f"{max(m(a, 'dev', 'raw', 'log_loss') for a, _ in EXPA_ARMS):.3f} and accuracy from {m('a0', 'dev', 'raw', 'acc'):.3f} to between "
+        f"{min(m(a, 'dev', 'raw', 'acc') for a, _ in EXPA_ARMS):.3f} and {max(m(a, 'dev', 'raw', 'acc') for a, _ in EXPA_ARMS):.3f}, "
+        f"whatever the arm. RLVR (A3) ends with an ECE of {m('a3', 'dev', 'raw', 'ece'):.3f} against {m('a1', 'dev', 'raw', 'ece'):.3f} for the supervised control "
+        f"(difference {_diff_sentence(t['C1-ece'])}) at the same accuracy, and without a worse log loss (difference {_diff_sentence(t['C1-log_loss'])}). "
+        f"After one temperature per answer type the ECEs are {m('a3', 'dev', 'ts', 'ece'):.3f} (A3) and {m('a1', 'dev', 'ts', 'ece'):.3f} (A1).\n"
+    )
+
+
 GENERATORS = {
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
@@ -279,6 +473,13 @@ GENERATORS = {
     "toy0b_setup": gen_toy0b_setup,
     "toy0b_table": gen_toy0b_table,
     "toy0b_group": gen_toy0b_group,
+    "expA_headline": gen_expA_headline,
+    "expA_verdicts": gen_expA_verdicts,
+    "expA_dev": gen_expA_dev,
+    "expA_select": gen_expA_select,
+    "expA_tests": gen_expA_tests,
+    "expA_pertype": gen_expA_pertype,
+    "expA_temps": gen_expA_temps,
 }
 
 

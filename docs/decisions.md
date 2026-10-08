@@ -370,3 +370,27 @@ Choices the design left open, made while building the Exp A runner (`rlcd/train_
 - The maintainer's public repositories were checked the same day: `phone-to-hpc` and `paper-finder` carry the correct
   noreply address; `jev-class-9b` carries the old Gmail address in all 29 commits. No repository (open-rlcd included)
   contains the address, a university address or the name in file contents.
+
+## D20. Exp A: how the results are analysed and reported (2026-10-08)
+
+- **Analysis follows Amendment 1 of the pre-registration exactly**, and was written down before any Phase 3 dev or
+  selection prediction was opened. The 19 tests are in `rlcd/compare.py` (`preregistered_tests`); the 2,000-replicate
+  bootstrap, the Holm correction and the p-value definitions are in its module docstring. Re-running the analysis
+  after adding the exploratory modes reproduces the pre-registered numbers bit-for-bit (the scoped tests use a second
+  random stream).
+- **Exploratory additions, each labelled exploratory wherever it appears and outside every Holm family:** the same
+  19 tests on the selection split (a robustness check, not the test set); per-answer-type differences with unadjusted
+  intervals; the tests on seed-ensembled probabilities (the other reading of "seed-averaged"); and A3 with β = 0 (E1).
+- **A design confound that the pooled log loss hides, found while reading the per-type table and reported in the
+  README:** A1, A5, A6 and A6r train `SCORE` questions with the ranked probability score (D3, D4), whereas A3 and A4
+  train them from sampled answers. A3 and A4 therefore win the pooled log loss largely through `SCORE`; on `NOUL` and
+  `CHOICE` (the like-for-like comparison) they do not. This was not anticipated in the pre-registration and changes no
+  pre-registered verdict; it changes how C1 and C3 on log loss should be read.
+- **Temperatures are fitted on the calibration split, which is harder than the dev set.** A temperature fitted there
+  can leave dev ECE slightly *worse* than raw (seen for A1), so "after TS" is not always an improvement on dev.
+- **JevBench** (hard tier, 111 items) is reported descriptively. Each adapter is merged into the start model and served
+  by decider at **T = 1.0**, one temperature for all answer types, so the per-type fitted temperatures of the "after TS"
+  rows are not applied there; the start model is also served as shipped (1.05) for reference.
+- **Raw predictions are committed** (`results/expA/runs/`, 2.4 MB: the readout of every question at T = 1 on the
+  calibration, selection and dev splits for all 21 runs), so every number in the README can be regenerated without a GPU
+  (`make expA-analysis`, `make expA-figures`, `make readme`).

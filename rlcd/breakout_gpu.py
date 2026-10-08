@@ -476,7 +476,10 @@ def evaluate_checkpoint(a: Any) -> None:
         recs = [json.loads(x) for x in Path(path).read_text().splitlines()]
         np.savez(out / f"beliefs_{name}.npz", **_belief_arrays(pol, recs))
         log(f"[eval] answered {len(recs)} questions from {path} as '{name}'")
-    (out / "games.json").write_text(json.dumps(res, indent=1))
+    if (
+        not a.no_games or not (out / "games.json").exists()
+    ):  # a scoring-only call keeps the existing game results
+        (out / "games.json").write_text(json.dumps(res, indent=1))
 
 
 def collect_common_states(a: Any) -> None:
