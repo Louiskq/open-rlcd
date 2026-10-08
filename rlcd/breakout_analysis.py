@@ -178,8 +178,7 @@ def _agg_blocks(blocks: list[dict[str, Any]]) -> dict[str, Any]:
 def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000, ckpt: str = "last") -> dict[str, Any]:
     """PREREGISTRATION.md Amendment 2 item 9 as amended by Amendment 4: B3 (``ckpt``, by default the FINAL checkpoint,
     T = 1) against B4 (+TS) on the common states, and the greedy and sampled game-score conditions. Also B3 + TS
-    against B4, B3 against B2 (B1 + TS) and B1, descriptively."""PREREGISTRATION.md Amendment 2 item 9 as amended by Amendment 4: B3 (``ckpt``, default the FINAL checkpoint, T = 1)
-    against B4 (+TS) on the common states, and the greedy and sampled game-score conditions. Also B3 + TS against B4, B3 against B2 (B1 + TS) and B1, descriptively."""
+    against B4, B3 against B2 (B1 + TS) and B1, descriptively."""
     b3 = [_npz(runs_dir / f"b3_s{s}" / f"eval_{ckpt}" / "beliefs_common.npz") for s in SEEDS]
     b4, b4_t = [], []
     for s in SEEDS:
