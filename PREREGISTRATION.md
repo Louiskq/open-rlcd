@@ -211,4 +211,41 @@ Stated so that readers can judge which hypotheses were tested blind. Nothing bel
 
 ## Amendments
 
-None.
+### Amendment 1 (2026-10-08): how the pre-registered comparisons are run
+
+Written **before any Phase 3 run's calibration, selection or dev predictions were opened** (the only Phase 3 numbers
+seen were the three A4 sweep selection log losses the launcher used to pick the A4 rate: 0.340 at 1e-4, 0.364 at
+5e-5, 0.384 at 2e-4; all 17 jobs finished and none diverged). It fixes details the text above leaves open; it changes
+no hypothesis, margin or comparison.
+
+1. **Split.** Every test below uses the **dev set** (2,791 questions, 4 domains). The selection split and JevBench are
+   reported descriptively and are not tested. Scope is the pooled `all` row of the δ table; per-type results are
+   descriptive.
+2. **"Seed-averaged predictions" means the mean over seeds of each metric, computed per seed.** For arms with three
+   seeds, a bootstrap replicate resamples the items once and every seed of every arm is scored on the same resampled
+   items, then the metric is averaged over seeds. (The δ margins are single-run differences, which this matches.) Averaging
+   the probabilities of the seeds first, an ensemble, is reported as a robustness check only. "+TS" rows use each run's own
+   temperatures fitted on the calibration split (D2).
+3. **Bootstrap.** 2,000 replicates, random seed 20261008, items resampled with replacement, the same indices for all
+   arms, seeds and rows; for per-domain ECE items are resampled within each domain.
+4. **p-values.** For a claim "A is worse/better than B" with difference d = M(A) − M(B): p = 2 × (share of replicates
+   with d on the wrong side of 0 or equal to 0), capped at 1, so that p < 0.05 is the same as the 95% interval excluding 0 in the
+   stated direction. For equivalence within ±δ: p_eq = 2 × max(share of replicates with d ≤ −δ, share with d ≥ δ), so
+   that p_eq < 0.05 is the same as the 95% interval lying inside (−δ, δ). Holm's step-down correction is applied to
+   these p-values at 0.05, **separately for the primary family and the H5b family**. Unadjusted 95% percentile
+   intervals are reported too.
+5. **The primary family (17 tests, δ from the table above: raw rows for raw comparisons, +TS rows for +TS comparisons).**
+   - C1, A3 against A1, raw: ECE higher; log loss higher; accuracy equivalent within ±δ_acc (2.2 points).
+   - C2, A5 seed 0 against A1 seed 0, raw: equivalence for log loss, ECE, accuracy, Brier, reliability and resolution.
+   - C3, A4 against A1, raw: equivalence for ECE and log loss. (Across-seed variance is descriptive.)
+   - C4, A6 against A6r, raw: A6 better, that is ECE lower, log loss lower, accuracy higher (one direction each).
+   - C5, +TS rows, equivalence of ECE within δ_ECE(+TS) = 0.0083: A1 against A3; A1 against A4; A1 seed 0 against A5 seed 0.
+6. **The H5b family (2 tests, +TS rows):** A3 against A1, mean over the 4 dev domains of equal-mass (15 bins) ECE higher;
+   A3 against A1, Murphy resolution lower.
+7. **What counts as each hypothesis holding.** H1: C1's ECE and log-loss tests and its accuracy equivalence all pass.
+   H2: all six C2 equivalences pass. H3: both C3 equivalences pass (and the A4 across-seed s.d. of ECE and log loss is
+   reported next to A1's). H4: no C4 test passes (the intervals are reported, so a null is not read as an
+   equivalence). H5: all three C5 equivalences pass. H5b: both H5b tests pass. Anything else is reported as
+   "not shown", with its interval.
+8. **Descriptive only, no test:** A0 (T = 1, as served, +TS), the A3 β = 0 run (E1), per-type results, the selection
+   split, JevBench, risk-coverage and AURC, Murphy parts other than those above, and the learning-rate sweeps.
