@@ -558,6 +558,7 @@ def gen_expB_beliefs() -> str:
         ("b3_raw", "B3 RLCD, T = 1"),
         ("b3_ts", "B3 after temperature scaling"),
         ("b4_ts", "B4 cynical: supervised fit, then temperature scaling"),
+        ("b4_raw", "B4 supervised fit, T = 1 (descriptive)"),
     ):
         c = cm[key]
         rows.append(

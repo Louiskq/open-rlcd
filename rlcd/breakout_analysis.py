@@ -194,22 +194,27 @@ def h7(runs_dir: Path, delta: dict[str, Any], B: int = 2000) -> dict[str, Any]:
     l3 = np.stack([_loss(b) for b in b3])
     l3_ts = np.stack([_loss(b, t) for b, t in zip(b3, b3_t, strict=True)])
     l4 = np.stack([_loss(b, t) for b, t in zip(b4, b4_t, strict=True)])
+    l4_raw = np.stack([_loss(b) for b in b4])
     primary = BK.paired_bootstrap_diff(l3, l4, B)
     out: dict[str, Any] = {
         "common_states": int(l3.shape[1]),
         "b3_raw_vs_b4_ts": primary,
         "b3_ts_vs_b4_ts": BK.paired_bootstrap_diff(l3_ts, l4, B),
+        # descriptive: the sceptic's recipe without its temperature step (B4 + TS is the pre-registered comparator)
+        "b3_raw_vs_b4_raw": BK.paired_bootstrap_diff(l3, l4_raw, B),
         "temperatures": {"b3": b3_t, "b4": b4_t},
         "belief_log_loss": {
             "b3_raw": mean_range([float(x.mean()) for x in l3]),
             "b3_ts": mean_range([float(x.mean()) for x in l3_ts]),
             "b4_ts": mean_range([float(x.mean()) for x in l4]),
+            "b4_raw": mean_range([float(x.mean()) for x in l4_raw]),
         },
     }
     out["common_metrics"] = {
         "b3_raw": _agg_blocks([belief_block(b) for b in b3]),
         "b3_ts": _agg_blocks([belief_block(b, t) for b, t in zip(b3, b3_t, strict=True)]),
         "b4_ts": _agg_blocks([belief_block(b, t) for b, t in zip(b4, b4_t, strict=True)]),
+        "b4_raw": _agg_blocks([belief_block(b) for b in b4]),
     }
     b1 = [_npz(runs_dir / f"b1_s{s}" / "eval_best" / "beliefs_common.npz") for s in SEEDS]
     b1_sel = [
