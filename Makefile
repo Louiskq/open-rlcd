@@ -1,4 +1,4 @@
-.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures expA-analysis expA-figures
+.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures expA-analysis expA-figures explorer
 
 PY ?= uv run python
 
@@ -60,3 +60,6 @@ expA-analysis:
 
 expA-figures:
 	$(PY) -m rlcd.plots_expA results/expA/analysis.json figures
+
+explorer:
+	$(PY) scripts/make_explorer.py
