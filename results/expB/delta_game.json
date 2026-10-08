@@ -1,0 +1,33 @@
+{
+ "range": 3.0,
+ "floor": 0.5,
+ "delta_game": 3.0,
+ "mean": 10.0,
+ "n": 3,
+ "runs": [
+  "b1_s0",
+  "b1_s1",
+  "b1_s2"
+ ],
+ "selected_selection_scores": [
+  11.0,
+  8.0,
+  11.0
+ ],
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "sampled": {
+  "delta_sampled": 4.32,
+  "range": 4.32,
+  "floor": 0.406333,
+  "mean": 8.12667,
+  "selected_sampled_selection_scores": [
+   6.56,
+   6.94,
+   10.88
+  ]
+ }
+}
