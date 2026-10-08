@@ -133,7 +133,7 @@ will be reported here with the same prominence whichever way it goes.
 |---|---|
 | **Colab notebook**, runs the toy on a CPU and has a slider that mixes the two rewards | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Louiskq/open-rlcd/blob/main/notebooks/toy_rlcd.ipynb) |
 | **`make toy`**, the same experiment as a script; regenerates `results/toy/` and `figures/` | available |
-| **`python -m rlcd.demo --state "..." --question "..."`**, a typed answer with a probability per option from the released model | *pending* (needs the phase 3 model release) |
+| **`python -m rlcd.demo --model DIR --state "..." --question "..." --type choice --options a,b,c`**, a typed answer with a probability per option from any decider checkpoint (needs one GPU) | available; a downloadable model is *pending* ([release plan](docs/release.md)) |
 | **Interactive reliability-diagram explorer** (arm × answer type × split × temperature scaling on/off), one self-contained file built from the committed predictions | open [`docs/explorer.html`](docs/explorer.html) in a browser (`make explorer` rebuilds it) |
 
 ## Exp 0 results: a toy where the truth is known
