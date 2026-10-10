@@ -29,3 +29,5 @@ jobs:
           uv run python -m toy.exp0b --quick --out /tmp/rlcd-toy-quick
       - name: README tables are in sync with results/
         run: uv run python scripts/make_readme_tables.py --check
+      - name: Landing page is in sync with results/
+        run: uv run python scripts/build_site.py --check

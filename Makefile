@@ -1,4 +1,4 @@
-.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures expA-analysis expA-figures explorer
+.PHONY: help install test lint format toy toy0b toy-quick readme readme-check notebook figures expA-analysis expA-figures explorer site site-data site-check
 
 PY ?= uv run python
 
@@ -15,6 +15,7 @@ help:
 	@echo "make figures      render the concept diagram (the toy figures come from make toy)"
 	@echo "make expA-analysis  the pre-registered Exp A tests from results/expA/runs (about 25 min on a laptop CPU)"
 	@echo "make expA-figures   the Exp A figures from results/expA/analysis.json"
+	@echo "make site          build the static landing page in site/ (make site-data first)"
 
 install:
 	uv sync --extra dev
@@ -63,3 +64,12 @@ expA-figures:
 
 explorer:
 	$(PY) scripts/make_explorer.py
+
+site-data:
+	$(PY) scripts/make_site_data.py
+
+site:
+	$(PY) scripts/build_site.py
+
+site-check:
+	$(PY) scripts/build_site.py --check

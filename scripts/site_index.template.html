@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>open-rlcd: an open test of RLCD</title>
+<meta name="description" content="A pre-registered, open test of whether rewarding a model for honest probabilities beats rewarding it for being right. One reading of RLCD, not TypeSafe's method.">
+<meta property="og:title" content="open-rlcd: an open test of RLCD">
+<meta property="og:description" content="Does rewarding calibration fix overconfident models? A pre-registered test on a toy, a 9B model and Breakout.">
+<meta property="og:image" content="assets/expA_overview.png">
+<style>
+:root{
+  --bg:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6f6d68;--grid:#e1e0d9;--axis:#c3c2b7;--panel:#f4f3ee;
+  --rlcd:#2a78d6;--rlvr:#eb6834;--sup:#1baf7a;--ref:#898781;--accent:#2a78d6;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#a09e97;--grid:#2c2c2a;--axis:#383835;--panel:#232321;
+  --rlcd:#3987e5;--rlvr:#d95926;--sup:#199e70;--accent:#3987e5}}
+:root[data-theme="dark"]{
+  --bg:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#a09e97;--grid:#2c2c2a;--axis:#383835;--panel:#232321;
+  --rlcd:#3987e5;--rlvr:#d95926;--sup:#199e70;--accent:#3987e5}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+header.top .brand{font-weight:700;letter-spacing:-.01em;color:var(--ink);text-decoration:none;white-space:nowrap}
+header.top nav{display:flex;gap:18px;align-items:center;font-size:15px}
+header.top nav a{color:var(--ink2);text-decoration:none}
+header.top nav a:hover{color:var(--ink)}
+button.theme{background:none;border:1px solid var(--axis);color:var(--ink2);border-radius:999px;padding:3px 11px;font:inherit;font-size:13px;cursor:pointer}
+.hero{padding:40px 0 20px}
+.pill{display:inline-block;border:1px solid var(--axis);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--ink2);margin-bottom:18px}
+h1{font-size:clamp(32px,5.4vw,52px);line-height:1.08;letter-spacing:-.025em;margin:0 0 16px;max-width:17ch}
+.lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink2);max-width:60ch;margin:0}
+h2{font-size:clamp(24px,3.4vw,32px);letter-spacing:-.015em;line-height:1.2;margin:56px 0 12px}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 14px;max-width:68ch}
+.small{font-size:14.5px;color:var(--muted)}
+section{scroll-margin-top:16px}
+
+/* the interactive toy */
+.demo{border:1px solid var(--grid);background:var(--panel);border-radius:var(--radius);padding:20px;margin-top:22px}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px}
+@media (max-width:820px){.demo-grid{grid-template-columns:1fr}}
+.ctrl{margin:0 0 18px}
+.ctrl label.t{display:flex;justify-content:space-between;gap:12px;font-weight:600;font-size:15px;margin-bottom:6px}
+.ctrl .val{font-variant-numeric:tabular-nums;color:var(--ink2);font-weight:500}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.ends{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:2px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+button.btn{background:var(--bg);color:var(--ink);border:1px solid var(--axis);border-radius:8px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+button.btn:hover{border-color:var(--ink2)}
+label.chk{display:flex;gap:8px;align-items:center;font-size:14.5px;cursor:pointer}
+.read{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 14px}
+.read div{background:var(--bg);border:1px solid var(--grid);border-radius:8px;padding:8px 10px}
+.read b{display:block;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2}
+.read span{font-size:12.5px;color:var(--muted)}
+#insight{font-size:15.5px;min-height:3.2em;color:var(--ink2)}
+svg.chart{width:100%;height:auto;display:block}
+svg.chart text{fill:var(--muted);font-size:11px}
+details.tv{margin-top:10px;font-size:14px;color:var(--ink2)}
+details.tv summary{cursor:pointer}
+details.tv table{border-collapse:collapse;margin-top:8px;width:100%}
+details.tv td,details.tv th{border-bottom:1px solid var(--grid);padding:3px 8px;text-align:right;font-variant-numeric:tabular-nums}
+details.tv td:first-child,details.tv th:first-child{text-align:left}
+
+/* cards */
+.cards{display:grid;gap:22px;margin-top:20px}
+.card{border:1px solid var(--grid);border-radius:var(--radius);padding:20px;background:var(--bg)}
+.card .num{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.card img{width:100%;height:auto;border-radius:6px;border:1px solid var(--grid);margin-top:10px;background:var(--bg)}
+.nums{display:flex;flex-wrap:wrap;gap:8px 18px;margin:10px 0 0;padding:0;list-style:none;font-size:15px}
+.nums li{white-space:nowrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+
+table.headline{border-collapse:collapse;width:100%;font-size:15px;margin:16px 0 6px}
+table.headline th,table.headline td{padding:8px 10px;border-bottom:1px solid var(--grid);text-align:right;font-variant-numeric:tabular-nums}
+table.headline th:first-child,table.headline td:first-child{text-align:left}
+table.headline th{font-size:13px;color:var(--muted);font-weight:600}
+table.headline td.best{font-weight:700}
+.scroll{overflow-x:auto}
+.callout{border-left:3px solid var(--accent);background:var(--panel);padding:14px 18px;border-radius:0 8px 8px 0;margin:22px 0;max-width:68ch}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:18px}
+.links a{display:block;border:1px solid var(--grid);border-radius:var(--radius);padding:14px 16px;text-decoration:none;color:var(--ink);background:var(--bg)}
+.links a:hover{border-color:var(--ink2)}
+.links a b{display:block}
+.links a span{font-size:14px;color:var(--muted)}
+footer{border-top:1px solid var(--grid);margin-top:64px;padding:26px 0 48px;font-size:14px;color:var(--muted)}
+footer p{max-width:80ch}
+@media (max-width:600px){header.top nav a:nth-child(-n+3){display:none}header.top nav{gap:12px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#top">open-rlcd</a>
+  <nav>
+    <a href="#toy">Try it</a><a href="#tests">The tests</a><a href="#bottom">Bottom line</a>
+    <a href="explorer.html">Explorer</a><a href="{{REPO}}">GitHub</a>
+    <button class="theme" id="theme" aria-label="Switch between light and dark theme">theme</button>
+  </nav>
+</header>
+
+<main id="top">
+<div class="hero">
+  <span class="pill">One reading of RLCD, not TypeSafe's method</span>
+  <h1>Does rewarding honesty fix overconfident models?</h1>
+  <p class="lead">A model trained to <em>be right</em> tends to become more sure of itself than it should be. RLCD is the idea of
+  rewarding the probabilities it states instead. This is a pre-registered, open test of whether that works, including
+  the results that go against it.</p>
+</div>
+
+<section id="toy">
+<h2>Try it: be right, or be honest</h2>
+<p>A toy where the true probabilities are known. The reward is a mix of two things: the plain "was the answer right?" reward
+(<b style="color:var(--rlvr)">RLVR</b>) and the <b style="color:var(--rlcd)">RLCD</b> reward, which pays for stating the true probability.
+Drag the first slider and watch what training does to the model's confidence.</p>
+
+<div class="demo" role="group" aria-label="Interactive toy experiment">
+  <div class="demo-grid">
+    <div>
+      <div class="ctrl">
+        <label class="t" for="mix"><span>Share of the reward that is plain "be right"</span><span class="val" id="mixval"></span></label>
+        <input type="range" id="mix" min="0" max="8" step="1" value="8" aria-describedby="mixends">
+        <div class="ends" id="mixends"><span>0% (pure RLCD)</span><span>100% (pure RLVR)</span></div>
+      </div>
+      <div class="ctrl">
+        <label class="t" for="step"><span>Training step</span><span class="val" id="stepval"></span></label>
+        <input type="range" id="step" min="0" max="42" step="1" value="42">
+        <div class="row" style="margin-top:8px">
+          <button class="btn" id="play" type="button">Play training</button>
+          <label class="chk"><input type="checkbox" id="ts"> Show the final model after fitting one temperature</label>
+        </div>
+      </div>
+      <div class="read" aria-live="polite">
+        <div><b id="r-ece"></b><span>calibration error (ECE), lower is better</span></div>
+        <div><b id="r-acc"></b><span>accuracy</span></div>
+        <div><b id="r-sup"></b><span>ECE of plain supervised training</span></div>
+      </div>
+      <p id="insight"></p>
+    </div>
+    <div>
+      <svg class="chart" id="rel" viewBox="0 0 400 360" role="img" aria-label="Reliability diagram: stated confidence against how often the answer was right"></svg>
+      <svg class="chart" id="curve" viewBox="0 0 400 130" role="img" aria-label="Calibration error against training step" style="margin-top:6px"></svg>
+    </div>
+  </div>
+  <details class="tv"><summary>Table view of this setting</summary><div id="tbl"></div></details>
+</div>
+<p class="small" style="margin-top:12px">Exp 0 of the repository: a linear-softmax policy over five options, 4,000 Adam steps, five seeds pooled. Points are bins of
+stated confidence; their size is the number of questions. Every curve here was produced by the repository's own code
+(<code>scripts/make_site_data.py</code>), not drawn by hand.</p>
+</section>
+
+<section id="idea">
+<h2>The idea in one picture</h2>
+<p>The model reads a state and a typed question and states a probability for every option in one pass. RLVR rewards the
+sampled answer for being correct, which is maximised by putting all the probability on the likeliest answer, so the model
+becomes sharper than the evidence justifies. RLCD scores the whole distribution with a proper scoring rule, which pays most for
+stating the true probabilities. When only the sampled answer can be checked, dividing the reward by that answer's
+probability keeps the gradient unbiased.</p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/concept-dark.png"><img alt="State and typed questions go through one forward pass to a distribution per question, which is scored against an outcome by a proper scoring rule; the score drives gradient ascent." src="assets/concept.png" style="width:100%;height:auto;border:1px solid var(--grid);border-radius:8px"></picture></p>
+<div class="callout"><b>The sceptic's objection.</b> With fixed labels, rewarding the full distribution has the same gradient as ordinary supervised training. So maybe
+RLCD is just supervised fine-tuning plus a temperature fitted afterwards. The plan was frozen before any full run, and every
+experiment compares RLCD with exactly that sceptical baseline.</div>
+</section>
+
+<section id="tests">
+<h2>Three tests, in order of realism</h2>
+<div class="cards">
+  <article class="card">
+    <div class="num">1 &middot; Toy</div>
+    <h3>The mechanism is real</h3>
+    <p>Same model, data and optimiser; only the reward differs. RLVR ends overconfident at unchanged accuracy, and the RLCD reward does not.</p>
+    <ul class="nums">
+      <li><span class="dot" style="background:var(--rlvr)"></span>RLVR ECE <b>{{toy_rlvr_ece}}</b></li>
+      <li><span class="dot" style="background:var(--rlcd)"></span>RLCD ECE <b>{{toy_rlcd_ece}}</b></li>
+      <li><span class="dot" style="background:var(--sup)"></span>supervised ECE <b>{{toy_sup_ece}}</b></li>
+      <li>accuracy {{toy_rlvr_acc}} vs {{toy_rlcd_acc}}</li>
+    </ul>
+  </article>
+  <article class="card">
+    <div class="num">2 &middot; A 9B language model</div>
+    <h3>The sceptic mostly wins</h3>
+    <p>A 9B model trained on teacher-labelled questions, three seeds per arm, tested on an independent set of unseen domains. RLVR is more overconfident than RLCD, but plain supervised training does as well as RLCD, and after one fitted temperature the arms are close.</p>
+    <ul class="nums">
+      <li><span class="dot" style="background:var(--rlvr)"></span>RLVR ECE <b>{{a3_dev_ece}}</b></li>
+      <li><span class="dot" style="background:var(--rlcd)"></span>RLCD-bandit <b>{{a4_dev_ece}}</b></li>
+      <li><span class="dot" style="background:var(--sup)"></span>supervised <b>{{a1_dev_ece}}</b></li>
+      <li>after one temperature: {{a3_ts_ece}} / {{a4_ts_ece}} / {{a1_ts_ece}}</li>
+    </ul>
+    <p class="small" style="margin-top:10px">Remove the KL penalty that ties RLVR to its start and its probabilities collapse (one run).</p>
+    <a href="assets/expA_overview.png"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/expA_overview-dark.png"><img alt="ECE, log loss and accuracy of every Exp A arm on the dev set and the harder selection split." src="assets/expA_overview.png" loading="lazy"></picture></a>
+    <p class="small" style="margin:6px 0 0">Click the figure to enlarge it.</p>
+  </article>
+  <article class="card">
+    <div class="num">3 &middot; Breakout</div>
+    <h3>A narrow, fragile win for RLCD</h3>
+    <p>Here outcomes depend on the model's own moves, the case where RL is actually needed. Training beliefs together with play beat the sceptic's version (fit the beliefs by supervised learning, then scale) by the pre-registered rule. But the sceptic's version was better in {{b4_better_seeds}} of 3 seeds, and without its temperature step it is nearly as good.</p>
+    <ul class="nums">
+      <li><span class="dot" style="background:var(--rlvr)"></span>plain PPO belief log loss <b>{{b1_ll}}</b></li>
+      <li><span class="dot" style="background:var(--rlcd)"></span>RLCD <b>{{b3_ll}}</b></li>
+      <li><span class="dot" style="background:var(--sup)"></span>sceptic's version <b>{{b4_ll}}</b></li>
+    </ul>
+    <a href="assets/expB_beliefs.png"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/expB_beliefs-dark.png"><img alt="Belief log loss and ECE of B1, B2, B3 and B4 on the common states, and calibration curves." src="assets/expB_beliefs.png" loading="lazy"></picture></a>
+    <p class="small" style="margin:6px 0 0">Click the figure to enlarge it.</p>
+  </article>
+</div>
+</section>
+
+<section id="bottom">
+<h2>The honest bottom line</h2>
+<p><b>RLCD fixes RLVR's overconfidence, but gave no clear advantage over supervised training plus temperature scaling</b>, except possibly in the on-policy Breakout case, where the evidence is weak.</p>
+<div class="scroll"><table class="headline">
+<thead><tr><th>setting (lower is better)</th><th>RLVR / plain RL</th><th>RLCD</th><th>supervised control or sceptic's baseline</th></tr></thead>
+<tbody>
+{{HEADLINE_ROWS}}
+</tbody></table></div>
+<p class="small">Seed means; the best value in each row is in bold. Calibration error (ECE) in the first four rows, belief log loss in the last.</p>
+<p><b>What this does not show.</b> One model, one teacher-written dataset, one game, one learning rate shared across the arms, and a KL
+penalty that already limits RLVR. The test set was written by the same teacher as the training data. It says nothing about RLCD in
+general. The results that went against a hypothesis are listed by name in the repository.</p>
+</section>
+
+<section id="check">
+<h2>Check it yourself</h2>
+<p>Every number on this page is generated from the results files in the repository, and the raw predictions of all the 9B-model runs are committed, so any figure can be recomputed without a GPU.</p>
+<div class="links">
+  <a href="explorer.html"><b>Reliability explorer</b><span>arm &times; answer type &times; split &times; temperature scaling</span></a>
+  <a href="{{REPO}}/blob/main/docs/results.md"><b>Full results</b><span>every table and the 19 pre-registered tests</span></a>
+  <a href="{{REPO}}/blob/main/PREREGISTRATION.md"><b>The pre-registration</b><span>frozen before any full run, with four dated amendments</span></a>
+  <a href="{{REPO}}"><b>The code</b><span>about 200 tests, CI, one command per figure</span></a>
+</div>
+</section>
+</main>
+
+<footer>
+<p><b>One reading of RLCD, not TypeSafe's method.</b> TypeSafe has not published RLCD; the term and JevBench are TypeSafe's, and this project is independent of them and does not speak for them. "RLCD" is also the name of an unrelated method, Reinforcement Learning from Contrastive Distillation (Yang et al., arXiv:2307.12950).</p>
+<p>Built on <a href="https://github.com/Mapika/decider">Mapika's decider</a> (Apache 2.0). No JevBench item is used for training or for choosing training data. Code and results: Apache 2.0.</p>
+</footer>
+</div>
+
+<script type="application/json" id="toy-data">{{TOY_JSON}}</script>
+<script>
+(function(){
+"use strict";
+var D = JSON.parse(document.getElementById("toy-data").textContent);
+var MIXES = D.mixes, STEPS = D.steps, NB = D.bins;
+var els = {mix:q("mix"),step:q("step"),ts:q("ts"),play:q("play"),mixval:q("mixval"),stepval:q("stepval"),
+  eceR:q("r-ece"),accR:q("r-acc"),supR:q("r-sup"),insight:q("insight"),rel:q("rel"),curve:q("curve"),tbl:q("tbl")};
+function q(id){return document.getElementById(id)}
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function hex(c){c=c.replace("#","");return [0,2,4].map(function(i){return parseInt(c.substr(i,2),16)})}
+function blend(a,b,t){var x=hex(a),y=hex(b);return "rgb("+x.map(function(v,i){return Math.round(v+(y[i]-v)*t)}).join(",")+")"}
+function fmt(x,n){return x==null?"-":x.toFixed(n==null?3:n)}
+function pct(m){return Math.round(m*100)+"%"}
+var timer=null;
+
+function state(){return {i:+els.mix.value, s:+els.step.value, ts:els.ts.checked}}
+function colorFor(i){return blend(cssv("--rlcd"),cssv("--rlvr"),Math.min(1,i/(MIXES.length-1)))}
+
+function bins(a,st,ts){
+  var f = ts ? a.final_ts.bins : (st.s===STEPS.length-1 ? a.final_raw.bins : null);
+  var out=[];
+  for(var b=0;b<NB;b++){
+    var n = f ? f.count[b] : a.reliability.count[st.s][b];
+    var c = f ? f.conf[b] : a.reliability.conf[st.s][b];
+    var y = f ? f.acc[b] : a.reliability.acc[st.s][b];
+    if(n>0 && c!=null && y!=null) out.push({c:c,y:y,n:n});
+  }
+  return out;
+}
+
+function draw(){
+  var st=state();
+  var a=D.arms[String(MIXES[st.i])], sup=D.supervised;  /* not Object.keys order: JS puts integer-like keys ("0", "1") first */
+  els.mixval.textContent=pct(MIXES[st.i])+" RLVR";
+  els.stepval.textContent = st.ts ? "final model, after temperature scaling" : "step "+STEPS[st.s].toLocaleString("en");
+  els.step.disabled = st.ts;
+  var col=colorFor(st.i), muted=cssv("--muted"), grid=cssv("--grid"), ink2=cssv("--ink2"), bg=cssv("--bg");
+  /* reliability diagram */
+  var W=400,H=360,L=44,R=12,T=10,B=44,pw=W-L-R,ph=H-T-B,X=function(v){return L+v*pw},Y=function(v){return T+(1-v)*ph};
+  var s="";
+  for(var g=0;g<=5;g++){var v=g/5;
+    s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="'+grid+'"/><line y1="'+T+'" y2="'+(T+ph)+'" x1="'+X(v)+'" x2="'+X(v)+'" stroke="'+grid+'"/>';
+    s+='<text x="'+(L-6)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v.toFixed(1)+'</text><text x="'+X(v)+'" y="'+(T+ph+15)+'" text-anchor="middle">'+v.toFixed(1)+'</text>'}
+  s+='<line x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(1)+'" y2="'+Y(1)+'" stroke="'+muted+'" stroke-dasharray="4 4"/>';
+  s+='<text x="'+(X(0.98))+'" y="'+(Y(0.9))+'" text-anchor="end">perfectly calibrated</text>';
+  s+='<text x="'+(W/2)+'" y="'+(H-6)+'" text-anchor="middle">stated confidence (probability of the top answer)</text>';
+  s+='<text transform="translate(11 '+(T+ph/2)+') rotate(-90)" text-anchor="middle">how often it was right</text>';
+  var supb=bins(sup,{s:st.s},st.ts), pts=bins(a,st,st.ts), maxn=1;
+  pts.forEach(function(p){maxn=Math.max(maxn,p.n)});
+  if(supb.length){s+='<polyline fill="none" stroke="'+cssv("--sup")+'" stroke-width="1.4" stroke-dasharray="5 3" opacity=".8" points="'+supb.map(function(p){return X(p.c)+","+Y(p.y)}).join(" ")+'"/>'}
+  s+='<polyline fill="none" stroke="'+col+'" stroke-width="2" opacity=".9" points="'+pts.map(function(p){return X(p.c)+","+Y(p.y)}).join(" ")+'"/>';
+  pts.forEach(function(p){var r=3+7*Math.sqrt(p.n/maxn);
+    s+='<circle cx="'+X(p.c)+'" cy="'+Y(p.y)+'" r="'+r.toFixed(1)+'" fill="'+(st.ts?bg:col)+'" stroke="'+col+'" stroke-width="2"><title>confidence '+fmt(p.c,2)+', right '+fmt(p.y,2)+' of the time, '+p.n+' questions</title></circle>'});
+  s+='<g><line x1="'+(L+10)+'" x2="'+(L+34)+'" y1="'+(T+14)+'" y2="'+(T+14)+'" stroke="'+cssv("--sup")+'" stroke-dasharray="5 3" stroke-width="1.4"/><text x="'+(L+40)+'" y="'+(T+18)+'">plain supervised training</text></g>';
+  els.rel.innerHTML=s;
+  /* ece curve */
+  var cw=400,ch=130,cl=44,cr=12,ct=8,cb=26,w2=cw-cl-cr,h2=ch-ct-cb;
+  var all=a.ece.concat(sup.ece), ymax=Math.max.apply(null,all)*1.08||0.1;
+  var cx=function(i){return cl+(i/(STEPS.length-1))*w2}, cy=function(v){return ct+(1-v/ymax)*h2};
+  var c2='<line x1="'+cl+'" x2="'+(cw-cr)+'" y1="'+cy(0)+'" y2="'+cy(0)+'" stroke="'+grid+'"/>';
+  c2+='<text x="'+(cl-6)+'" y="'+(cy(0)+4)+'" text-anchor="end">0</text><text x="'+(cl-6)+'" y="'+(cy(ymax)+10)+'" text-anchor="end">'+ymax.toFixed(2)+'</text>';
+  c2+='<text x="'+cl+'" y="'+(ch-8)+'">0</text><text x="'+(cw-cr)+'" y="'+(ch-8)+'" text-anchor="end">'+STEPS[STEPS.length-1].toLocaleString("en")+' steps</text>';
+  c2+='<polyline fill="none" stroke="'+cssv("--sup")+'" stroke-dasharray="5 3" stroke-width="1.4" opacity=".8" points="'+sup.ece.map(function(v,i){return cx(i)+","+cy(v)}).join(" ")+'"/>';
+  c2+='<polyline fill="none" stroke="'+col+'" stroke-width="2" points="'+a.ece.map(function(v,i){return cx(i)+","+cy(v)}).join(" ")+'"/>';
+  var cur = st.ts ? STEPS.length-1 : st.s;
+  c2+='<line x1="'+cx(cur)+'" x2="'+cx(cur)+'" y1="'+ct+'" y2="'+(ct+h2)+'" stroke="'+ink2+'" stroke-width="1" opacity=".5"/>';
+  c2+='<text x="'+(cl+4)+'" y="'+(ct+10)+'">calibration error over training</text>';
+  els.curve.innerHTML=c2;
+  /* readouts */
+  var ece = st.ts ? a.final_ts.ece : a.ece[st.s], acc = st.ts ? a.final_ts.acc : a.acc[st.s];
+  var sece = st.ts ? sup.final_ts.ece : sup.ece[st.s];
+  els.eceR.textContent=fmt(ece); els.accR.textContent=fmt(acc); els.supR.textContent=fmt(sece);
+  var mixv=MIXES[st.i], msg, acc0=D.arms["0"].final_raw.acc;
+  if(st.ts){
+    if(mixv>=0.5){
+      msg="After fitting one temperature on held-out data the model sits close to the diagonal again (ECE "+fmt(ece)+"), but only after dividing its logits by "+fmt(a.temperature,2)+": a large correction. In this toy the policy class contains the truth, so one scale factor is enough. Whether that holds for a real model is what the later tests ask.";
+    } else {
+      msg="This model was already close to calibrated, so the fitted temperature ("+fmt(a.temperature,2)+") changes little.";
+    }
+  } else if(st.s<14){
+    msg="Early on every setting looks alike: the model starts out under-confident and learns to sharpen its answers. The settings only separate later in training.";
+  } else if(mixv>=0.35 && st.s<24){
+    msg="Partway through training the model passes through calibration on its way from under-confident to over-confident. Keep training (or press Play) and watch its confidence overtake its accuracy.";
+  } else if(mixv>=0.75){
+    msg="Confidence has run ahead of accuracy: the points sit below the diagonal. The model is right "+fmt(acc,2)+" of the time (pure RLCD: "+fmt(acc0,2)+") but states far more certainty than that.";
+  } else if(mixv>=0.35){
+    msg="Mixing in this much of the 'be right' reward is enough to make the model overstate its confidence, with no gain in accuracy ("+fmt(acc,2)+" against "+fmt(acc0,2)+").";
+  } else if(mixv>0){
+    msg="A small share of the 'be right' reward does little harm here: the points stay near the diagonal. The damage only shows once the share is large; drag the first slider right.";
+  } else {
+    msg="Confidence tracks accuracy: the points sit on the diagonal, as with plain supervised training.";
+  }
+  els.insight.textContent=msg;
+  els.tbl.innerHTML='<table><tr><th>quantity</th><th>value</th></tr><tr><td>share of RLVR reward</td><td>'+pct(mixv)+'</td></tr><tr><td>training step</td><td>'+(st.ts?"final, after one temperature":STEPS[st.s])+'</td></tr><tr><td>ECE</td><td>'+fmt(ece,4)+'</td></tr><tr><td>accuracy</td><td>'+fmt(acc,4)+'</td></tr><tr><td>ECE of supervised training</td><td>'+fmt(sece,4)+'</td></tr></table>';
+}
+
+els.mix.addEventListener("input",draw);
+els.step.addEventListener("input",draw);
+els.ts.addEventListener("change",function(){stop();draw()});
+function stop(){if(timer){clearInterval(timer);timer=null;els.play.textContent="Play training"}}
+els.play.addEventListener("click",function(){
+  if(timer){stop();return}
+  els.ts.checked=false; els.step.value=0; draw(); els.play.textContent="Pause";
+  timer=setInterval(function(){
+    var n=+els.step.value+1;
+    if(n>=STEPS.length){stop();return}
+    els.step.value=n; draw();
+  },90);
+});
+/* theme toggle, remembered if storage is available */
+var root=document.documentElement;
+try{var saved=localStorage.getItem("rlcd-theme");if(saved)root.dataset.theme=saved}catch(e){}
+q("theme").addEventListener("click",function(){
+  var dark=root.dataset.theme==="dark"||(root.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  root.dataset.theme=dark?"light":"dark";
+  try{localStorage.setItem("rlcd-theme",root.dataset.theme)}catch(e){}
+  draw();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+draw();
+})();
+</script>
+</body>
+</html>

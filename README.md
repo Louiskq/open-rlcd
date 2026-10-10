@@ -85,6 +85,7 @@ list of results that went against a hypothesis is in [`docs/caveats.md`](docs/ca
 | **Colab notebook**: the toy on a CPU, with a slider that mixes the two rewards | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Louiskq/open-rlcd/blob/main/notebooks/toy_rlcd.ipynb) |
 | **`make toy`**: the same experiment as a script (about two minutes) | regenerates `results/toy/` and `figures/` |
 | **Reliability explorer**: arm × answer type × split × temperature scaling, one self-contained file | open [`docs/explorer.html`](docs/explorer.html) in a browser |
+| **Landing page**: the interactive toy and the findings on one page, deployable to Vercel | `make site`, then see [`docs/site.md`](docs/site.md) |
 | **`python -m rlcd.demo --model DIR --state "..." --question "..." --type choice --options a,b,c`**: a typed answer with a probability per option from a decider checkpoint | needs one GPU; no model is published yet |
 
 ## Reproduce

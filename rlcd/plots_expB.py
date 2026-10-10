@@ -89,7 +89,7 @@ def fig_beliefs(data: dict[str, Any], runs: Path, theme: Theme) -> Any:
     xl = ["B1\nraw", "B2\nB1+TS", "B3\nraw", "B3\n+TS", "B4\nraw", "B4\n+TS"]
     with plt.rc_context(rc(theme)):
         fig, axes = plt.subplots(1, 3, figsize=(12.2, 5.0))
-        fig.subplots_adjust(left=0.065, right=0.985, top=0.7, bottom=0.14, wspace=0.28)
+        fig.subplots_adjust(left=0.065, right=0.985, top=0.65, bottom=0.14, wspace=0.28)
         for ax, metric, ylabel in (
             (axes[0], "log_loss", "belief log loss, lower is better"),
             (axes[1], "ece", "belief ECE, lower is better"),
@@ -146,7 +146,7 @@ def fig_beliefs(data: dict[str, Any], runs: Path, theme: Theme) -> Any:
             "Exp B: belief quality on the same states",
             "Every arm answers the same questions: B1 seed 0's final policy's sampled play on the evaluation seeds. Mean over 3 seeds, bars are the seed range.\nB4 is B1's policy with beliefs fitted by supervised learning, then temperature-scaled (raw B4 is descriptive).\nAll arms are final checkpoints. H7 asks whether B3 (raw) beats B4 + TS.",
         )
-        _legend(fig, theme, ["B1", "B2", "B3", "B4"], 0.85, extra=True)
+        _legend(fig, theme, ["B1", "B2", "B3", "B4"], 0.79, extra=True)
     return fig
 
 
