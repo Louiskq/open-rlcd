@@ -1,6 +1,6 @@
 # Release plan (nothing has been uploaded)
 
-Everything the README's numbers rest on is **already in this repository**: the raw predictions of every Exp A run
+Everything the numbers on the README and the results page rest on is **already in this repository**: the raw predictions of every Exp A run
 (`results/expA/runs/`, 2.4 MB), the analysis outputs (`results/expA/analysis*.json`, `results/expB/`), the figures and
 `docs/explorer.html`. `make expA-analysis`, `make expA-figures` and `make readme` regenerate the tables and figures from
 them without a GPU. What follows is only about model weights, which are too large for git.

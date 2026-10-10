@@ -1,6 +1,6 @@
-# Exp A: from predictions to the README
+# Exp A: from predictions to the results page
 
-Everything in the Exp A section of the README is computed from `results/expA/runs/<run>/preds_{cal,select,dev}.npz`,
+Everything in the Exp A section of [results.md](results.md) is computed from `results/expA/runs/<run>/preds_{cal,select,dev}.npz`,
 the readout of every question at temperature 1 that `rlcd.train_labels` saves after each run. No GPU is needed.
 
 | step | command | writes |
@@ -9,7 +9,7 @@ the readout of every question at temperature 1 that `rlcd.train_labels` saves af
 | the same tests on the selection split (exploratory) | in `make expA-analysis` | `results/expA/analysis_select_prereg_tests.json` |
 | per-answer-type differences (exploratory) | in `make expA-analysis` | `results/expA/analysis_exploratory_{dev,select}.json` |
 | figures | `make expA-figures` | `figures/expA_*.{png,svg}` (light and dark) |
-| README tables | `make readme` | the generated blocks in `README.md` |
+| tables | `make readme` | the generated blocks in `README.md`, `docs/results.md` and `docs/toy.md` |
 
 What is computed, in `rlcd/evaluate.py` and `rlcd/compare.py`:
 

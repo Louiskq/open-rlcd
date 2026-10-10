@@ -1,7 +1,7 @@
-"""Fill the generated blocks of README.md from results/**/*.json.
+"""Fill the generated blocks of README.md, docs/toy.md and docs/results.md from results/**/*.json.
 
-    python scripts/make_readme_tables.py           # rewrite README.md in place
-    python scripts/make_readme_tables.py --check   # exit 1 if README.md is out of date (CI)
+    python scripts/make_readme_tables.py           # rewrite the pages in place
+    python scripts/make_readme_tables.py --check   # exit 1 if a page is out of date (CI)
 
 A block looks like ``<!-- BEGIN gen:NAME --> ... <!-- END gen:NAME -->``. Everything between the
 markers is replaced; nothing outside them is touched. Every number links to the JSON it came from.
@@ -642,7 +642,59 @@ def gen_expB_perseed() -> str:
     return "\n".join(rows) + "\n"
 
 
+def gen_headline() -> str:
+    """The one small table of the README: lowest is best in every row."""
+    toy, ea, eb = load_toy(), load_expA(), load_expB()
+    if toy is None or ea is None or eb is None:
+        return pending("run the experiments")
+    rows = [
+        "| setting | metric (lower is better) | RLVR / plain RL | RLCD | supervised control or sceptic's baseline |",
+        "|---|---|---|---|---|",
+    ]
+
+    def row(label: str, metric: str, cells: list[tuple[dict, str]]) -> str:
+        win = bold_winners([c for c, _ in cells])
+        txt = []
+        for (c, rel), w in zip(cells, win, strict=True):
+            s = num(c, rel, rng=c.get("n", 1) > 1)
+            txt.append(f"**{s}**" if w else s)
+        return f"| {label} | {metric} | " + " | ".join(txt) + " |"
+
+    summ = toy["summary"]
+    rows.append(
+        row(
+            "Toy (truth known)",
+            "ECE",
+            [
+                (summ[a]["raw"]["ece"], f"{TOY}/{a}.json")
+                for a in ("rlvr", "rlcd_bandit", "supervised")
+            ],
+        )
+    )
+    rel = f"{EXPA}/analysis.json"
+    arms = ea["arms"]
+    for label, split, rw in (
+        ("9B model, dev set", "dev", "raw"),
+        ("9B model, dev set, after one temperature", "dev", "ts"),
+        ("9B model, harder split", "select", "raw"),
+    ):
+        rows.append(
+            row(label, "ECE", [(arms[a][split][rw]["all"]["ece"], rel) for a in ("a3", "a4", "a1")])
+        )
+    relb = f"{EXPB}/analysis.json"
+    cm = eb["h7"]["common_metrics"]
+    rows.append(
+        row(
+            "Breakout beliefs",
+            "log loss",
+            [(cm[k]["log_loss"], relb) for k in ("b1_raw", "b3_raw", "b4_ts")],
+        )
+    )
+    return "\n".join(rows) + "\n"
+
+
 GENERATORS = {
+    "headline": gen_headline,
     "tldr": gen_tldr,
     "toy_setup": gen_toy_setup,
     "toy_table": gen_toy_table,
@@ -668,31 +720,49 @@ GENERATORS = {
 }
 
 
-def render(text: str) -> str:
+# Files with generated blocks. Links inside generated blocks are written relative to the repository root, so pages
+# in docs/ get a "../" prefix.
+FILES = ["README.md", "docs/toy.md", "docs/results.md"]
+
+
+def render(text: str, prefix: str = "") -> str:
     def fill(m: re.Match[str]) -> str:
         name = m.group(2)
         if name not in GENERATORS:
-            raise SystemExit(f"README.md has an unknown generated block: gen:{name}")
-        return m.group(1) + GENERATORS[name]() + m.group(4)
+            raise SystemExit(f"unknown generated block: gen:{name}")
+        body = GENERATORS[name]()
+        if prefix:
+            body = body.replace("](results/", f"]({prefix}results/").replace(
+                "](figures/", f"]({prefix}figures/"
+            )
+        return m.group(1) + body + m.group(4)
 
     return BLOCK.sub(fill, text)
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
-    ap.add_argument("--check", action="store_true", help="exit 1 if README.md is out of date")
+    ap.add_argument("--check", action="store_true", help="exit 1 if a file is out of date")
     args = ap.parse_args()
-    path = ROOT / "README.md"
-    old = path.read_text()
-    new = render(old)
-    if args.check:
+    stale, blocks = [], 0
+    for rel in FILES:
+        path = ROOT / rel
+        old = path.read_text()
+        new = render(old, "../" if rel.startswith("docs/") else "")
+        blocks += sum(1 for _ in BLOCK.finditer(new))
         if new != old:
-            print("README.md is out of date with results/. Run: make readme", file=sys.stderr)
+            stale.append(rel)
+            if not args.check:
+                path.write_text(new)
+    if args.check:
+        if stale:
+            print(
+                f"{', '.join(stale)} out of date with results/. Run: make readme", file=sys.stderr
+            )
             raise SystemExit(1)
-        print("README.md is up to date")
+        print("README.md and docs pages are up to date")
         return
-    path.write_text(new)
-    print(f"updated {sum(1 for _ in BLOCK.finditer(new))} generated blocks in README.md")
+    print(f"checked {blocks} generated blocks in {len(FILES)} files; rewrote {stale or 'nothing'}")
 
 
 if __name__ == "__main__":
