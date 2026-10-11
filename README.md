@@ -4,8 +4,6 @@
 
 > **This is one reading of RLCD, not TypeSafe's method.** TypeSafe has not published RLCD. This repository tests the idea
 > as it has been described, in the open, and reports the results that go against it too.
-> *Name collision:* "RLCD" is also the name of Reinforcement Learning from Contrastive Distillation
-> (Yang et al., [arXiv:2307.12950](https://arxiv.org/abs/2307.12950)), an unrelated method.
 
 [![CI](https://github.com/Louiskq/open-rlcd/actions/workflows/ci.yml/badge.svg)](https://github.com/Louiskq/open-rlcd/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
