@@ -21,15 +21,18 @@
 
 ## What this is
 
-A model trained with reinforcement learning to *be right* tends to become more confident than it deserves: its answers
+A model that's trained with RL to *be right* tends to become more confident than it deserves. The answers
 stay as accurate, but its stated probabilities stop being trustworthy. RLCD is the idea of rewarding the model with a
 **proper scoring rule applied to the probabilities it states over typed options** (true/false, pick-one, ordered scale)
-instead. A proper rule pays best for stating the true probabilities, so confidence stays honest.
+instead. A proper rule pays best for stating the true probabilities.
 
-The obvious objection is that, with fixed labels, this is just supervised fine-tuning plus a temperature fitted
-afterwards. So the experiments, planned and frozen before any full run ([`PREREGISTRATION.md`](PREREGISTRATION.md)), put
-RLCD against that sceptical baseline in three settings of increasing realism: a toy, a 9B language model trained on
-teacher-labelled questions, and a model playing Breakout.
+With fixed labels, this is just supervised fine-tuning plus a temperature fitted afterwards. 
+
+The experiments, planned and frozen before any full run ([`PREREGISTRATION.md`](PREREGISTRATION.md)), puts
+RLCD against that sceptical baseline in three settings of increasing realism
+- a toy
+- a 9B language model trained on teacher-labelled questions,
+- and a model playing Breakout
 
 ## What was found
 
@@ -58,14 +61,10 @@ teacher-labelled questions, and a model playing Breakout.
 <sub>Seed mean (min&ndash;max). Bold: best, or within the best arm's seed range. Every number links to the file it came from.
 Exp A is the pre-registered dev set unless stated.</sub>
 
-**In one line:** RLCD fixes RLVR's overconfidence, but gave no clear advantage over supervised training plus temperature
+
+RLCD fixes RLVR's overconfidence, but gave no clear advantage over supervised training plus temperature
 scaling, except possibly in the on-policy Breakout case, where the evidence is weak.
 
-### What this does not show
-
-One model, one teacher-written dataset, one game, one learning rate shared across arms, and a KL anchor that already limits
-RLVR. It says nothing about RLCD in general, and the dev set was written by the same teacher as the training data. The
-list of results that went against a hypothesis is in [`docs/caveats.md`](docs/caveats.md).
 
 ## Read more
 
